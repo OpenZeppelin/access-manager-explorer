@@ -1,6 +1,6 @@
-import { SVGAttributes } from "react";
+import { FC, SVGAttributes } from "react";
 
-const Logo = (props: SVGAttributes<SVGElement>) => {
+const Logo: FC<SVGAttributes<SVGElement>> = (props) => {
   return (
     <svg
       width="23"

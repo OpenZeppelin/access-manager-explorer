@@ -1,48 +1,107 @@
 import Link from "next/link";
 
-import { buttonVariants } from "@/components/button";
-
-import { site } from "@/config";
-import { Github, Twitter } from "lucide-react";
+import { links } from "@/config/site";
 import Logo from "./logo";
+import { Box, Flex, IconButton, Separator, Text } from "@radix-ui/themes";
+import { TwitterLogoIcon, GitHubLogoIcon } from "@radix-ui/react-icons";
+import ConnectButton from "../connect-button";
+import Search from "./search";
 
 const Navbar = () => {
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background">
-      <div className="flex h-16 items-center sm:justify-between space-x-0 px-4">
-        <Link href="/" className="flex items-center space-x-2">
-          <Logo className="h-auto w-6" />
-          <span className="hidden font-silka font-semibold sm:inline-block">
-            OpenZeppelin <span className="font-light">| AccessManager</span>
-          </span>
-        </Link>
-        <div className="flex flex-1 items-center justify-end space-x-4">
-          <nav className="flex items-center space-x-2">
-            <Link href={site.links.github} target="_blank" rel="noreferrer">
-              <div
-                className={buttonVariants({
-                  size: "sm",
-                  variant: "ghost",
-                })}
-              >
-                <Github />
-              </div>
-            </Link>
-            <Link href={site.links.twitter} target="_blank" rel="noreferrer">
-              <div
-                className={buttonVariants({
-                  size: "sm",
-                  variant: "ghost",
-                })}
-              >
-                <Twitter />
-                <span className="sr-only">Twitter</span>
-              </div>
-            </Link>
-          </nav>
-        </div>
-      </div>
-    </header>
+    <Box asChild width="100%" className="sticky top-0 z-40 border-b">
+      <header>
+        <Flex
+          height="9"
+          align="center"
+          justify={{
+            sm: "between",
+          }}
+          px="4"
+          mx="0"
+        >
+          <Link href="/" className="flex items-center ">
+            <Logo className="h-auto w-6" />
+            <Text ml="1" as="span" weight="bold" className=" sm:inline-block">
+              OpenZeppelin{" "}
+              <Text as="span" weight="light">
+                | AccessManager
+              </Text>
+            </Text>
+          </Link>
+          <Flex>
+            <Search
+              ml="4"
+              size="2"
+              variant="soft"
+              color="gray"
+              radius="full"
+              input={{
+                placeholder: "Search address...",
+                style: {
+                  width: 400,
+                },
+              }}
+            />
+          </Flex>
+          <Flex ml="auto" align="center" justify="end">
+            <Flex asChild align="center" mx="2">
+              <nav>
+                <ConnectButton
+                  mr="2"
+                  states={{
+                    connect: {
+                      variant: "solid",
+                      color: "blue",
+                    },
+                    wrongNetwork: {
+                      variant: "soft",
+                      color: "red",
+                    },
+                    connected: {
+                      account: {
+                        variant: "outline",
+                        color: "gray",
+                      },
+                      chain: {
+                        variant: "soft",
+                        color: "gray",
+                        ml: "2",
+                      },
+                    },
+                  }}
+                />
+                <Separator orientation="vertical" mr="1" size="1" />
+                <IconButton
+                  mx="2"
+                  size="3"
+                  variant="ghost"
+                  color="gray"
+                  asChild
+                >
+                  <Link href={links.github} target="_blank" rel="noreferrer">
+                    <GitHubLogoIcon />
+                    <span className="sr-only">Github</span>
+                  </Link>
+                </IconButton>
+                <IconButton
+                  ml="2"
+                  size="3"
+                  variant="ghost"
+                  color="gray"
+                  asChild
+                >
+                  <Link href={links.twitter} target="_blank" rel="noreferrer">
+                    <TwitterLogoIcon />
+                    <span className="sr-only">Twitter</span>
+                  </Link>
+                </IconButton>
+              </nav>
+            </Flex>
+          </Flex>
+        </Flex>
+      </header>
+    </Box>
   );
 };
 

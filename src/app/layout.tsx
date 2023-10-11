@@ -1,15 +1,22 @@
 import "./globals.css";
+import "@rainbow-me/rainbowkit/styles.css";
+import "@radix-ui/themes/styles.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { site } from "@/config";
+import { title, description } from "@/config/site";
+import { WagmiConfig } from "wagmi";
 import { cn } from "@/utils";
+import { config, chains } from "@/config/wallet";
+import { FC } from "react";
+import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { Theme } from "@radix-ui/themes";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://contracts.openzeppelin.com"),
-  title: site.title,
-  description: site.description,
+  title,
+  description,
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "white" },
     { media: "(prefers-color-scheme: dark)", color: "black" },
@@ -24,8 +31,8 @@ export const metadata: Metadata = {
   // },
   twitter: {
     card: "summary_large_image",
-    title: site.title,
-    description: site.description,
+    title,
+    description,
     creator: "@openzeppelin",
     images: [
       /* "/banner.png" */
@@ -33,10 +40,20 @@ export const metadata: Metadata = {
   },
 };
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+type Props = { children: React.ReactNode };
+
+const RootLayout: FC<Props> = ({ children }) => {
   return (
-    <html lang="en">
-      <body className={cn(inter.className, "flex flex-col min-h-screen")}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={cn(inter.className, "flex flex-col min-h-screen")}>
+        <WagmiConfig config={config}>
+          <RainbowKitProvider chains={chains} showRecentTransactions={true}>
+            <Theme appearance="light" accentColor="blue">
+              {children}
+            </Theme>
+          </RainbowKitProvider>
+        </WagmiConfig>
+      </body>
     </html>
   );
 };
