@@ -1,9 +1,11 @@
 "use client";
 import { Theme as Themes } from "@radix-ui/themes";
 import { FC, ReactNode } from "react";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider, useTheme } from "next-themes";
 import { Provider } from "urql";
 import { client } from "@/config/urql";
+import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
+import { chains } from "@/config/wallet";
 
 interface Props {
   children: ReactNode;
@@ -21,4 +23,17 @@ const Urql: FC<Props> = ({ children }) => {
   return <Provider value={client}>{children}</Provider>;
 };
 
-export { Theme, Urql };
+const RainbowKit: FC<Props> = ({ children }) => {
+  const { theme } = useTheme();
+  return (
+    <RainbowKitProvider
+      theme={theme == "light" ? undefined : darkTheme()}
+      chains={chains}
+      showRecentTransactions={true}
+    >
+      {children}
+    </RainbowKitProvider>
+  );
+};
+
+export { Theme, Urql, RainbowKit };

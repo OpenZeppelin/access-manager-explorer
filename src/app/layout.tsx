@@ -6,10 +6,10 @@ import { Inter } from "next/font/google";
 import { title, description } from "@/config/site";
 import { WagmiConfig } from "wagmi";
 import { cn } from "@/utils";
-import { config, chains } from "@/config/wallet";
+import { config } from "@/config/wallet";
 import { FC, ReactNode } from "react";
-import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { Theme, Urql } from "@/components/providers";
+import { RainbowKit, Theme, Urql } from "@/components/providers";
+import { useTheme } from "next-themes";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -47,11 +47,11 @@ const RootLayout: FC<Props> = ({ children }) => {
     <html lang="en" suppressHydrationWarning>
       <body className={cn(inter.className, "flex flex-col min-h-screen")}>
         <WagmiConfig config={config}>
-          <RainbowKitProvider chains={chains} showRecentTransactions={true}>
+          <Theme>
             <Urql>
-              <Theme>{children}</Theme>
+              <RainbowKit>{children}</RainbowKit>
             </Urql>
-          </RainbowKitProvider>
+          </Theme>
         </WagmiConfig>
       </body>
     </html>
