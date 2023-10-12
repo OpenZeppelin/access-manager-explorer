@@ -1,5 +1,6 @@
 import Address from "@/components/address";
-import { Table, Badge } from "@radix-ui/themes";
+import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
+import { Table, Badge, IconButton } from "@radix-ui/themes";
 import { FC } from "react";
 
 interface Props {
@@ -14,6 +15,7 @@ const Targets: FC<Props> = ({ data }) => {
           <Table.ColumnHeaderCell>Address</Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell>Admin delay</Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell>Status</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>Managed</Table.ColumnHeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -39,6 +41,17 @@ const Targets: FC<Props> = ({ data }) => {
                 <Badge color="red">Closed</Badge>
               ) : (
                 <Badge color="green">Open</Badge>
+              )}
+            </Table.Cell>
+            <Table.Cell>
+              {data.account.asAccessManager.id === target.manager.id ? (
+                <IconButton size="1" variant="soft" color="green">
+                  <CheckCircledIcon />
+                </IconButton>
+              ) : (
+                <IconButton size="1" variant="soft" color="red">
+                  <CrossCircledIcon />
+                </IconButton>
               )}
             </Table.Cell>
           </Table.Row>

@@ -8,6 +8,9 @@ const ACCESS_MANAGER_QUERY = gql`
         id
         targets {
           id
+          manager {
+            id
+          }
           target {
             id
           }
