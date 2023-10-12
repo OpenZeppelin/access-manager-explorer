@@ -9,10 +9,9 @@ import {
   ChevronRightIcon,
   PlusIcon,
 } from "@radix-ui/react-icons";
-import { useAccount } from "wagmi";
 import { cn } from "@/utils";
-import { zeroAddress } from "viem";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
+import useAccount from "@/hooks/use-account";
 
 const Sidebar = () => {
   const [open, setOpen] = useState(true);
@@ -21,15 +20,28 @@ const Sidebar = () => {
 
   return (
     <Flex height="auto" className="border-r w-64" p="4">
-      <Collapsible.Root defaultOpen={true} open={open} onOpenChange={setOpen}>
-        <div className="flex items-center cursor-pointer">
+      <Collapsible.Root
+        className="w-full"
+        defaultOpen={true}
+        open={open && isConnected}
+        onOpenChange={setOpen}
+      >
+        <Flex align="center" className="cursor-pointer" mb="1">
           {isConnected && (
-            <Collapsible.Trigger>
-              <Button ml="1" size="2" variant="ghost" color="gray">
-                <Heading size="2">My wallet</Heading>
-                {!open ? <ChevronRightIcon /> : <ChevronDownIcon />}
-              </Button>
-            </Collapsible.Trigger>
+            <Button ml="1" size="2" variant="ghost" color="gray">
+              <Collapsible.Trigger asChild>
+                <Flex>
+                  <Heading size="2" mr="2">
+                    My wallet
+                  </Heading>
+                  {!open ? (
+                    <ChevronRightIcon width="16" height="16" />
+                  ) : (
+                    <ChevronDownIcon width="16" height="16" />
+                  )}
+                </Flex>
+              </Collapsible.Trigger>
+            </Button>
           )}
           {!isConnected && (
             <Button
@@ -39,23 +51,25 @@ const Sidebar = () => {
               color="gray"
               onClick={openConnectModal}
             >
-              <Heading size="2">Connect wallet</Heading>
-              <PlusIcon />
+              <Heading size="2" mr="2">
+                Add wallet
+              </Heading>
+              <PlusIcon width="16" height="16" />
             </Button>
           )}
-        </div>
+        </Flex>
         <Collapsible.Content className="pt-2">
-          <Address
-            address={address ?? zeroAddress}
-            truncate
-            avatar={{ size: "1" }}
-            className={cn(
-              {
-                hidden: !address,
-              },
-              "p-1"
+          <Button variant="ghost" color="gray" className="w-full">
+            {address && (
+              <Address
+                address={{
+                  value: address,
+                }}
+                truncate
+                className={cn("p-1", "ml-4")}
+              />
             )}
-          />
+          </Button>
         </Collapsible.Content>
       </Collapsible.Root>
     </Flex>

@@ -84,20 +84,16 @@ const Inner: FC<Props> = ({
           <Flex>
             <Button onClick={openAccountModal} {...states?.connected?.account}>
               <Address
-                address={account.address as AddressType}
+                address={{
+                  value: account.address as AddressType,
+                }}
                 truncate
-                avatar={{ size: "1" }}
-                className="p-1"
               />
-              <Text>
+              <Text size="1" className="whitespace-nowrap">
                 {account.displayBalance ? ` (${account.displayBalance})` : ""}
               </Text>
             </Button>
-            <Button
-              onClick={openChainModal}
-              className="flex items-center"
-              {...states?.connected?.chain}
-            >
+            <Button onClick={openChainModal} {...states?.connected?.chain}>
               {chain.hasIcon && chain.iconUrl && (
                 <Image
                   width="16"

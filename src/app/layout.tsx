@@ -7,7 +7,7 @@ import { title, description } from "@/config/site";
 import { WagmiConfig } from "wagmi";
 import { cn } from "@/utils";
 import { config, chains } from "@/config/wallet";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { Theme } from "@radix-ui/themes";
 
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   },
 };
 
-type Props = { children: React.ReactNode };
+type Props = { children: ReactNode };
 
 const RootLayout: FC<Props> = ({ children }) => {
   return (

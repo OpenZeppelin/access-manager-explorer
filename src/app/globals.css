@@ -5,3 +5,18 @@
 input:focus {
   outline: none;
 }
+
+.rt-AvatarRoot:where(.rt-r-size-1) {
+  --avatar-size: var(--space-3);
+  --avatar-fallback-one-letter-font-size: var(--font-size-2);
+  --avatar-fallback-two-letters-font-size: var(--font-size-1);
+  border-radius: max(var(--radius-2), var(--radius-full));
+  letter-spacing: var(--letter-spacing-1);
+}
+
+body > div:nth-child(1),
+.radix-themes {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
