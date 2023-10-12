@@ -1,13 +1,6 @@
+"use client";
 import { Box } from "@radix-ui/themes";
-import {
-  ComponentProps,
-  FC,
-  HTMLAttributes,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { ComponentProps, FC, useEffect, useRef, useState } from "react";
 import { Address, keccak256 } from "viem";
 
 const hslTriad = require("hsl-triad");
@@ -35,7 +28,7 @@ const Gradient: FC<Props> = ({ address, svgClassName, ...props }) => {
       setWidth(ref.current.clientWidth);
       setHeight(ref.current.clientHeight);
     }
-  }, [ref]);
+  }, [ref.current]);
 
   return (
     <Box {...props}>

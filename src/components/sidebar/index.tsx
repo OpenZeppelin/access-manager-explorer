@@ -3,7 +3,7 @@
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { useState } from "react";
 import Address from "@/components/address";
-import { Button, Flex, Heading } from "@radix-ui/themes";
+import { Box, Button, Card, Flex, Heading } from "@radix-ui/themes";
 import {
   ChevronDownIcon,
   ChevronRightIcon,
@@ -19,7 +19,13 @@ const Sidebar = () => {
   const { openConnectModal } = useConnectModal();
 
   return (
-    <Flex height="auto" className="border-r w-64" p="4">
+    <Card
+      className="no-radius flex border-r w-64"
+      size="2"
+      style={{
+        border: 0,
+      }}
+    >
       <Collapsible.Root
         className="w-full"
         defaultOpen={true}
@@ -72,7 +78,13 @@ const Sidebar = () => {
           </Button>
         </Collapsible.Content>
       </Collapsible.Root>
-    </Flex>
+      {/* TODO: Avoid this filling */}
+      <Box
+        style={{
+          height: "83vh",
+        }}
+      />
+    </Card>
   );
 };
 

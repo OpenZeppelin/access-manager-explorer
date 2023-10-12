@@ -5,9 +5,14 @@ const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
 };
 
-const truncateAddress = (address: string) => {
+const truncateAddress = (
+  address: string,
+  { leading, trailing } = { leading: 2, trailing: 4 }
+) => {
   const match = address.match(
-    /^(0x[a-zA-Z0-9]{4})[a-zA-Z0-9]+([a-zA-Z0-9]{4})$/
+    new RegExp(
+      `^(0x[a-zA-Z0-9]{${leading}})[a-zA-Z0-9]+([a-zA-Z0-9]{${trailing}})$`
+    )
   );
   if (!match) return address;
   return `${match[1]}…${match[2]}`;

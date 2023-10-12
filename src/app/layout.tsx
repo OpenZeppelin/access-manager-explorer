@@ -9,7 +9,7 @@ import { cn } from "@/utils";
 import { config, chains } from "@/config/wallet";
 import { FC, ReactNode } from "react";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { Theme } from "@radix-ui/themes";
+import { Theme, Urql } from "@/components/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -48,9 +48,9 @@ const RootLayout: FC<Props> = ({ children }) => {
       <body className={cn(inter.className, "flex flex-col min-h-screen")}>
         <WagmiConfig config={config}>
           <RainbowKitProvider chains={chains} showRecentTransactions={true}>
-            <Theme appearance="light" accentColor="blue">
-              {children}
-            </Theme>
+            <Urql>
+              <Theme>{children}</Theme>
+            </Urql>
           </RainbowKitProvider>
         </WagmiConfig>
       </body>

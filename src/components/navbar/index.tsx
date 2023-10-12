@@ -2,17 +2,17 @@ import Link from "next/link";
 
 import { links } from "@/config/site";
 import Logo from "./logo";
-import { Box, Flex, IconButton, Separator, Text } from "@radix-ui/themes";
+import { Card, Flex, IconButton, Separator, Text } from "@radix-ui/themes";
 import { TwitterLogoIcon, GitHubLogoIcon } from "@radix-ui/react-icons";
 import ConnectButton from "../connect-button";
 import Search from "./search";
+import ThemeIcon from "./theme-icon";
 
 const Navbar = () => {
   return (
-    <Box asChild width="100%" className="sticky top-0 z-40 border-b">
+    <Card asChild size="2" className="sticky top-0 z-40 w-full no-radius">
       <header>
         <Flex
-          height="9"
           align="center"
           justify={{
             sm: "between",
@@ -20,9 +20,9 @@ const Navbar = () => {
           px="4"
           mx="0"
         >
-          <Link href="/" className="flex items-center ">
+          <Link href="/" className="flex items-center">
             <Logo className="h-auto w-6" />
-            <Text ml="1" as="span" weight="bold" className=" sm:inline-block">
+            <Text ml="1" as="span" weight="bold" className="sm:inline-block">
               OpenZeppelin{" "}
               <Text as="span" weight="light">
                 | AccessManager
@@ -85,7 +85,7 @@ const Navbar = () => {
                   </Link>
                 </IconButton>
                 <IconButton
-                  ml="2"
+                  mx="2"
                   size="3"
                   variant="ghost"
                   color="gray"
@@ -96,12 +96,13 @@ const Navbar = () => {
                     <span className="sr-only">Twitter</span>
                   </Link>
                 </IconButton>
+                <ThemeIcon mx="2" size="3" variant="ghost" color="gray" />
               </nav>
             </Flex>
           </Flex>
         </Flex>
       </header>
-    </Box>
+    </Card>
   );
 };
 
