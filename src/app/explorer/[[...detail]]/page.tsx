@@ -23,11 +23,12 @@ const Explorer: FC<Props> = ({ params: { detail } }) => {
               maxHeight: "calc(100vh - 64px)",
             }}
           />
-          {detail?.map((account) => (
+          {detail?.map((account, depth) => (
             <AccessManager
               key={account}
               address={account}
               size="4"
+              depth={depth}
               variant="classic"
               className="no-radius"
               style={{

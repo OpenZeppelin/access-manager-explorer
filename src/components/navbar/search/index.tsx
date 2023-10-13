@@ -15,14 +15,13 @@ interface Props extends ComponentProps<typeof Root> {
 
 const Search: FC<Props> = (props) => {
   const [address, setAddress] = useState("");
-  const pathname = usePathname();
-  const { push } = useRouter();
+  const { replace } = useRouter();
 
   const handleSubmit = (
     event: Parameters<KeyboardEventHandler<HTMLInputElement>>[0]
   ) => {
     if (isAddress(address) && event.key == "Enter") {
-      push(join(pathname, address));
+      replace(join("/explorer", address));
       setAddress("");
     }
   };

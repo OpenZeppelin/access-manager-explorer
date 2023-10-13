@@ -11,7 +11,7 @@ import {
   Heading,
   IconButton,
 } from "@radix-ui/themes";
-import { ComponentProps, FC } from "react";
+import { ComponentProps, FC, useCallback, useMemo } from "react";
 import Address from "@/components/address";
 import { Address as AddressType } from "viem";
 import { useQuery } from "urql";
@@ -26,13 +26,14 @@ import Skeleton from "./skeleton";
 import { Cross2Icon, ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { cn } from "@/utils";
 import Interactions from "./tabs/interactions";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface Props extends ComponentProps<typeof Card> {
+  depth: number;
   address: AddressType;
 }
 
-const AccessManager: FC<Props> = ({ address, className, ...props }) => {
+const AccessManager: FC<Props> = ({ address, className, depth, ...props }) => {
   const [{ data, fetching, error }] = useQuery({
     query: ACCOUNT_QUERY,
     variables: {
@@ -40,7 +41,14 @@ const AccessManager: FC<Props> = ({ address, className, ...props }) => {
     },
   });
 
-  const { back } = useRouter();
+  const { replace } = useRouter();
+  const pathname = usePathname();
+
+  const remove = useCallback(() => {
+    const [_, explorer, ...items] = pathname.split("/");
+    items.splice(depth, 1);
+    replace([_, explorer, ...items].join("/"));
+  }, [depth, replace]);
 
   return (
     <Card
@@ -67,7 +75,13 @@ const AccessManager: FC<Props> = ({ address, className, ...props }) => {
           }}
         />
         <Badge size="2">Access Manager</Badge>
-        <IconButton onClick={back} ml="4" color="gray" size="3" variant="ghost">
+        <IconButton
+          onClick={remove}
+          ml="4"
+          color="gray"
+          size="3"
+          variant="ghost"
+        >
           <Cross2Icon />
         </IconButton>
       </Flex>
