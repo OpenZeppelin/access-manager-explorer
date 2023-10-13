@@ -9,9 +9,13 @@ import { cn } from "@/utils";
 import { config } from "@/config/wallet";
 import { FC, ReactNode } from "react";
 import { RainbowKit, Theme, Urql } from "@/components/providers";
-import { useTheme } from "next-themes";
+import { NextIntlClientProvider } from "next-intl";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://contracts.openzeppelin.com"),
@@ -45,14 +49,20 @@ type Props = { children: ReactNode };
 const RootLayout: FC<Props> = ({ children }) => {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn(inter.className, "flex flex-col min-h-screen")}>
-        <WagmiConfig config={config}>
-          <Theme>
-            <Urql>
-              <RainbowKit>{children}</RainbowKit>
-            </Urql>
-          </Theme>
-        </WagmiConfig>
+      <body className={cn(inter.className)}>
+        <main>
+          <WagmiConfig config={config}>
+            <Theme>
+              <Urql>
+                <RainbowKit>
+                  <NextIntlClientProvider locale="en" messages={{}}>
+                    {children}
+                  </NextIntlClientProvider>
+                </RainbowKit>
+              </Urql>
+            </Theme>
+          </WagmiConfig>
+        </main>
       </body>
     </html>
   );

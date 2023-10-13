@@ -4,6 +4,10 @@ import { ComponentProps, FC } from "react";
 import Gradient from "./gradient";
 import { Address } from "viem";
 import { ExternalLinkIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
+import { chains } from "@/config/wallet";
+import { useNetwork } from "wagmi";
+import { join } from "path";
 
 type AvatarProps = ComponentProps<typeof Avatar>;
 type HeadingProps = ComponentProps<typeof Heading>;
@@ -34,6 +38,8 @@ const Address: FC<Props> = ({ address, avatar, truncate, links, ...props }) => {
 
   const size = avatar?.size || DEFAULT_SIZE;
 
+  const { chain } = useNetwork();
+
   return (
     <Flex align="center" width="100%" {...props}>
       <Avatar
@@ -51,15 +57,26 @@ const Address: FC<Props> = ({ address, avatar, truncate, links, ...props }) => {
       <Heading size="2" weight="light" mr="3" {...(address as HeadingProps)}>
         {displayAddress}
       </Heading>
-      {links && (
+      {links?.etherscan && chain?.blockExplorers && (
         <IconButton
           variant="ghost"
           color="gray"
           size="1"
           {...(links?.etherscan == true ? {} : links.etherscan)}
+          asChild
         >
-          <ExternalLinkIcon width="13" height="13" />
-          <span className="sr-only">Etherscan</span>
+          <Link
+            href={join(
+              chain.blockExplorers.default.url,
+              "address",
+              address.value
+            )}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <ExternalLinkIcon width="13" height="13" />
+            <span className="sr-only">{chain.blockExplorers.default.name}</span>
+          </Link>
         </IconButton>
       )}
     </Flex>

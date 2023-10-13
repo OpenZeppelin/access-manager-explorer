@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.radix-themes {
+  --default-font-family: var(--font-inter);
+}
+
 input:focus {
   outline: none;
 }
@@ -17,4 +21,8 @@ input:focus {
 .no-radius,
 .no-radius::after {
   border-radius: 0 !important;
+}
+
+.card-inner-overflow-y-scroll > .rt-CardInner {
+  overflow-y: auto;
 }

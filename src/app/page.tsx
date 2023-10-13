@@ -7,23 +7,28 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <main>
-        <ScrollArea scrollbars="horizontal">
-          <Flex>
-            <Sidebar />
-            <AccessManager
-              address={"0x4ee69a1703b717cb46cd12c71c6fe225f646ba1e"}
-              size="3"
-              variant="classic"
-              className="no-radius"
-              style={{
-                minWidth: 600,
-                border: 0,
-              }}
-            />
-          </Flex>
-        </ScrollArea>
-      </main>
+      <ScrollArea size="2" scrollbars="horizontal">
+        <Flex>
+          <Sidebar
+            style={{
+              minHeight: "calc(100vh - 64px)",
+              maxHeight: "calc(100vh - 64px)",
+            }}
+          />
+          <AccessManager
+            address={"0x4ee69a1703b717cb46cd12c71c6fe225f646ba1e"}
+            size="3"
+            variant="classic"
+            className="no-radius"
+            style={{
+              maxWidth: 600,
+              minWidth: 600,
+              border: 0,
+              maxHeight: "calc(100vh - 64px)",
+            }}
+          />
+        </Flex>
+      </ScrollArea>
     </>
   );
 };

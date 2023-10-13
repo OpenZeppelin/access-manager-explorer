@@ -1,9 +1,9 @@
 "use client";
 
 import * as Collapsible from "@radix-ui/react-collapsible";
-import { useState } from "react";
+import { ComponentProps, FC, useEffect, useState } from "react";
 import Address from "@/components/address";
-import { Box, Button, Card, Flex, Heading } from "@radix-ui/themes";
+import { Button, Card, Flex, Heading } from "@radix-ui/themes";
 import {
   ChevronDownIcon,
   ChevronRightIcon,
@@ -13,18 +13,22 @@ import { cn } from "@/utils";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import useAccount from "@/hooks/use-account";
 
-const Sidebar = () => {
+interface Props extends ComponentProps<typeof Card> {}
+
+const Sidebar: FC<Props> = (props) => {
   const [open, setOpen] = useState(true);
   const { address, isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
 
   return (
     <Card
-      className="no-radius flex border-r w-64"
+      className={cn("no-radius flex border-r w-64", props.className)}
       size="2"
       style={{
         border: 0,
+        ...props.style,
       }}
+      {...props}
     >
       <Collapsible.Root
         className="w-full"
@@ -78,12 +82,6 @@ const Sidebar = () => {
           </Button>
         </Collapsible.Content>
       </Collapsible.Root>
-      {/* TODO: Avoid this filling */}
-      <Box
-        style={{
-          height: "83vh",
-        }}
-      />
     </Card>
   );
 };

@@ -1,6 +1,7 @@
 import Address from "@/components/address";
-import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
-import { Table, Badge, IconButton } from "@radix-ui/themes";
+import DelayedValue from "@/components/delayed-value";
+import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
+import { Table, Badge } from "@radix-ui/themes";
 import { FC } from "react";
 
 interface Props {
@@ -35,23 +36,25 @@ const Targets: FC<Props> = ({ data }) => {
                 }}
               />
             </Table.RowHeaderCell>
-            <Table.Cell>{target.adminDelay.value}</Table.Cell>
             <Table.Cell>
+              <DelayedValue {...target.adminDelay} />
+            </Table.Cell>
+            <Table.Cell align="center">
               {target.closed ? (
                 <Badge color="red">Closed</Badge>
               ) : (
                 <Badge color="green">Open</Badge>
               )}
             </Table.Cell>
-            <Table.Cell>
+            <Table.Cell align="center">
               {data.account.asAccessManager.id === target.manager.id ? (
-                <IconButton size="1" variant="soft" color="green">
-                  <CheckCircledIcon />
-                </IconButton>
+                <Badge radius="full" variant="soft" color="green">
+                  <CheckIcon />
+                </Badge>
               ) : (
-                <IconButton size="1" variant="soft" color="red">
-                  <CrossCircledIcon />
-                </IconButton>
+                <Badge radius="full" variant="soft" color="red">
+                  <Cross2Icon />
+                </Badge>
               )}
             </Table.Cell>
           </Table.Row>
