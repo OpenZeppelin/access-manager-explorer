@@ -55,7 +55,7 @@ const formatDuration = ({ weeks, days, hours, minutes, seconds }: Units) => {
   return result || "immediate";
 };
 
-const DelayedValue: FC<Props> = ({ value, oldValue, since }) => {
+const DelayedValue: FC<Props> = ({ value, oldValue, since, ...props }) => {
   const format = useFormatter();
   const now = useNow();
 
@@ -73,7 +73,7 @@ const DelayedValue: FC<Props> = ({ value, oldValue, since }) => {
   );
 
   const valueComponent = (
-    <Badge size="1" variant="soft">
+    <Badge size="1" variant="soft" {...props}>
       {formatDuration(units)}
       {!hasEffect}
     </Badge>

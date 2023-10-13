@@ -1,7 +1,7 @@
 import { gql } from "urql";
 
-const ACCESS_MANAGER_QUERY = gql`
-  query AccessManagerQuery($id: ID!) {
+const ACCOUNT_QUERY = gql`
+  query AccountQuery($id: ID!) {
     account(id: $id) {
       id
       asAccessManager {
@@ -59,6 +59,9 @@ const ACCESS_MANAGER_QUERY = gql`
           id
           target {
             id
+            target {
+              id
+            }
           }
           selector {
             id
@@ -90,9 +93,13 @@ const ACCESS_MANAGER_QUERY = gql`
         transaction {
           id
         }
+        timestamp
+        sender {
+          id
+        }
       }
     }
   }
 `;
 
-export { ACCESS_MANAGER_QUERY };
+export { ACCOUNT_QUERY };

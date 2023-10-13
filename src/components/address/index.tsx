@@ -3,11 +3,15 @@ import { truncateAddress } from "@/utils";
 import { ComponentProps, FC } from "react";
 import Gradient from "./gradient";
 import { Address } from "viem";
-import { ExternalLinkIcon } from "@radix-ui/react-icons";
+import {
+  CheckIcon,
+  ClipboardCopyIcon,
+  ExternalLinkIcon,
+} from "@radix-ui/react-icons";
 import Link from "next/link";
-import { chains } from "@/config/wallet";
 import { useNetwork } from "wagmi";
 import { join } from "path";
+import { useClipboard } from "@/hooks/use-clipboardÏ";
 
 type AvatarProps = ComponentProps<typeof Avatar>;
 type HeadingProps = ComponentProps<typeof Heading>;
@@ -20,18 +24,19 @@ interface AddressProps extends Partial<Omit<HeadingProps, "value">> {
 
 interface LinkProps {
   etherscan?: IconButtonProps | boolean;
+  copy?: IconButtonProps | boolean;
 }
 
 interface Props extends FlexProps {
   address: AddressProps;
   avatar?: Partial<Omit<AvatarProps, "fallback">>;
   truncate?: Parameters<typeof truncateAddress>[1] | boolean;
-  links?: LinkProps;
+  icons?: LinkProps;
 }
 
 const DEFAULT_SIZE = "1";
 
-const Address: FC<Props> = ({ address, avatar, truncate, links, ...props }) => {
+const Address: FC<Props> = ({ address, avatar, truncate, icons, ...props }) => {
   const displayAddress = !!truncate
     ? truncateAddress(address.value, truncate === true ? undefined : truncate)
     : address.value;
@@ -39,6 +44,8 @@ const Address: FC<Props> = ({ address, avatar, truncate, links, ...props }) => {
   const size = avatar?.size || DEFAULT_SIZE;
 
   const { chain } = useNetwork();
+
+  const { onCopy, hasCopied } = useClipboard(address.value);
 
   return (
     <Flex align="center" width="100%" {...props}>
@@ -57,28 +64,47 @@ const Address: FC<Props> = ({ address, avatar, truncate, links, ...props }) => {
       <Heading size="2" weight="light" mr="3" {...(address as HeadingProps)}>
         {displayAddress}
       </Heading>
-      {links?.etherscan && chain?.blockExplorers && (
-        <IconButton
-          variant="ghost"
-          color="gray"
-          size="1"
-          {...(links?.etherscan == true ? {} : links.etherscan)}
-          asChild
-        >
-          <Link
-            href={join(
-              chain.blockExplorers.default.url,
-              "address",
-              address.value
-            )}
-            target="_blank"
-            rel="noreferrer"
+      <Flex gap="2">
+        {icons?.etherscan && chain?.blockExplorers && (
+          <IconButton
+            variant="ghost"
+            color="gray"
+            size="1"
+            {...(icons?.etherscan == true ? {} : icons.etherscan)}
+            asChild
           >
-            <ExternalLinkIcon width="13" height="13" />
-            <span className="sr-only">{chain.blockExplorers.default.name}</span>
-          </Link>
-        </IconButton>
-      )}
+            <Link
+              href={join(
+                chain.blockExplorers.default.url,
+                "address",
+                address.value
+              )}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <ExternalLinkIcon width="13" height="13" />
+              <span className="sr-only">
+                {chain.blockExplorers.default.name}
+              </span>
+            </Link>
+          </IconButton>
+        )}
+        {icons?.copy && (
+          <IconButton
+            variant="ghost"
+            color="gray"
+            size="1"
+            onClick={onCopy}
+            {...(icons?.copy == true ? {} : icons.copy)}
+          >
+            {hasCopied ? (
+              <CheckIcon width="13" height="13" />
+            ) : (
+              <ClipboardCopyIcon width="13" height="13" />
+            )}
+          </IconButton>
+        )}
+      </Flex>
     </Flex>
   );
 };

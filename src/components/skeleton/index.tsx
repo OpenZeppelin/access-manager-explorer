@@ -1,5 +1,5 @@
 import { cn } from "@/utils";
-import { Box, Button } from "@radix-ui/themes";
+import { Box } from "@radix-ui/themes";
 import { ComponentProps, FC } from "react";
 
 interface Props extends ComponentProps<typeof Box> {}
