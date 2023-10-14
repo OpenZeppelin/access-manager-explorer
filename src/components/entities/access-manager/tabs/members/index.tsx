@@ -1,20 +1,16 @@
 import Address from "@/components/address";
 import { CircleIcon } from "@radix-ui/react-icons";
-import { Box, Callout, Card, Flex, Text } from "@radix-ui/themes";
+import { Callout, Card, Flex, Text } from "@radix-ui/themes";
 import { FC } from "react";
 
 interface Props {
-  data: any;
+  members: any[];
 }
 
-const Managed: FC<Props> = ({ data }) => {
+const Members: FC<Props> = ({ members }) => {
   return (
-    <Box>
-      <Text mt="4" size="2">
-        Contracts that inherit from AccessManaged and have this manager as its
-        authority
-      </Text>
-      {!data.account.authorityOf.length ? (
+    <>
+      {!members.length ? (
         <Callout.Root>
           <Callout.Icon>
             <CircleIcon />
@@ -22,12 +18,13 @@ const Managed: FC<Props> = ({ data }) => {
           <Callout.Text>No members found</Callout.Text>
         </Callout.Root>
       ) : (
-        <Flex mt="2" direction="column" gap="2">
-          {data.account.authorityOf.map((managed: any) => (
-            <Card size="2">
+        <Flex direction="column" gap="2">
+          {members.map(({ id, asAccount }: any) => (
+            <Card key={id} size="1">
               <Address
+                key={id}
                 address={{
-                  value: managed.id,
+                  value: asAccount.id,
                 }}
                 icons={{
                   etherscan: true,
@@ -38,8 +35,8 @@ const Managed: FC<Props> = ({ data }) => {
           ))}
         </Flex>
       )}
-    </Box>
+    </>
   );
 };
 
-export default Managed;
+export default Members;

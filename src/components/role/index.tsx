@@ -9,7 +9,7 @@ interface Role {
 interface AccessManagerRole {
   id: string;
   label?: string;
-  role: Role;
+  asRole: Role;
 }
 
 interface Props extends Omit<ComponentProps<typeof Badge>, "role"> {
@@ -19,7 +19,7 @@ interface Props extends Omit<ComponentProps<typeof Badge>, "role"> {
 const Role: FC<Props> = ({ role, ...props }) => {
   return (
     <Badge color={role.label ? "blue" : "gray"} {...props}>
-      {role.role.id}
+      {role.asRole.id}
       <Separator orientation="vertical" />
       {role.label ?? (
         <>

@@ -12,6 +12,8 @@ import {
 import { cn } from "@/utils";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import useAccount from "@/hooks/use-account";
+import { usePathname, useRouter } from "next/navigation";
+import { join } from "path";
 
 interface Props extends ComponentProps<typeof Card> {}
 
@@ -19,6 +21,8 @@ const Sidebar: FC<Props> = (props) => {
   const [open, setOpen] = useState(true);
   const { address, isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
+  const { push } = useRouter();
+  const pathname = usePathname();
 
   return (
     <Card
@@ -69,7 +73,12 @@ const Sidebar: FC<Props> = (props) => {
           )}
         </Flex>
         <Collapsible.Content className="pt-2">
-          <Button variant="ghost" color="gray" className="w-full">
+          <Button
+            onClick={() => push(join(pathname, `mbr-${address}`))}
+            variant="ghost"
+            color="gray"
+            className="w-full"
+          >
             {address && (
               <Address
                 address={{

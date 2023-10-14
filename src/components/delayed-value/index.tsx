@@ -67,7 +67,7 @@ const DelayedValue: FC<Props> = ({ value, oldValue, since, ...props }) => {
   const oldValueUnits = useMemo(() => duration(oldValue), [oldValue, format]);
 
   const oldValueComponent = (
-    <Badge size="1" variant="soft">
+    <Badge size="1" variant="soft" {...props}>
       {formatDuration(oldValueUnits)}
     </Badge>
   );

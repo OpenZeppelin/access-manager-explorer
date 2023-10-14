@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import { useNetwork } from "wagmi";
 import { join } from "path";
-import { useClipboard } from "@/hooks/use-clipboardÏ";
+import { useClipboard } from "@/hooks/use-clipboard";
 
 type AvatarProps = ComponentProps<typeof Avatar>;
 type HeadingProps = ComponentProps<typeof Heading>;
