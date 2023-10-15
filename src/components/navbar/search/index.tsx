@@ -1,17 +1,9 @@
 "use client";
 
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { Badge, DropdownMenu, TextField } from "@radix-ui/themes";
-import { useRouter } from "next/navigation";
+import { CircleIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { Badge, Callout, DropdownMenu, TextField } from "@radix-ui/themes";
 import { join } from "path";
-import {
-  ComponentProps,
-  FC,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { ComponentProps, FC, useEffect, useMemo, useState } from "react";
 import { ACCOUNT_QUERY } from "./requests";
 import { useDebounce } from "use-debounce";
 import { isAddress } from "viem";
@@ -32,14 +24,13 @@ const Search: FC<Props> = (props) => {
   const [address, setAddress] = useState("");
   const [debouncedAddress] = useDebounce(address, 300);
   const [open, setOpen] = useState(false);
-  const { replace } = useRouter();
 
   const isInputAddress = useMemo(
     () => isAddress(debouncedAddress),
     [debouncedAddress]
   );
 
-  const [{ data, fetching, error }] = useQuery({
+  const [{ data, fetching }] = useQuery({
     query: ACCOUNT_QUERY,
     variables: {
       id: debouncedAddress,
@@ -47,7 +38,7 @@ const Search: FC<Props> = (props) => {
     pause: !isInputAddress,
   });
 
-  const { isData, isManager, isManaged, hasMembership, isTarget } =
+  const { isData, isManager, isManaged, hasMembership, isTarget, hasResults } =
     useMemo(() => {
       const result = {
         isData: false,
@@ -55,15 +46,22 @@ const Search: FC<Props> = (props) => {
         isManaged: false,
         hasMembership: false,
         isTarget: false,
+        hasResults: false,
       };
-      result.isData = !!data?.account;
+      result.isData = !!data;
 
-      if (!result.isData) return result;
+      if (!data?.account) return result;
 
       result.isManager = !!data.account.asAccessManager;
       result.isManaged = !!data.account.asAccessManaged;
       result.hasMembership = data.account.membership.length > 0;
       result.isTarget = data.account.targettedBy.length > 0;
+
+      result.hasResults =
+        result.isManager ||
+        result.isManaged ||
+        result.hasMembership ||
+        result.isTarget;
 
       return result;
     }, [data?.account]);
@@ -91,6 +89,16 @@ const Search: FC<Props> = (props) => {
           value={address}
         />
         <DropdownMenu.Content>
+          {!hasResults && (
+            <Callout.Root color="gray">
+              <Callout.Icon>
+                <CircleIcon />
+              </Callout.Icon>
+              <Callout.Text>
+                No information found for this address.
+              </Callout.Text>
+            </Callout.Root>
+          )}
           {isManager && (
             <DropdownMenu.Item asChild>
               <Link

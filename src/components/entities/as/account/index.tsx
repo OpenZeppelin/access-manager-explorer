@@ -1,45 +1,19 @@
 "use client";
-import {
-  Badge,
-  Card,
-  Flex,
-  Text,
-  Separator,
-  IconButton,
-} from "@radix-ui/themes";
-import { ComponentProps, FC, ReactNode, useCallback } from "react";
+import { Card } from "@radix-ui/themes";
+import { ComponentProps, FC, ReactNode } from "react";
 import Address from "@/components/address";
 import { Address as AddressType } from "viem";
-import { Cross2Icon } from "@radix-ui/react-icons";
-import { cn } from "@/utils";
+import Entity from "../entity";
 
-import { AddressEntity } from "@/types";
-
-interface Props extends ComponentProps<typeof Card> {
-  entityType: AddressEntity;
+interface Props extends Omit<ComponentProps<typeof Entity>, "header"> {
   address: AddressType;
-  children: ReactNode;
-  description: string;
-  remove: () => void;
   truncate: ComponentProps<typeof Address>["truncate"];
 }
 
-const Account: FC<Props> = ({
-  entityType,
-  address,
-  children,
-  description,
-  className,
-  remove,
-  truncate,
-  ...props
-}) => {
+const Account: FC<Props> = ({ address, truncate, children, ...props }) => {
   return (
-    <Card
-      {...props}
-      className={cn("max-h-full card-inner-overflow-y-scroll", className)}
-    >
-      <Flex align="center" mb="4">
+    <Entity
+      header={
         <Address
           mr="auto"
           address={{
@@ -47,7 +21,6 @@ const Account: FC<Props> = ({
             weight: "medium",
             size: "6",
           }}
-          truncate={truncate}
           avatar={{
             size: "2",
           }}
@@ -55,22 +28,13 @@ const Account: FC<Props> = ({
             etherscan: true,
             copy: true,
           }}
+          truncate={truncate}
         />
-        <Badge>{entityType}</Badge>
-        <IconButton
-          onClick={remove}
-          ml="4"
-          color="gray"
-          size="3"
-          variant="ghost"
-        >
-          <Cross2Icon />
-        </IconButton>
-      </Flex>
-      <Text size="2">{description}</Text>
-      <Separator orientation="horizontal" my="3" size="4" />
+      }
+      {...props}
+    >
       {children}
-    </Card>
+    </Entity>
   );
 };
 

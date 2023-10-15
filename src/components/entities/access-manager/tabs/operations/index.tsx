@@ -18,7 +18,7 @@ const Operations: FC<Props> = ({ operations }) => {
           <Callout.Text>No operations found</Callout.Text>
         </Callout.Root>
       ) : (
-        <Grid columns="3" gap="3" width="auto">
+        <Grid columns="2" gap="3" width="auto">
           {operations.map((operation: any) => (
             <Operation className="w-full" size="2" operation={operation} />
           ))}

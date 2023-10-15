@@ -11,7 +11,7 @@ input:focus {
 }
 
 .rt-AvatarRoot:where(.rt-r-size-1) {
-  --avatar-size: var(--space-3) !important;
+  --avatar-size: var(--space-4) !important;
   --avatar-fallback-one-letter-font-size: var(--font-size-2);
   --avatar-fallback-two-letters-font-size: var(--font-size-1);
   border-radius: max(var(--radius-2), var(--radius-full));

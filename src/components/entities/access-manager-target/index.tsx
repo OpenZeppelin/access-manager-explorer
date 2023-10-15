@@ -120,7 +120,7 @@ const AccessManagerTarget: FC<Props> = ({
                   </Text>
                 </Info>
               </Heading>
-              <DelayedValue {...data.accessManagerTarget.adminDelay} />
+              <DelayedValue size="2" {...data.accessManagerTarget.adminDelay} />
             </Flex>
             <Separator size="4" my="3" />
             <Flex align="center" width="100%" justify="between">

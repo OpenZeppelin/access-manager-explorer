@@ -1,13 +1,12 @@
 "use client";
 import {
-  Box,
   Card,
   Callout,
-  Table,
   Flex,
   Heading,
   Separator,
   Text,
+  Code,
 } from "@radix-ui/themes";
 import { ComponentProps, FC, useMemo } from "react";
 import { Address as AddressType } from "viem";
@@ -23,6 +22,7 @@ import DelayedValue from "@/components/delayed-value";
 import { useFormatter, useNow } from "next-intl";
 import Skeleton from "./skeleton";
 import ROUTES from "@/config/routes";
+import Info from "@/components/info";
 
 interface Props extends ComponentProps<typeof Card> {
   id: string;
@@ -108,18 +108,38 @@ const AccessManagerMember: FC<Props> = ({
           </Flex>
           <Separator size="4" my="3" />
           <Flex align="center" width="100%" justify="between">
-            <Heading size="2">Execution delay</Heading>
-            <DelayedValue {...data.accessManagerRoleMember.executionDelay} />
+            <Heading size="2">
+              Execution delay
+              <Info ml="3" mt="1">
+                <Text size="1">
+                  Roles are assigned to users along with an execution delay,
+                  which is the amount of time the user needs to call{" "}
+                  <Code>schedule</Code> in advance of calling{" "}
+                  <Code>execute</Code> for any allowed operation to its role.
+                </Text>
+              </Info>
+            </Heading>
+            <DelayedValue size="2" {...data.accessManagerRoleMember.executionDelay} />
           </Flex>
           <Separator size="4" my="3" />
           <Flex align="center" width="100%" justify="between">
             <Heading size="2">Member since</Heading>
-            <Text size="1">
-              {format.relativeTime(
-                data.accessManagerRoleMember.since * 1000,
-                now
+            <Flex align="center">
+              <Text size="2">
+                {format.relativeTime(
+                  data.accessManagerRoleMember.since * 1000,
+                  now.getTime()
+                )}
+              </Text>
+              {data.accessManagerRoleMember.since * 1000 > now.getTime() && (
+                <Info ml="3" mt="1">
+                  <Text size="1">
+                    A date in the future means this role is already granted but
+                    not in effect yet.
+                  </Text>
+                </Info>
               )}
-            </Text>
+            </Flex>
           </Flex>
         </Flex>
       )}

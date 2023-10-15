@@ -1,6 +1,7 @@
 import AccessManaged from "@/components/entities/access-managed";
 import AccessManager from "@/components/entities/access-manager";
-import AccessManagerMember from "@/components/entities/access-manager-member";
+import AccessManagerRole from "@/components/entities/access-manager-role";
+import AccessManagerMember from "@/components/entities/access-manager-role-member";
 import AccessManagerTarget from "@/components/entities/access-manager-target";
 import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
@@ -107,6 +108,23 @@ const Explorer: FC<Props> = ({ params: { entities } }) => {
                       leading: 2,
                       trailing: 4,
                     }}
+                    style={{
+                      maxWidth: 430,
+                      minWidth: 430,
+                      border: 0,
+                      maxHeight: "calc(100vh - 64px)",
+                    }}
+                  />
+                );
+              case "role":
+                return (
+                  <AccessManagerRole
+                    key={prefixedId}
+                    id={id}
+                    depth={depth}
+                    size="4"
+                    variant="classic"
+                    className="no-radius"
                     style={{
                       maxWidth: 430,
                       minWidth: 430,

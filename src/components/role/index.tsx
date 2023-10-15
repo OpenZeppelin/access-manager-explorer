@@ -31,6 +31,7 @@ interface Props extends Omit<ComponentProps<typeof Badge>, "role"> {
 }
 
 const Role: FC<Props> = ({ role, icons, ...props }) => {
+  if (!role.label && role.asRole.id == "0") role.label = "ADMIN";
   const isLabel = typeof role.label !== "undefined";
 
   const pathname = usePathname();
