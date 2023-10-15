@@ -1,6 +1,6 @@
 import Role from "@/components/role";
 import { ACCESS_MANAGER_ROLE_FRAGMENT } from "@/components/role/requests";
-import { FragmentType, useFragment } from "@/gql";
+import { FragmentType, useFragment as asFragment } from "@/gql";
 import { CircleIcon } from "@radix-ui/react-icons";
 import { Callout, Grid } from "@radix-ui/themes";
 import { FC } from "react";
@@ -11,7 +11,7 @@ interface Props {
 
 const Roles: FC<Props> = ({ roles: fragments }) => {
   const roles = fragments.map((role) =>
-    useFragment(ACCESS_MANAGER_ROLE_FRAGMENT, role)
+    asFragment(ACCESS_MANAGER_ROLE_FRAGMENT, role)
   );
 
   return (

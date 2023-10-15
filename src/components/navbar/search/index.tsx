@@ -14,7 +14,7 @@ import { EntityPrefix } from "@/types";
 import ROUTES from "@/config/routes";
 import Role from "@/components/role";
 import Link from "next/link";
-import { makeFragmentData, useFragment } from "@/gql";
+import { makeFragmentData, useFragment as asFragment } from "@/gql";
 import { ACCESS_MANAGER_ROLE_FRAGMENT } from "@/components/role/requests";
 const { Root, Slot, Input } = TextField;
 
@@ -153,7 +153,7 @@ const Search: FC<Props> = (props) => {
               <DropdownMenu.SubTrigger>Member of</DropdownMenu.SubTrigger>
               <DropdownMenu.SubContent>
                 {data?.account?.membership.map((membership) => {
-                  const role = useFragment(
+                  const role = asFragment(
                     ACCESS_MANAGER_ROLE_FRAGMENT,
                     membership.role
                   );

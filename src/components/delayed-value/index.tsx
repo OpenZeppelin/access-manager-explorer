@@ -2,7 +2,10 @@ import { Badge, Flex, HoverCard, IconButton, Text } from "@radix-ui/themes";
 import { ComponentProps, FC, useMemo } from "react";
 import { useFormatter, useNow } from "next-intl";
 import { ArrowRightIcon, InfoCircledIcon } from "@radix-ui/react-icons";
-import { FragmentType, useFragment } from "@/gql/fragment-masking";
+import {
+  FragmentType,
+  useFragment as asFragment,
+} from "@/gql/fragment-masking";
 import { DELAYED_BIG_INT_FRAGMENT } from "./requests";
 
 interface Props extends ComponentProps<typeof Badge> {
@@ -56,7 +59,7 @@ const formatDuration = ({ weeks, days, hours, minutes, seconds }: Units) => {
 };
 
 const DelayedValue: FC<Props> = ({ value: delayedValue, ...props }) => {
-  const { since, oldValue, value } = useFragment(
+  const { since, oldValue, value } = asFragment(
     DELAYED_BIG_INT_FRAGMENT,
     delayedValue
   );

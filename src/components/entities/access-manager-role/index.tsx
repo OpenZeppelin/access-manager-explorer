@@ -24,7 +24,7 @@ import DelayedValue from "@/components/delayed-value";
 import Info from "@/components/info";
 import RoleBadge from "@/components/role";
 import FunctionBadge from "@/components/function";
-import { makeFragmentData, useFragment } from "@/gql";
+import { makeFragmentData, useFragment as asFragment } from "@/gql";
 import { ACCESS_MANAGER_ROLE_FRAGMENT } from "@/components/role/requests";
 import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "@/components/function/requests";
 
@@ -169,7 +169,7 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
                 <Grid columns="2" gap="3" width="auto">
                   {accessManagerRole?.adminOf.map((role) => (
                     <RoleBadge
-                      key={useFragment(ACCESS_MANAGER_ROLE_FRAGMENT, role).id}
+                      key={asFragment(ACCESS_MANAGER_ROLE_FRAGMENT, role).id}
                       size="2"
                       icons={{ navigate: true }}
                       accessManagerRole={role}
@@ -186,7 +186,7 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
                 <Grid columns="2" gap="3" width="auto">
                   {accessManagerRole?.guardianOf.map((role) => (
                     <RoleBadge
-                      key={useFragment(ACCESS_MANAGER_ROLE_FRAGMENT, role).id}
+                      key={asFragment(ACCESS_MANAGER_ROLE_FRAGMENT, role).id}
                       size="2"
                       icons={{ navigate: true }}
                       accessManagerRole={role}
@@ -240,7 +240,7 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
             {(accessManagerRole?.functions.length ?? 0) > 0 ? (
               <Flex direction="column">
                 {accessManagerRole?.functions.map((method) => {
-                  const { id } = useFragment(
+                  const { id } = asFragment(
                     ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT,
                     method
                   );

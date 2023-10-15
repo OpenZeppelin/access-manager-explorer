@@ -2,7 +2,7 @@ import Address from "@/components/address";
 import Role from "@/components/role";
 import { ACCESS_MANAGER_ROLE_FRAGMENT } from "@/components/role/requests";
 import ROUTES from "@/config/routes";
-import { makeFragmentData, useFragment } from "@/gql";
+import { makeFragmentData, useFragment as asFragment } from "@/gql";
 import { AccessManagerRoleMembersQuery } from "@/gql/graphql";
 import { EntityPrefix } from "@/types";
 import { Button } from "@radix-ui/themes";
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const MemberOf: FC<Props> = ({ membership }) => {
-  const role = useFragment(ACCESS_MANAGER_ROLE_FRAGMENT, membership.role);
+  const role = asFragment(ACCESS_MANAGER_ROLE_FRAGMENT, membership.role);
 
   const asRole = role?.label ? { id: role.label } : role.asRole;
   const roleFragment = makeFragmentData(

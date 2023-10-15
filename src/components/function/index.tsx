@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { join } from "path";
 import { ComponentProps, FC } from "react";
 import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "./requests";
-import { FragmentType, useFragment } from "@/gql";
+import { FragmentType, useFragment as asFragment } from "@/gql";
 
 type IconButtonProps = ComponentProps<typeof IconButton>;
 
@@ -19,7 +19,7 @@ interface Props extends ComponentProps<typeof Code> {
 }
 
 const Selector: FC<Props> = ({ method: fn, icons, ...props }) => {
-  const method = useFragment(ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT, fn);
+  const method = asFragment(ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT, fn);
   const pathname = usePathname();
   return (
     <Flex align="center">
