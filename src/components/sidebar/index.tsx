@@ -114,6 +114,7 @@ const Sidebar: FC<Props> = (props) => {
           )}
           {data?.accessManagerRoleMembers?.map((membership: any) => (
             <Button
+              key={membership.id}
               my="1"
               variant="ghost"
               color="gray"
@@ -121,6 +122,7 @@ const Sidebar: FC<Props> = (props) => {
               asChild
             >
               <Link
+                scroll={false}
                 href={join(
                   ROUTES.EXPLORER.ROOT,
                   ROUTES.EXPLORER.DETAILS(
@@ -130,6 +132,15 @@ const Sidebar: FC<Props> = (props) => {
                 )}
                 replace
               >
+                <Role
+                  ml="3"
+                  role={{
+                    id: membership.id,
+                    asRole: membership.role.label
+                      ? { id: membership.role.label }
+                      : membership.role.asRole,
+                  }}
+                />
                 <Address
                   address={{
                     value: membership.manager.asAccount.id,
@@ -138,17 +149,8 @@ const Sidebar: FC<Props> = (props) => {
                     leading: 4,
                     trailing: 6,
                   }}
-                  mr="auto"
-                  ml="3"
                   p="1"
-                />
-                <Role
-                  role={{
-                    id: membership.id,
-                    asRole: membership.role.label
-                      ? { id: membership.role.label }
-                      : membership.role.asRole,
-                  }}
+                  mr="auto"
                 />
               </Link>
             </Button>

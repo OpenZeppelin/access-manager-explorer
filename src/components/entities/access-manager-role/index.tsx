@@ -23,6 +23,7 @@ import Address from "@/components/address";
 import DelayedValue from "@/components/delayed-value";
 import Info from "@/components/info";
 import RoleBadge from "@/components/role";
+import FunctionBadge from "@/components/function";
 
 interface Props extends ComponentProps<typeof Card> {
   id: string;
@@ -217,9 +218,18 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
             {data.accessManagerRole.functions.length > 0 ? (
               <Flex direction="column">
                 {data.accessManagerRole.functions.map((method: any) => (
-                  <Code my="1" key={method.id}>
-                    {method.asSelector.id}
-                  </Code>
+                  <FunctionBadge
+                    my="1"
+                    method={method}
+                    icons={{
+                      navigate: {
+                        id: ROUTES.EXPLORER.DETAILS(
+                          EntityPrefix.AccessManagerTargetFunction,
+                          method.id
+                        ),
+                      },
+                    }}
+                  />
                 ))}
               </Flex>
             ) : (

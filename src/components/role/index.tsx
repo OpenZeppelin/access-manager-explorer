@@ -71,6 +71,7 @@ const Role: FC<Props> = ({ role, icons, ...props }) => {
           asChild
         >
           <Link
+            scroll={false}
             href={join(
               pathname,
               ROUTES.EXPLORER.DETAILS(EntityPrefix.AccessManagerRole, role.id)

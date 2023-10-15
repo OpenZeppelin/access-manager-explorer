@@ -15,6 +15,7 @@ export enum EntityPrefix {
   AccessManager = "mgr",
   AccessManaged = "mgd",
   AccessManagerTarget = "tgt",
+  AccessManagerTargetFunction = "fn",
   AccessManagerRole = "role",
   AccessManagerRoleMember = "mbr",
 }

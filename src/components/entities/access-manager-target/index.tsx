@@ -3,7 +3,6 @@ import {
   Box,
   Card,
   Callout,
-  Tabs,
   Flex,
   Separator,
   Heading,
@@ -25,6 +24,7 @@ import Account from "../as/account";
 import { AddressEntity, EntityPrefix } from "@/types";
 import useRemoveEntity from "@/hooks/use-remove-entity";
 import Address from "@/components/address";
+import Function from "@/components/function";
 import { ACCESS_MANAGER_TARGET_QUERY } from "./request";
 import DelayedValue from "@/components/delayed-value";
 import Info from "@/components/info";
@@ -144,6 +144,7 @@ const AccessManagerTarget: FC<Props> = ({
             {data.accessManagerTarget.asAccount.asAccessManaged?.id && (
               <Button asChild variant="surface" size="1" mt="4" color="gray">
                 <Link
+                  scroll={false}
                   href={join(
                     pathname,
                     ROUTES.EXPLORER.DETAILS(
@@ -162,9 +163,19 @@ const AccessManagerTarget: FC<Props> = ({
             {data.accessManagerTarget.functions.length > 0 ? (
               <Flex direction="column">
                 {data.accessManagerTarget.functions.map((method: any) => (
-                  <Code my="1" key={method.id}>
-                    {method.asSelector.id}
-                  </Code>
+                  <Function
+                    my="1"
+                    size="4"
+                    method={method}
+                    icons={{
+                      navigate: {
+                        id: ROUTES.EXPLORER.DETAILS(
+                          EntityPrefix.AccessManagerTargetFunction,
+                          method.id
+                        ),
+                      },
+                    }}
+                  />
                 ))}
               </Flex>
             ) : (

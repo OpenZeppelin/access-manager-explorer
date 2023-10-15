@@ -67,7 +67,7 @@ const AccessManager: FC<Props> = ({
                 <Tabs.Trigger value="targets">Targets</Tabs.Trigger>
                 <Tabs.Trigger value="roles">Roles</Tabs.Trigger>
                 <Tabs.Trigger value="members">Members</Tabs.Trigger>
-                <Tabs.Trigger value="operations">Operations</Tabs.Trigger>
+                {/* <Tabs.Trigger value="operations">Operations</Tabs.Trigger> */}
               </Tabs.List>
               <Box pt="4" pb="2">
                 <Tabs.Content value="targets">
@@ -79,9 +79,9 @@ const AccessManager: FC<Props> = ({
                 <Tabs.Content value="members">
                   <Members members={data.accessManager.members} />
                 </Tabs.Content>
-                <Tabs.Content value="operations">
+                {/* <Tabs.Content value="operations">
                   <Operations operations={data.accessManager.operations} />
-                </Tabs.Content>
+                </Tabs.Content> */}
               </Box>
             </Tabs.Root>
           </>

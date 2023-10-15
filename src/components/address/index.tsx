@@ -125,7 +125,7 @@ const Address: FC<Props> = ({ address, avatar, truncate, icons, ...props }) => {
             {...(icons?.copy == true ? {} : icons.copy)}
             asChild
           >
-            <Link href={join(pathname, icons.navigate.id)}>
+            <Link scroll={false} href={join(pathname, icons.navigate.id)}>
               <ArrowRightIcon width="13" height="13" />
             </Link>
           </IconButton>
