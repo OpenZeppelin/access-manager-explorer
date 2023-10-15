@@ -1,4 +1,6 @@
 import Address from "@/components/address";
+import ROUTES from "@/config/routes";
+import { EntityPrefix } from "@/types";
 import { CircleIcon } from "@radix-ui/react-icons";
 import { Callout, Flex, Card } from "@radix-ui/themes";
 import { FC } from "react";
@@ -29,6 +31,12 @@ const Targets: FC<Props> = ({ targets }) => {
                 icons={{
                   etherscan: true,
                   copy: true,
+                  navigate: {
+                    id: ROUTES.EXPLORER.DETAILS(
+                      EntityPrefix.AccessManagerTarget,
+                      id
+                    ),
+                  },
                 }}
               />
             </Card>

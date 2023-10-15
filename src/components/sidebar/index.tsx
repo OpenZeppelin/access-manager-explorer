@@ -19,6 +19,7 @@ import { EntityPrefix } from "@/types";
 import { useQuery } from "urql";
 import { ACCESS_MANAGER_MEMBER_QUERY } from "./requests";
 import Role from "../role";
+import Link from "next/link";
 
 interface Props extends ComponentProps<typeof Card> {}
 
@@ -114,40 +115,42 @@ const Sidebar: FC<Props> = (props) => {
           {data?.accessManagerRoleMembers?.map((membership: any) => (
             <Button
               my="1"
-              onClick={() =>
-                replace(
-                  join(
-                    ROUTES.EXPLORER.ROOT,
-                    ROUTES.EXPLORER.DETAILS(
-                      EntityPrefix.AccessManagerRoleMember,
-                      membership.id
-                    )
-                  )
-                )
-              }
               variant="ghost"
               color="gray"
               className="w-full"
+              asChild
             >
-              <Address
-                address={{
-                  value: membership.manager.asAccount.id,
-                }}
-                truncate={{
-                  leading: 4,
-                  trailing: 6,
-                }}
-                mr="auto"
-                ml="3"
-                p="1"
-              />
-              <Role
-                role={{
-                  asRole: membership.role.label
-                    ? { id: membership.role.label }
-                    : membership.role.asRole,
-                }}
-              />
+              <Link
+                href={join(
+                  ROUTES.EXPLORER.ROOT,
+                  ROUTES.EXPLORER.DETAILS(
+                    EntityPrefix.AccessManagerRoleMember,
+                    membership.id
+                  )
+                )}
+                replace
+              >
+                <Address
+                  address={{
+                    value: membership.manager.asAccount.id,
+                  }}
+                  truncate={{
+                    leading: 4,
+                    trailing: 6,
+                  }}
+                  mr="auto"
+                  ml="3"
+                  p="1"
+                />
+                <Role
+                  role={{
+                    id: membership.id,
+                    asRole: membership.role.label
+                      ? { id: membership.role.label }
+                      : membership.role.asRole,
+                  }}
+                />
+              </Link>
             </Button>
           ))}
         </Collapsible.Content>

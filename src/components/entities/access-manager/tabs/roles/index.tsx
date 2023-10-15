@@ -24,7 +24,7 @@ const Roles: FC<Props> = ({ roles }) => {
             <Role
               className="w-full"
               size="2"
-              icons={{ unlabelled: true }}
+              icons={{ unlabelled: true, navigate: true }}
               role={role}
             />
           ))}

@@ -4,6 +4,7 @@ import { ComponentProps, FC, useMemo } from "react";
 import Gradient from "./gradient";
 import { Address } from "viem";
 import {
+  ArrowRightIcon,
   CheckIcon,
   ClipboardCopyIcon,
   ExternalLinkIcon,
@@ -12,6 +13,7 @@ import Link from "next/link";
 import { useNetwork } from "wagmi";
 import { join } from "path";
 import { useClipboard } from "@/hooks/use-clipboard";
+import { usePathname } from "next/navigation";
 
 type AvatarProps = ComponentProps<typeof Avatar>;
 type HeadingProps = ComponentProps<typeof Heading>;
@@ -25,6 +27,7 @@ interface AddressProps extends Partial<Omit<HeadingProps, "value">> {
 interface IconProps {
   etherscan?: IconButtonProps | boolean;
   copy?: IconButtonProps | boolean;
+  navigate?: IconButtonProps & { id: string };
 }
 
 interface Props extends FlexProps {
@@ -54,6 +57,8 @@ const Address: FC<Props> = ({ address, avatar, truncate, icons, ...props }) => {
 
   const { onCopy, hasCopied } = useClipboard(address.value);
 
+  const pathname = usePathname();
+
   return (
     <Flex align="center" justify="between" {...props}>
       <Flex gap="2">
@@ -73,6 +78,21 @@ const Address: FC<Props> = ({ address, avatar, truncate, icons, ...props }) => {
         </Heading>
       </Flex>
       <Flex gap="2">
+        {icons?.copy && (
+          <IconButton
+            variant="ghost"
+            color="gray"
+            size="1"
+            onClick={onCopy}
+            {...(icons?.copy == true ? {} : icons.copy)}
+          >
+            {hasCopied ? (
+              <CheckIcon width="13" height="13" />
+            ) : (
+              <ClipboardCopyIcon width="13" height="13" />
+            )}
+          </IconButton>
+        )}
         {icons?.etherscan && chain?.blockExplorers && (
           <IconButton
             variant="ghost"
@@ -97,19 +117,17 @@ const Address: FC<Props> = ({ address, avatar, truncate, icons, ...props }) => {
             </Link>
           </IconButton>
         )}
-        {icons?.copy && (
+        {icons?.navigate && (
           <IconButton
             variant="ghost"
             color="gray"
             size="1"
-            onClick={onCopy}
             {...(icons?.copy == true ? {} : icons.copy)}
+            asChild
           >
-            {hasCopied ? (
-              <CheckIcon width="13" height="13" />
-            ) : (
-              <ClipboardCopyIcon width="13" height="13" />
-            )}
+            <Link href={join(pathname, icons.navigate.id)}>
+              <ArrowRightIcon width="13" height="13" />
+            </Link>
           </IconButton>
         )}
       </Flex>

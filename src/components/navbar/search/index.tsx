@@ -21,6 +21,7 @@ import { cn } from "@/utils";
 import { EntityPrefix } from "@/types";
 import ROUTES from "@/config/routes";
 import Role from "@/components/role";
+import Link from "next/link";
 const { Root, Slot, Input } = TextField;
 
 interface Props extends ComponentProps<typeof Root> {
@@ -71,11 +72,6 @@ const Search: FC<Props> = (props) => {
     setOpen(isInputAddress && isData);
   }, [isData, data?.account, isInputAddress, address]);
 
-  const navigate = (prefix: EntityPrefix, id: string) => {
-    replace(join(ROUTES.EXPLORER.ROOT, ROUTES.EXPLORER.DETAILS(prefix, id)));
-    setAddress("");
-  };
-
   return (
     <Root {...props}>
       <DropdownMenu.Root open={open} onOpenChange={setOpen}>
@@ -96,36 +92,47 @@ const Search: FC<Props> = (props) => {
         />
         <DropdownMenu.Content>
           {isManager && (
-            <DropdownMenu.Item
-              onSelect={() =>
-                navigate(
-                  EntityPrefix.AccessManager,
-                  data.account.asAccessManager.id
-                )
-              }
-            >
-              <Address address={{ value: data.account.asAccessManager.id }} />
-              <Badge color="amber" ml="auto" size="1" variant="solid">
-                Manager
-              </Badge>
+            <DropdownMenu.Item asChild>
+              <Link
+                id={data.account.asAccessManager.id}
+                href={join(
+                  ROUTES.EXPLORER.ROOT,
+                  ROUTES.EXPLORER.DETAILS(
+                    EntityPrefix.AccessManager,
+                    data.account.asAccessManager.id
+                  )
+                )}
+                onClick={() => setAddress("")}
+                replace
+              >
+                <Address address={{ value: data.account.asAccessManager.id }} />
+                <Badge color="amber" ml="auto" size="1" variant="solid">
+                  Manager
+                </Badge>
+              </Link>
             </DropdownMenu.Item>
           )}
           {isManaged && (
-            <DropdownMenu.Item
-              onSelect={() =>
-                navigate(
-                  EntityPrefix.AccessManaged,
-                  data.account.asAccessManaged.id
-                )
-              }
-            >
-              <Address
-                mr="2"
-                address={{ value: data.account.asAccessManaged.id }}
-              />
-              <Badge color="amber" ml="auto" size="1" variant="solid">
-                Managed
-              </Badge>
+            <DropdownMenu.Item id={data.account.asAccessManaged.id} asChild>
+              <Link
+                href={join(
+                  ROUTES.EXPLORER.ROOT,
+                  ROUTES.EXPLORER.DETAILS(
+                    EntityPrefix.AccessManaged,
+                    data.account.asAccessManaged.id
+                  )
+                )}
+                onClick={() => setAddress("")}
+                replace
+              >
+                <Address
+                  mr="2"
+                  address={{ value: data.account.asAccessManaged.id }}
+                />
+                <Badge color="amber" ml="auto" size="1" variant="solid">
+                  Managed
+                </Badge>
+              </Link>
             </DropdownMenu.Item>
           )}
           {hasMembership && (
@@ -133,35 +140,41 @@ const Search: FC<Props> = (props) => {
               <DropdownMenu.SubTrigger>Member of</DropdownMenu.SubTrigger>
               <DropdownMenu.SubContent>
                 {data.account.membership.map((membership: any) => (
-                  <DropdownMenu.Item
-                    key={membership.id}
-                    onSelect={() =>
-                      navigate(
-                        EntityPrefix.AccessManagerRoleMember,
-                        membership.id
-                      )
-                    }
-                  >
-                    <Address
-                      mr="2"
-                      truncate={{
-                        leading: 4,
-                        trailing: 6,
-                      }}
-                      address={{ value: membership.manager.asAccount.id }}
-                    />
-                    <Role
-                      mr="2"
-                      role={{
-                        asRole: {
-                          id:
-                            membership.role.label ?? membership.role.asRole.id,
-                        },
-                      }}
-                    />
-                    <Badge color="amber" ml="auto" size="1" variant="solid">
-                      Role member
-                    </Badge>
+                  <DropdownMenu.Item key={membership.id} asChild>
+                    <Link
+                      href={join(
+                        ROUTES.EXPLORER.ROOT,
+                        ROUTES.EXPLORER.DETAILS(
+                          EntityPrefix.AccessManagerRoleMember,
+                          membership.id
+                        )
+                      )}
+                      onClick={() => setAddress("")}
+                      replace
+                    >
+                      <Address
+                        mr="2"
+                        truncate={{
+                          leading: 4,
+                          trailing: 6,
+                        }}
+                        address={{ value: membership.manager.asAccount.id }}
+                      />
+                      <Role
+                        mr="2"
+                        role={{
+                          id: membership.id,
+                          asRole: {
+                            id:
+                              membership.role.label ??
+                              membership.role.asRole.id,
+                          },
+                        }}
+                      />
+                      <Badge color="amber" ml="auto" size="1" variant="solid">
+                        Role member
+                      </Badge>
+                    </Link>
                   </DropdownMenu.Item>
                 ))}
               </DropdownMenu.SubContent>
@@ -172,23 +185,30 @@ const Search: FC<Props> = (props) => {
               <DropdownMenu.SubTrigger>Managed by</DropdownMenu.SubTrigger>
               <DropdownMenu.SubContent>
                 {data.account.targettedBy.map((targettedBy: any) => (
-                  <DropdownMenu.Item
-                    key={targettedBy.id}
-                    onSelect={() =>
-                      navigate(EntityPrefix.AccessManagerTarget, targettedBy.id)
-                    }
-                  >
-                    <Address
-                      mr="2"
-                      truncate={{
-                        leading: 4,
-                        trailing: 6,
-                      }}
-                      address={{ value: targettedBy.manager.asAccount.id }}
-                    />
-                    <Badge color="amber" ml="auto" size="1" variant="solid">
-                      Target
-                    </Badge>
+                  <DropdownMenu.Item key={targettedBy.id} asChild>
+                    <Link
+                      href={join(
+                        ROUTES.EXPLORER.ROOT,
+                        ROUTES.EXPLORER.DETAILS(
+                          EntityPrefix.AccessManagerTarget,
+                          targettedBy.id
+                        )
+                      )}
+                      onClick={() => setAddress("")}
+                      replace
+                    >
+                      <Address
+                        mr="2"
+                        truncate={{
+                          leading: 4,
+                          trailing: 6,
+                        }}
+                        address={{ value: targettedBy.manager.asAccount.id }}
+                      />
+                      <Badge color="amber" ml="auto" size="1" variant="solid">
+                        Target
+                      </Badge>
+                    </Link>
                   </DropdownMenu.Item>
                 ))}
               </DropdownMenu.SubContent>

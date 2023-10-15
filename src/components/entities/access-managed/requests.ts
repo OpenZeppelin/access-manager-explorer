@@ -18,6 +18,9 @@ const ACCESS_MANAGED_QUERY = gql`
       }
       authority {
         id
+        asAccessManager {
+          id
+        }
       }
     }
   }

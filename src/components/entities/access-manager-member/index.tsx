@@ -15,13 +15,14 @@ import { useQuery } from "urql";
 import { ACCESS_MANAGER_MEMBER_QUERY } from "./requests";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import Account from "../as/account";
-import { AddressEntity } from "@/types";
+import { AddressEntity, EntityPrefix } from "@/types";
 import useRemoveEntity from "@/hooks/use-remove-entity";
 import Address from "@/components/address";
 import Role from "@/components/role";
 import DelayedValue from "@/components/delayed-value";
 import { useFormatter, useNow } from "next-intl";
 import Skeleton from "./skeleton";
+import ROUTES from "@/config/routes";
 
 interface Props extends ComponentProps<typeof Card> {
   id: string;
@@ -84,6 +85,12 @@ const AccessManagerMember: FC<Props> = ({
               icons={{
                 etherscan: true,
                 copy: true,
+                navigate: {
+                  id: ROUTES.EXPLORER.DETAILS(
+                    EntityPrefix.AccessManager,
+                    data.accessManagerRoleMember.manager.asAccount.id
+                  ),
+                },
               }}
               address={{
                 value: data.accessManagerRoleMember.manager.asAccount.id,
@@ -93,7 +100,11 @@ const AccessManagerMember: FC<Props> = ({
           <Separator size="4" my="3" />
           <Flex align="center" width="100%" justify="between">
             <Heading size="2">Role</Heading>
-            <Role role={data.accessManagerRoleMember.role} />
+            <Role
+              size="2"
+              role={data.accessManagerRoleMember.role}
+              icons={{ navigate: true }}
+            />
           </Flex>
           <Separator size="4" my="3" />
           <Flex align="center" width="100%" justify="between">

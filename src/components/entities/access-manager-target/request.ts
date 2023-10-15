@@ -6,6 +6,9 @@ const ACCESS_MANAGER_TARGET_QUERY = gql`
       id
       asAccount {
         id
+        asAccessManaged {
+          id
+        }
       }
       manager {
         id

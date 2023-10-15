@@ -1,15 +1,37 @@
 "use client";
-import { Box, Card, Callout, Tabs } from "@radix-ui/themes";
+import {
+  Box,
+  Card,
+  Callout,
+  Tabs,
+  Flex,
+  Separator,
+  Heading,
+  Badge,
+  Text,
+  Code,
+  Button,
+} from "@radix-ui/themes";
 import { ComponentProps, FC, useMemo } from "react";
 import { Address as AddressType } from "viem";
 import { useQuery } from "urql";
 import Skeleton from "./skeleton";
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import {
+  ArrowRightIcon,
+  CircleIcon,
+  ExclamationTriangleIcon,
+} from "@radix-ui/react-icons";
 import Account from "../as/account";
-import { AddressEntity } from "@/types";
+import { AddressEntity, EntityPrefix } from "@/types";
 import useRemoveEntity from "@/hooks/use-remove-entity";
 import Address from "@/components/address";
 import { ACCESS_MANAGER_TARGET_QUERY } from "./request";
+import DelayedValue from "@/components/delayed-value";
+import Info from "@/components/info";
+import Link from "next/link";
+import { join } from "path";
+import ROUTES from "@/config/routes";
+import { usePathname } from "next/navigation";
 
 interface Props extends ComponentProps<typeof Card> {
   depth: number;
@@ -35,11 +57,13 @@ const AccessManagerTarget: FC<Props> = ({
 
   const address = useMemo(() => id.split("/").reverse()[0], [id]);
 
+  const pathname = usePathname();
+
   return (
     <Account
       remove={remove}
       entityType={AddressEntity.AccessManagerTarget}
-      description="A contract targetted by an AccessManager that stores its permissions."
+      description="An address targetted by an AccessManager"
       address={address as AddressType}
       className={className}
       truncate={truncate}
@@ -59,9 +83,99 @@ const AccessManagerTarget: FC<Props> = ({
         ) : fetching ? (
           <Skeleton />
         ) : (
-          <>
-            <p>hello</p>
-          </>
+          <Flex direction="column">
+            <Flex align="center" width="100%" justify="between">
+              <Heading size="2">Targetted by</Heading>
+              <Address
+                truncate={{
+                  leading: 10,
+                  trailing: 10,
+                }}
+                icons={{
+                  etherscan: true,
+                  copy: true,
+                  navigate: {
+                    id: ROUTES.EXPLORER.DETAILS(
+                      EntityPrefix.AccessManager,
+                      data.accessManagerTarget.manager.asAccount.id
+                    ),
+                  },
+                }}
+                address={{
+                  value: data.accessManagerTarget.manager.asAccount.id,
+                }}
+              />
+            </Flex>
+            <Separator size="4" my="3" />
+            <Flex align="center" width="100%" justify="between">
+              <Heading size="2">
+                Admin delay
+                <Info ml="3" mt="1">
+                  <Text size="1">
+                    AccessManager admins can schedule delayed admin actions.
+                    This is the time it takes to execute one of these actions
+                    after a previous <Code>schedule</Code> call, namely{" "}
+                    <Code>updateAuthority</Code>, <Code>setTargetClosed</Code>{" "}
+                    and <Code>setTargetFunctionRole</Code>.
+                  </Text>
+                </Info>
+              </Heading>
+              <DelayedValue {...data.accessManagerTarget.adminDelay} />
+            </Flex>
+            <Separator size="4" my="3" />
+            <Flex align="center" width="100%" justify="between">
+              <Flex>
+                <Heading size="2">Status</Heading>
+                <Info ml="3" mt="1">
+                  <Text size="1">
+                    A target can be closed, which means that every{" "}
+                    <Code>canCall</Code> invokation will return false. If this
+                    contract's authority is the access manager targetting it,
+                    every call will revert.
+                  </Text>
+                </Info>
+              </Flex>
+              {data.accessManagerTarget.closed ? (
+                <Badge color="red">Closed</Badge>
+              ) : (
+                <Badge color="green">Open</Badge>
+              )}
+            </Flex>
+            {data.accessManagerTarget.asAccount.asAccessManaged?.id && (
+              <Button asChild variant="surface" size="1" mt="4" color="gray">
+                <Link
+                  href={join(
+                    pathname,
+                    ROUTES.EXPLORER.DETAILS(
+                      EntityPrefix.AccessManaged,
+                      data.accessManagerTarget.asAccount.asAccessManaged?.id
+                    )
+                  )}
+                >
+                  See as AccessManaged <ArrowRightIcon />
+                </Link>
+              </Button>
+            )}
+            <Heading size="3" mt="4" mb="2">
+              Managed functions
+            </Heading>
+            {data.accessManagerTarget.functions.length > 0 ? (
+              <Flex direction="column">
+                {data.accessManagerTarget.functions.map((method: any) => (
+                  <Code my="1" key={method.id}>
+                    {method.asSelector.id}
+                  </Code>
+                ))}
+              </Flex>
+            ) : (
+              <Callout.Root>
+                <Callout.Icon>
+                  <CircleIcon />
+                </Callout.Icon>
+                <Callout.Text>No managed functions</Callout.Text>
+              </Callout.Root>
+            )}
+          </Flex>
         )}
       </Box>
     </Account>

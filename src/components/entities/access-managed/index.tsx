@@ -14,10 +14,11 @@ import { useQuery } from "urql";
 import Skeleton from "./skeleton";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import Account from "../as/account";
-import { AddressEntity } from "@/types";
+import { AddressEntity, EntityPrefix } from "@/types";
 import useRemoveEntity from "@/hooks/use-remove-entity";
 import Address from "@/components/address";
 import { ACCESS_MANAGED_QUERY } from "./requests";
+import ROUTES from "@/config/routes";
 
 interface Props extends ComponentProps<typeof Card> {
   depth: number;
@@ -67,7 +68,7 @@ const AccessManaged: FC<Props> = ({
         ) : (
           <Flex direction="column">
             <Flex align="center" width="100%" justify="between">
-              <Heading size="2">Manager</Heading>
+              <Heading size="2">Authority</Heading>
               <Address
                 truncate={{
                   leading: 10,
@@ -76,6 +77,14 @@ const AccessManaged: FC<Props> = ({
                 icons={{
                   etherscan: true,
                   copy: true,
+                  navigate: data.accessManaged.authority.asAccessManager?.id
+                    ? {
+                        id: ROUTES.EXPLORER.DETAILS(
+                          EntityPrefix.AccessManager,
+                          data.accessManaged.authority.asAccessManager.id
+                        ),
+                      }
+                    : undefined,
                 }}
                 address={{
                   value: data.accessManaged.authority.id,
@@ -100,6 +109,12 @@ const AccessManaged: FC<Props> = ({
                   icons={{
                     etherscan: true,
                     copy: true,
+                    navigate: {
+                      id: ROUTES.EXPLORER.DETAILS(
+                        EntityPrefix.AccessManager,
+                        data.accessManaged.authority.asAccessManager.id
+                      ),
+                    },
                   }}
                 />
               </Card>
