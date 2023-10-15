@@ -1,7 +1,7 @@
-import { gql } from "urql";
+import { graphql } from "@/gql";
 
-const ACCESS_MANAGER_MEMBER_QUERY = gql`
-  query AccessManagerRoleMembers($address: ID!) {
+const ACCESS_MANAGER_ROLE_MEMBERS_QUERY = graphql(/* GraphQL */ `
+  query AccessManagerRoleMembers($address: String!) {
     accessManagerRoleMembers(where: { asAccount: $address }) {
       id
       asAccount {
@@ -14,14 +14,10 @@ const ACCESS_MANAGER_MEMBER_QUERY = gql`
         }
       }
       role {
-        id
-        label
-        asRole {
-          id
-        }
+        ...AccessManagerRoleFragment
       }
     }
   }
-`;
+`);
 
-export { ACCESS_MANAGER_MEMBER_QUERY };
+export { ACCESS_MANAGER_ROLE_MEMBERS_QUERY };

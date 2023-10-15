@@ -12,7 +12,7 @@ import {
 } from "@radix-ui/themes";
 import { ComponentProps, FC, useMemo } from "react";
 import { useQuery } from "urql";
-import { ACESS_MANAGER_ROLE_QUERY } from "./requests";
+import { ACCESS_MANAGER_ROLE_QUERY } from "./requests";
 import Skeleton from "./skeleton";
 import { CircleIcon, ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { Entity, EntityPrefix } from "@/types";
@@ -24,6 +24,9 @@ import DelayedValue from "@/components/delayed-value";
 import Info from "@/components/info";
 import RoleBadge from "@/components/role";
 import FunctionBadge from "@/components/function";
+import { makeFragmentData, useFragment } from "@/gql";
+import { ACCESS_MANAGER_ROLE_FRAGMENT } from "@/components/role/requests";
+import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "@/components/function/requests";
 
 interface Props extends ComponentProps<typeof Card> {
   id: string;
@@ -32,7 +35,7 @@ interface Props extends ComponentProps<typeof Card> {
 
 const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
   const [{ data, fetching, error }] = useQuery({
-    query: ACESS_MANAGER_ROLE_QUERY,
+    query: ACCESS_MANAGER_ROLE_QUERY,
     variables: {
       id,
     },
@@ -41,12 +44,26 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
   const remove = useRemoveEntity(depth);
   const roleId = useMemo(() => id.split("/").reverse()[0], [id]);
 
+  const accessManagerRole = data?.accessManagerRole;
+
+  const role =
+    data?.accessManagerRole ??
+    makeFragmentData(
+      {
+        id: roleId,
+        asRole: {
+          id: roleId,
+        },
+      },
+      ACCESS_MANAGER_ROLE_FRAGMENT
+    );
+
   return (
     <Role
       remove={remove}
       entityType={Entity.AccessManagerRole}
       description="A role is allowed to call functions by an AccessManager"
-      role={data?.accessManagerRole || { id: id, asRole: { id: roleId } }}
+      accessManagerRole={role}
       className={className}
       {...props}
     >
@@ -78,12 +95,12 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
                   navigate: {
                     id: ROUTES.EXPLORER.DETAILS(
                       EntityPrefix.AccessManager,
-                      data.accessManagerRole.manager.asAccount.id
+                      accessManagerRole?.manager.asAccount.id
                     ),
                   },
                 }}
                 address={{
-                  value: data.accessManagerRole.manager.asAccount.id,
+                  value: accessManagerRole?.manager.asAccount.id,
                 }}
               />
             </Flex>
@@ -100,7 +117,9 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
                   </Text>
                 </Info>
               </Heading>
-              <DelayedValue size="2" {...data.accessManagerRole.grantDelay} />
+              {accessManagerRole?.grantDelay && (
+                <DelayedValue size="2" value={accessManagerRole?.grantDelay} />
+              )}
             </Flex>
             <Separator size="4" my="3" />
             <Flex align="center" width="100%" justify="between">
@@ -114,11 +133,13 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
                   </Text>
                 </Info>
               </Heading>
-              <RoleBadge
-                size="2"
-                role={data.accessManagerRole.admin}
-                icons={{ navigate: true }}
-              />
+              {accessManagerRole?.admin && (
+                <RoleBadge
+                  size="2"
+                  accessManagerRole={accessManagerRole.admin}
+                  icons={{ navigate: true }}
+                />
+              )}
             </Flex>
             <Separator size="4" my="3" />
             <Flex align="center" width="100%" justify="between">
@@ -131,42 +152,44 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
                   </Text>
                 </Info>
               </Heading>
-              <RoleBadge
-                size="2"
-                role={data.accessManagerRole.guardian}
-                icons={{ navigate: true }}
-              />
+              {accessManagerRole?.guardian && (
+                <RoleBadge
+                  size="2"
+                  accessManagerRole={accessManagerRole.guardian}
+                  icons={{ navigate: true }}
+                />
+              )}
             </Flex>
             <Separator size="4" my="3" />
-            {data.accessManagerRole.adminOf.length > 0 && (
+            {(accessManagerRole?.adminOf.length ?? 0) > 0 && (
               <Flex direction="column">
                 <Heading size="3" mt="4" mb="2">
                   Admin of
                 </Heading>
                 <Grid columns="2" gap="3" width="auto">
-                  {data.accessManagerRole.adminOf.map((role: any) => (
+                  {accessManagerRole?.adminOf.map((role) => (
                     <RoleBadge
-                      key={role.id}
+                      key={useFragment(ACCESS_MANAGER_ROLE_FRAGMENT, role).id}
                       size="2"
                       icons={{ navigate: true }}
-                      role={role}
+                      accessManagerRole={role}
                     />
                   ))}
                 </Grid>
               </Flex>
             )}
-            {data.accessManagerRole.guardianOf.length > 0 && (
+            {(accessManagerRole?.guardianOf.length ?? 0) > 0 && (
               <Flex direction="column">
                 <Heading size="3" mt="4" mb="2">
                   Guardian of
                 </Heading>
                 <Grid columns="2" gap="3" width="auto">
-                  {data.accessManagerRole.guardianOf.map((role: any) => (
+                  {accessManagerRole?.guardianOf.map((role) => (
                     <RoleBadge
-                      key={role.id}
+                      key={useFragment(ACCESS_MANAGER_ROLE_FRAGMENT, role).id}
                       size="2"
                       icons={{ navigate: true }}
-                      role={role}
+                      accessManagerRole={role}
                     />
                   ))}
                 </Grid>
@@ -175,34 +198,32 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
             <Heading size="3" mt="4" mb="2">
               Members
             </Heading>
-            {data.accessManagerRole.members.length > 0 ? (
+            {(accessManagerRole?.members.length ?? 0) > 0 ? (
               <Flex direction="column">
                 <Flex direction="column" gap="2">
-                  {data.accessManagerRole.members.map(
-                    ({ id, asAccount }: any) => (
-                      <Card key={id} size="1">
-                        <Address
-                          truncate={{
-                            leading: 4,
-                            trailing: 6,
-                          }}
-                          address={{
-                            value: asAccount.id,
-                          }}
-                          icons={{
-                            etherscan: true,
-                            copy: true,
-                            navigate: {
-                              id: ROUTES.EXPLORER.DETAILS(
-                                EntityPrefix.AccessManagerRoleMember,
-                                id
-                              ),
-                            },
-                          }}
-                        />
-                      </Card>
-                    )
-                  )}
+                  {accessManagerRole?.members.map(({ id, asAccount }) => (
+                    <Card key={id} size="1">
+                      <Address
+                        truncate={{
+                          leading: 4,
+                          trailing: 6,
+                        }}
+                        address={{
+                          value: asAccount.id,
+                        }}
+                        icons={{
+                          etherscan: true,
+                          copy: true,
+                          navigate: {
+                            id: ROUTES.EXPLORER.DETAILS(
+                              EntityPrefix.AccessManagerRoleMember,
+                              id
+                            ),
+                          },
+                        }}
+                      />
+                    </Card>
+                  ))}
                 </Flex>
               </Flex>
             ) : (
@@ -216,23 +237,29 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
             <Heading size="3" mt="4" mb="2">
               Functions
             </Heading>
-            {data.accessManagerRole.functions.length > 0 ? (
+            {(accessManagerRole?.functions.length ?? 0) > 0 ? (
               <Flex direction="column">
-                {data.accessManagerRole.functions.map((method: any) => (
-                  <FunctionBadge
-                    key={method.id}
-                    my="1"
-                    method={method}
-                    icons={{
-                      navigate: {
-                        id: ROUTES.EXPLORER.DETAILS(
-                          EntityPrefix.AccessManagerTargetFunction,
-                          method.id
-                        ),
-                      },
-                    }}
-                  />
-                ))}
+                {accessManagerRole?.functions.map((method) => {
+                  const { id } = useFragment(
+                    ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT,
+                    method
+                  );
+                  return (
+                    <FunctionBadge
+                      key={id}
+                      my="1"
+                      method={method}
+                      icons={{
+                        navigate: {
+                          id: ROUTES.EXPLORER.DETAILS(
+                            EntityPrefix.AccessManagerTargetFunction,
+                            id
+                          ),
+                        },
+                      }}
+                    />
+                  );
+                })}
               </Flex>
             ) : (
               <Callout.Root>

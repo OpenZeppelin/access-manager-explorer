@@ -1,13 +1,5 @@
 "use client";
-import {
-  Box,
-  Card,
-  Callout,
-  Tabs,
-  Flex,
-  Heading,
-  Separator,
-} from "@radix-ui/themes";
+import { Box, Card, Callout, Flex, Heading, Separator } from "@radix-ui/themes";
 import { ComponentProps, FC } from "react";
 import { Address as AddressType } from "viem";
 import { useQuery } from "urql";
@@ -41,6 +33,8 @@ const AccessManaged: FC<Props> = ({
   });
 
   const remove = useRemoveEntity(depth);
+
+  const accessManaged = data?.accessManaged;
 
   return (
     <Account
@@ -77,25 +71,25 @@ const AccessManaged: FC<Props> = ({
                 icons={{
                   etherscan: true,
                   copy: true,
-                  navigate: data.accessManaged.authority.asAccessManager?.id
+                  navigate: accessManaged?.authority.asAccessManager?.id
                     ? {
                         id: ROUTES.EXPLORER.DETAILS(
                           EntityPrefix.AccessManager,
-                          data.accessManaged.authority.asAccessManager.id
+                          accessManaged?.authority.asAccessManager.id
                         ),
                       }
                     : undefined,
                 }}
                 address={{
-                  value: data.accessManaged.authority.id,
+                  value: accessManaged?.authority.id,
                 }}
               />
             </Flex>
             <Separator size="4" my="3" />
-            {data.accessManaged.asAccount.targettedBy.length > 0 && (
+            {(accessManaged?.asAccount.targettedBy?.length ?? 0) > 0 && (
               <Heading size="2">Targetted by:</Heading>
             )}
-            {data.accessManaged.asAccount.targettedBy.map((target: any) => (
+            {accessManaged?.asAccount.targettedBy.map((target) => (
               <Card key={target.id} my="2" size="1">
                 <Address
                   key={target.id}
@@ -112,7 +106,7 @@ const AccessManaged: FC<Props> = ({
                     navigate: {
                       id: ROUTES.EXPLORER.DETAILS(
                         EntityPrefix.AccessManager,
-                        data.accessManaged.authority.asAccessManager.id
+                        target.manager.asAccount.id
                       ),
                     },
                   }}

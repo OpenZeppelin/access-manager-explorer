@@ -5,7 +5,7 @@ import { Address as AddressType } from "viem";
 import { useQuery } from "urql";
 import { ACCESS_MANAGER_QUERY } from "./requests";
 import Members from "./tabs/members";
-import Operations from "./tabs/operations";
+// import Operations from "./tabs/operations";
 import Skeleton from "./skeleton";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import Targets from "./tabs/targets";
@@ -36,6 +36,8 @@ const AccessManager: FC<Props> = ({
   });
 
   const remove = useRemoveEntity(depth);
+
+  const accessManager = data?.accessManager;
 
   return (
     <Account
@@ -71,16 +73,16 @@ const AccessManager: FC<Props> = ({
               </Tabs.List>
               <Box pt="4" pb="2">
                 <Tabs.Content value="targets">
-                  <Targets targets={data.accessManager.targets} />
+                  <Targets targets={accessManager?.targets ?? []} />
                 </Tabs.Content>
                 <Tabs.Content value="roles">
-                  <Roles roles={data.accessManager.roles} />
+                  <Roles roles={accessManager?.roles ?? []} />
                 </Tabs.Content>
                 <Tabs.Content value="members">
-                  <Members members={data.accessManager.members} />
+                  <Members members={accessManager?.members ?? []} />
                 </Tabs.Content>
                 {/* <Tabs.Content value="operations">
-                  <Operations operations={data.accessManager.operations} />
+                  <Operations operations={accessManager?.operations} />
                 </Tabs.Content> */}
               </Box>
             </Tabs.Root>

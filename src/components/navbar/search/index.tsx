@@ -14,6 +14,8 @@ import { EntityPrefix } from "@/types";
 import ROUTES from "@/config/routes";
 import Role from "@/components/role";
 import Link from "next/link";
+import { makeFragmentData, useFragment } from "@/gql";
+import { ACCESS_MANAGER_ROLE_FRAGMENT } from "@/components/role/requests";
 const { Root, Slot, Input } = TextField;
 
 interface Props extends ComponentProps<typeof Root> {
@@ -41,6 +43,7 @@ const Search: FC<Props> = (props) => {
   const { isData, isManager, isManaged, hasMembership, isTarget, hasResults } =
     useMemo(() => {
       const result = {
+        account: false,
         isData: false,
         isManager: false,
         isManaged: false,
@@ -52,10 +55,10 @@ const Search: FC<Props> = (props) => {
 
       if (!data?.account) return result;
 
-      result.isManager = !!data.account.asAccessManager;
-      result.isManaged = !!data.account.asAccessManaged;
-      result.hasMembership = data.account.membership.length > 0;
-      result.isTarget = data.account.targettedBy.length > 0;
+      result.isManager = !!data?.account?.asAccessManager;
+      result.isManaged = !!data?.account?.asAccessManaged;
+      result.hasMembership = data?.account?.membership.length > 0;
+      result.isTarget = data?.account?.targettedBy.length > 0;
 
       result.hasResults =
         result.isManager ||
@@ -102,18 +105,20 @@ const Search: FC<Props> = (props) => {
           {isManager && (
             <DropdownMenu.Item asChild>
               <Link
-                id={data.account.asAccessManager.id}
+                id={data?.account?.asAccessManager?.id}
                 href={join(
                   ROUTES.EXPLORER.ROOT,
                   ROUTES.EXPLORER.DETAILS(
                     EntityPrefix.AccessManager,
-                    data.account.asAccessManager.id
+                    data?.account?.asAccessManager?.id
                   )
                 )}
                 onClick={() => setAddress("")}
                 replace
               >
-                <Address address={{ value: data.account.asAccessManager.id }} />
+                <Address
+                  address={{ value: data?.account?.asAccessManager?.id }}
+                />
                 <Badge color="amber" ml="auto" size="1" variant="solid">
                   Manager
                 </Badge>
@@ -121,13 +126,13 @@ const Search: FC<Props> = (props) => {
             </DropdownMenu.Item>
           )}
           {isManaged && (
-            <DropdownMenu.Item id={data.account.asAccessManaged.id} asChild>
+            <DropdownMenu.Item id={data?.account?.asAccessManaged?.id} asChild>
               <Link
                 href={join(
                   ROUTES.EXPLORER.ROOT,
                   ROUTES.EXPLORER.DETAILS(
                     EntityPrefix.AccessManaged,
-                    data.account.asAccessManaged.id
+                    data?.account?.asAccessManaged?.id
                   )
                 )}
                 onClick={() => setAddress("")}
@@ -135,7 +140,7 @@ const Search: FC<Props> = (props) => {
               >
                 <Address
                   mr="2"
-                  address={{ value: data.account.asAccessManaged.id }}
+                  address={{ value: data?.account?.asAccessManaged?.id }}
                 />
                 <Badge color="amber" ml="auto" size="1" variant="solid">
                   Managed
@@ -147,44 +152,51 @@ const Search: FC<Props> = (props) => {
             <DropdownMenu.Sub>
               <DropdownMenu.SubTrigger>Member of</DropdownMenu.SubTrigger>
               <DropdownMenu.SubContent>
-                {data.account.membership.map((membership: any) => (
-                  <DropdownMenu.Item key={membership.id} asChild>
-                    <Link
-                      href={join(
-                        ROUTES.EXPLORER.ROOT,
-                        ROUTES.EXPLORER.DETAILS(
-                          EntityPrefix.AccessManagerRoleMember,
-                          membership.id
-                        )
-                      )}
-                      onClick={() => setAddress("")}
-                      replace
-                    >
-                      <Address
-                        mr="2"
-                        truncate={{
-                          leading: 4,
-                          trailing: 6,
-                        }}
-                        address={{ value: membership.manager.asAccount.id }}
-                      />
-                      <Role
-                        mr="2"
-                        role={{
-                          id: membership.id,
-                          asRole: {
-                            id:
-                              membership.role.label ??
-                              membership.role.asRole.id,
-                          },
-                        }}
-                      />
-                      <Badge color="amber" ml="auto" size="1" variant="solid">
-                        Role member
-                      </Badge>
-                    </Link>
-                  </DropdownMenu.Item>
-                ))}
+                {data?.account?.membership.map((membership) => {
+                  const role = useFragment(
+                    ACCESS_MANAGER_ROLE_FRAGMENT,
+                    membership.role
+                  );
+                  return (
+                    <DropdownMenu.Item key={membership.id} asChild>
+                      <Link
+                        href={join(
+                          ROUTES.EXPLORER.ROOT,
+                          ROUTES.EXPLORER.DETAILS(
+                            EntityPrefix.AccessManagerRoleMember,
+                            membership.id
+                          )
+                        )}
+                        onClick={() => setAddress("")}
+                        replace
+                      >
+                        <Address
+                          mr="2"
+                          truncate={{
+                            leading: 4,
+                            trailing: 6,
+                          }}
+                          address={{ value: membership.manager.asAccount.id }}
+                        />
+                        <Role
+                          mr="2"
+                          accessManagerRole={makeFragmentData(
+                            {
+                              id: role.id,
+                              asRole: {
+                                id: role.label ?? role.asRole.id,
+                              },
+                            },
+                            ACCESS_MANAGER_ROLE_FRAGMENT
+                          )}
+                        />
+                        <Badge color="amber" ml="auto" size="1" variant="solid">
+                          Role member
+                        </Badge>
+                      </Link>
+                    </DropdownMenu.Item>
+                  );
+                })}
               </DropdownMenu.SubContent>
             </DropdownMenu.Sub>
           )}
@@ -192,7 +204,7 @@ const Search: FC<Props> = (props) => {
             <DropdownMenu.Sub>
               <DropdownMenu.SubTrigger>Managed by</DropdownMenu.SubTrigger>
               <DropdownMenu.SubContent>
-                {data.account.targettedBy.map((targettedBy: any) => (
+                {data?.account?.targettedBy.map((targettedBy) => (
                   <DropdownMenu.Item key={targettedBy.id} asChild>
                     <Link
                       href={join(

@@ -1,13 +1,9 @@
-import { gql } from "urql";
+import { graphql } from "@/gql";
 
-const ACESS_MANAGER_ROLE_QUERY = gql`
+const ACCESS_MANAGER_ROLE_QUERY = graphql(/* GraphQL */ `
   query AccessManagerRole($id: ID!) {
     accessManagerRole(id: $id) {
-      id
-      label
-      asRole {
-        id
-      }
+      ...AccessManagerRoleFragment
       manager {
         id
         asAccount {
@@ -15,38 +11,19 @@ const ACESS_MANAGER_ROLE_QUERY = gql`
         }
       }
       grantDelay {
-        id
-        oldValue
-        value
-        since
+        ...DelayedBigIntFragment
       }
       admin {
-        id
-        label
-        asRole {
-          id
-        }
+        ...AccessManagerRoleFragment
       }
       guardian {
-        id
-        label
-        asRole {
-          id
-        }
+        ...AccessManagerRoleFragment
       }
       adminOf {
-        id
-        label
-        asRole {
-          id
-        }
+        ...AccessManagerRoleFragment
       }
       guardianOf {
-        id
-        label
-        asRole {
-          id
-        }
+        ...AccessManagerRoleFragment
       }
       members {
         id
@@ -55,13 +32,10 @@ const ACESS_MANAGER_ROLE_QUERY = gql`
         }
       }
       functions {
-        id
-        asSelector {
-          id
-        }
+        ...AccessManagerTargetFunctionFragment
       }
     }
   }
-`;
+`);
 
-export { ACESS_MANAGER_ROLE_QUERY };
+export { ACCESS_MANAGER_ROLE_QUERY };

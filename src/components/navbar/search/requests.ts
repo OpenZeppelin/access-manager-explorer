@@ -1,7 +1,7 @@
-import { gql } from "urql";
+import { graphql } from "@/gql";
 
-const ACCOUNT_QUERY = gql`
-  query AccessManager($id: ID!) {
+const ACCOUNT_QUERY = graphql(/* GraphQL */ `
+  query Account($id: ID!) {
     account(id: $id) {
       id
       asAccessManager {
@@ -19,11 +19,7 @@ const ACCOUNT_QUERY = gql`
           }
         }
         role {
-          id
-          label
-          asRole {
-            id
-          }
+          ...AccessManagerRoleFragment
         }
       }
       targettedBy {
@@ -37,6 +33,6 @@ const ACCOUNT_QUERY = gql`
       }
     }
   }
-`;
+`);
 
 export { ACCOUNT_QUERY };

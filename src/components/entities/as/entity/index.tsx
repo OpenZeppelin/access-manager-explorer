@@ -13,7 +13,7 @@ import { cn } from "@/utils";
 
 import { AddressEntity, Entity as EntityType } from "@/types";
 
-interface Props extends ComponentProps<typeof Card> {
+interface Props extends Omit<ComponentProps<typeof Card>, "role"> {
   entityType: AddressEntity | EntityType;
   children: ReactNode;
   description: string;

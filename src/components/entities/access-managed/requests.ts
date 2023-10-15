@@ -1,6 +1,6 @@
-import { gql } from "urql";
+import { graphql } from "@/gql";
 
-const ACCESS_MANAGED_QUERY = gql`
+const ACCESS_MANAGED_QUERY = graphql(/* GraphQL */ `
   query AccessManaged($id: ID!) {
     accessManaged(id: $id) {
       id
@@ -24,6 +24,6 @@ const ACCESS_MANAGED_QUERY = gql`
       }
     }
   }
-`;
+`);
 
 export { ACCESS_MANAGED_QUERY };

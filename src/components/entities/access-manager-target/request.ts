@@ -1,6 +1,6 @@
-import { gql } from "urql";
+import { graphql } from "@/gql";
 
-const ACCESS_MANAGER_TARGET_QUERY = gql`
+const ACCESS_MANAGER_TARGET_QUERY = graphql(/* GraphQL */ `
   query AccessManagerTarget($id: ID!) {
     accessManagerTarget(id: $id) {
       id
@@ -17,20 +17,14 @@ const ACCESS_MANAGER_TARGET_QUERY = gql`
         }
       }
       adminDelay {
-        id
-        oldValue
-        value
-        since
+        ...DelayedBigIntFragment
       }
       closed
       functions {
-        id
-        asSelector {
-          id
-        }
+        ...AccessManagerTargetFunctionFragment
       }
     }
   }
-`;
+`);
 
 export { ACCESS_MANAGER_TARGET_QUERY };

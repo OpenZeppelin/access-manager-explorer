@@ -58,6 +58,7 @@ const AccessManagerTarget: FC<Props> = ({
   const address = useMemo(() => id.split("/").reverse()[0], [id]);
 
   const pathname = usePathname();
+  const accessManagerTarget = data?.accessManagerTarget;
 
   return (
     <Account
@@ -97,12 +98,12 @@ const AccessManagerTarget: FC<Props> = ({
                   navigate: {
                     id: ROUTES.EXPLORER.DETAILS(
                       EntityPrefix.AccessManager,
-                      data.accessManagerTarget.manager.asAccount.id
+                      accessManagerTarget?.manager.asAccount.id
                     ),
                   },
                 }}
                 address={{
-                  value: data.accessManagerTarget.manager.asAccount.id,
+                  value: accessManagerTarget?.manager.asAccount.id,
                 }}
               />
             </Flex>
@@ -120,7 +121,12 @@ const AccessManagerTarget: FC<Props> = ({
                   </Text>
                 </Info>
               </Heading>
-              <DelayedValue size="2" {...data.accessManagerTarget.adminDelay} />
+              {accessManagerTarget?.adminDelay && (
+                <DelayedValue
+                  size="2"
+                  value={accessManagerTarget?.adminDelay}
+                />
+              )}
             </Flex>
             <Separator size="4" my="3" />
             <Flex align="center" width="100%" justify="between">
@@ -130,18 +136,18 @@ const AccessManagerTarget: FC<Props> = ({
                   <Text size="1">
                     A target can be closed, which means that every{" "}
                     <Code>canCall</Code> invokation will return false. If this
-                    contract{"'"}s authority is the access manager targetting it,
-                    every call will revert.
+                    contract{"'"}s authority is the access manager targetting
+                    it, every call will revert.
                   </Text>
                 </Info>
               </Flex>
-              {data.accessManagerTarget.closed ? (
+              {accessManagerTarget?.closed ? (
                 <Badge color="red">Closed</Badge>
               ) : (
                 <Badge color="green">Open</Badge>
               )}
             </Flex>
-            {data.accessManagerTarget.asAccount.asAccessManaged?.id && (
+            {accessManagerTarget?.asAccount.asAccessManaged?.id && (
               <Button asChild variant="surface" size="1" mt="4" color="gray">
                 <Link
                   scroll={false}
@@ -149,7 +155,7 @@ const AccessManagerTarget: FC<Props> = ({
                     pathname,
                     ROUTES.EXPLORER.DETAILS(
                       EntityPrefix.AccessManaged,
-                      data.accessManagerTarget.asAccount.asAccessManaged?.id
+                      accessManagerTarget?.asAccount.asAccessManaged?.id
                     )
                   )}
                 >
@@ -160,9 +166,9 @@ const AccessManagerTarget: FC<Props> = ({
             <Heading size="3" mt="4" mb="2">
               Managed functions
             </Heading>
-            {data.accessManagerTarget.functions.length > 0 ? (
+            {(accessManagerTarget?.functions.length ?? 0) > 0 ? (
               <Flex direction="column">
-                {data.accessManagerTarget.functions.map((method: any) => (
+                {accessManagerTarget?.functions.map((method: any) => (
                   <Function
                     key={method.id}
                     my="1"

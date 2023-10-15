@@ -19,7 +19,7 @@ const Operations: FC<Props> = ({ operations }) => {
         </Callout.Root>
       ) : (
         <Grid columns="2" gap="3" width="auto">
-          {operations.map((operation: any) => (
+          {operations.map((operation) => (
             <Operation
               key={operation.id}
               className="w-full"

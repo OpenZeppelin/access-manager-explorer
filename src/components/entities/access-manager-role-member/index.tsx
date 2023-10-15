@@ -50,6 +50,7 @@ const AccessManagerMember: FC<Props> = ({
   const now = useNow();
 
   const address = useMemo(() => id.split("/").reverse()[0], [id]);
+  const accessManagerRoleMember = data?.accessManagerRoleMember;
 
   return (
     <Account
@@ -88,23 +89,25 @@ const AccessManagerMember: FC<Props> = ({
                 navigate: {
                   id: ROUTES.EXPLORER.DETAILS(
                     EntityPrefix.AccessManager,
-                    data.accessManagerRoleMember.manager.asAccount.id
+                    accessManagerRoleMember?.manager.asAccount.id
                   ),
                 },
               }}
               address={{
-                value: data.accessManagerRoleMember.manager.asAccount.id,
+                value: accessManagerRoleMember?.manager.asAccount.id,
               }}
             />
           </Flex>
           <Separator size="4" my="3" />
           <Flex align="center" width="100%" justify="between">
             <Heading size="2">Role</Heading>
-            <Role
-              size="2"
-              role={data.accessManagerRoleMember.role}
-              icons={{ navigate: true }}
-            />
+            {accessManagerRoleMember?.role && (
+              <Role
+                size="2"
+                accessManagerRole={accessManagerRoleMember?.role}
+                icons={{ navigate: true }}
+              />
+            )}
           </Flex>
           <Separator size="4" my="3" />
           <Flex align="center" width="100%" justify="between">
@@ -119,7 +122,12 @@ const AccessManagerMember: FC<Props> = ({
                 </Text>
               </Info>
             </Heading>
-            <DelayedValue size="2" {...data.accessManagerRoleMember.executionDelay} />
+            {accessManagerRoleMember?.executionDelay && (
+              <DelayedValue
+                size="2"
+                value={accessManagerRoleMember?.executionDelay}
+              />
+            )}
           </Flex>
           <Separator size="4" my="3" />
           <Flex align="center" width="100%" justify="between">
@@ -127,11 +135,11 @@ const AccessManagerMember: FC<Props> = ({
             <Flex align="center">
               <Text size="2">
                 {format.relativeTime(
-                  data.accessManagerRoleMember.since * 1000,
+                  accessManagerRoleMember?.since * 1000,
                   now.getTime()
                 )}
               </Text>
-              {data.accessManagerRoleMember.since * 1000 > now.getTime() && (
+              {accessManagerRoleMember?.since * 1000 > now.getTime() && (
                 <Info ml="3" mt="1">
                   <Text size="1">
                     A date in the future means this role is already granted but

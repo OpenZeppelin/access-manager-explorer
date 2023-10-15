@@ -1,17 +1,14 @@
-import { gql } from "urql";
+import { graphql } from "@/gql";
 
-const ACCESS_MANAGER_TARGET_FUNCTION_QUERY = gql`
+const ACCESS_MANAGER_TARGET_FUNCTION_QUERY = graphql(/* GraphQL */ `
   query AccessManagerTargetFunction($id: ID!) {
     accessManagerTargetFunction(id: $id) {
-      id
+      ...AccessManagerTargetFunctionFragment
       manager {
         id
         asAccount {
           id
         }
-      }
-      asSelector {
-        id
       }
       target {
         id
@@ -20,13 +17,10 @@ const ACCESS_MANAGER_TARGET_FUNCTION_QUERY = gql`
         }
       }
       role {
-        id
-        asRole {
-          id
-        }
+        ...AccessManagerRoleFragment
       }
     }
   }
-`;
+`);
 
 export { ACCESS_MANAGER_TARGET_FUNCTION_QUERY };

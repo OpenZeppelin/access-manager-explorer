@@ -1,6 +1,6 @@
-import { gql } from "urql";
+import { graphql } from "@/gql";
 
-const ACCESS_MANAGER_QUERY = gql`
+const ACCESS_MANAGER_QUERY = graphql(/* GraphQL */ `
   query AccessManager($id: ID!) {
     accessManager(id: $id) {
       id
@@ -11,11 +11,7 @@ const ACCESS_MANAGER_QUERY = gql`
         }
       }
       roles {
-        id
-        label
-        asRole {
-          id
-        }
+        ...AccessManagerRoleFragment
       }
       members {
         id
@@ -35,6 +31,6 @@ const ACCESS_MANAGER_QUERY = gql`
       }
     }
   }
-`;
+`);
 
 export { ACCESS_MANAGER_QUERY };

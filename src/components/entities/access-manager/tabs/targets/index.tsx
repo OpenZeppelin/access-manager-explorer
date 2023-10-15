@@ -21,7 +21,7 @@ const Targets: FC<Props> = ({ targets }) => {
         </Callout.Root>
       ) : (
         <Flex direction="column" gap="2">
-          {targets.map(({ id, asAccount }: any) => (
+          {targets.map(({ id, asAccount }) => (
             <Card key={id} size="1">
               <Address
                 key={id}

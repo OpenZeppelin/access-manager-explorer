@@ -7,30 +7,27 @@ import { EntityPrefix } from "@/types";
 import Link from "next/link";
 import { join } from "path";
 import { usePathname } from "next/navigation";
+import { FragmentType, useFragment } from "@/gql/fragment-masking";
+import { ACCESS_MANAGER_ROLE_FRAGMENT } from "./requests";
 
 interface Role {
   id: string;
 }
 
-interface AccessManagerRole {
-  id: string;
-  label?: string;
-  asRole: Role;
-}
-
-interface UnlabelledIconProps extends ComponentProps<typeof Info> {}
+interface IconProps extends ComponentProps<typeof Info> {}
 
 interface IconProps {
-  unlabelled?: boolean | UnlabelledIconProps;
-  navigate?: boolean | UnlabelledIconProps;
+  unlabelled?: boolean | IconProps;
+  navigate?: boolean | IconProps;
 }
 
 interface Props extends Omit<ComponentProps<typeof Badge>, "role"> {
-  role: AccessManagerRole;
+  accessManagerRole: FragmentType<typeof ACCESS_MANAGER_ROLE_FRAGMENT>;
   icons?: IconProps;
 }
 
-const Role: FC<Props> = ({ role, icons, ...props }) => {
+const Role: FC<Props> = ({ accessManagerRole, icons, ...props }) => {
+  const role = useFragment(ACCESS_MANAGER_ROLE_FRAGMENT, accessManagerRole);
   if (!role.label && role.asRole.id == "0") role.label = "ADMIN";
   const isLabel = typeof role.label !== "undefined";
 

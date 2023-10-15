@@ -4,15 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { join } from "path";
 import { ComponentProps, FC } from "react";
-
-interface Selector {
-  id: string;
-}
-
-interface AccessManagerFunction {
-  id: string;
-  asSelector: Selector;
-}
+import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "./requests";
+import { FragmentType, useFragment } from "@/gql";
 
 type IconButtonProps = ComponentProps<typeof IconButton>;
 
@@ -21,11 +14,12 @@ interface IconProps {
 }
 
 interface Props extends ComponentProps<typeof Code> {
-  method: AccessManagerFunction;
+  method: FragmentType<typeof ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT>;
   icons?: IconProps;
 }
 
-const Selector: FC<Props> = ({ method, icons, ...props }) => {
+const Selector: FC<Props> = ({ method: fn, icons, ...props }) => {
+  const method = useFragment(ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT, fn);
   const pathname = usePathname();
   return (
     <Flex align="center">

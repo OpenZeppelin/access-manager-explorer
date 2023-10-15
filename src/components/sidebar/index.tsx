@@ -12,14 +12,9 @@ import {
 import { cn } from "@/utils";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import useAccount from "@/hooks/use-account";
-import { useRouter } from "next/navigation";
-import { join } from "path";
-import ROUTES from "@/config/routes";
-import { EntityPrefix } from "@/types";
 import { useQuery } from "urql";
-import { ACCESS_MANAGER_MEMBER_QUERY } from "./requests";
-import Role from "../role";
-import Link from "next/link";
+import { ACCESS_MANAGER_ROLE_MEMBERS_QUERY } from "./requests";
+import MemberOf from "./member-of";
 
 interface Props extends ComponentProps<typeof Card> {}
 
@@ -27,12 +22,11 @@ const Sidebar: FC<Props> = (props) => {
   const [open, setOpen] = useState(true);
   const { address, isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
-  const { replace } = useRouter();
 
   const [{ data, fetching }] = useQuery({
-    query: ACCESS_MANAGER_MEMBER_QUERY,
+    query: ACCESS_MANAGER_ROLE_MEMBERS_QUERY,
     variables: {
-      address: address,
+      address: address ?? "",
     },
     pause: !address,
   });
@@ -112,48 +106,8 @@ const Sidebar: FC<Props> = (props) => {
               Member of
             </Heading>
           )}
-          {data?.accessManagerRoleMembers?.map((membership: any) => (
-            <Button
-              key={membership.id}
-              my="1"
-              variant="ghost"
-              color="gray"
-              className="w-full"
-              asChild
-            >
-              <Link
-                scroll={false}
-                href={join(
-                  ROUTES.EXPLORER.ROOT,
-                  ROUTES.EXPLORER.DETAILS(
-                    EntityPrefix.AccessManagerRoleMember,
-                    membership.id
-                  )
-                )}
-                replace
-              >
-                <Role
-                  ml="3"
-                  role={{
-                    id: membership.id,
-                    asRole: membership.role.label
-                      ? { id: membership.role.label }
-                      : membership.role.asRole,
-                  }}
-                />
-                <Address
-                  address={{
-                    value: membership.manager.asAccount.id,
-                  }}
-                  truncate={{
-                    leading: 4,
-                    trailing: 6,
-                  }}
-                  p="1"
-                  mr="auto"
-                />
-              </Link>
-            </Button>
+          {data?.accessManagerRoleMembers?.map((membership) => (
+            <MemberOf key={membership.id} membership={membership} />
           ))}
         </Collapsible.Content>
       </Collapsible.Root>
