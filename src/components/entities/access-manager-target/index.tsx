@@ -130,7 +130,7 @@ const AccessManagerTarget: FC<Props> = ({
                   <Text size="1">
                     A target can be closed, which means that every{" "}
                     <Code>canCall</Code> invokation will return false. If this
-                    contract's authority is the access manager targetting it,
+                    contract{"'"}s authority is the access manager targetting it,
                     every call will revert.
                   </Text>
                 </Info>
@@ -164,6 +164,7 @@ const AccessManagerTarget: FC<Props> = ({
               <Flex direction="column">
                 {data.accessManagerTarget.functions.map((method: any) => (
                   <Function
+                    key={method.id}
                     my="1"
                     size="4"
                     method={method}

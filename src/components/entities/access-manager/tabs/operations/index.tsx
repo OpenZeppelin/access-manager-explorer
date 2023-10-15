@@ -20,7 +20,12 @@ const Operations: FC<Props> = ({ operations }) => {
       ) : (
         <Grid columns="2" gap="3" width="auto">
           {operations.map((operation: any) => (
-            <Operation className="w-full" size="2" operation={operation} />
+            <Operation
+              key={operation.id}
+              className="w-full"
+              size="2"
+              operation={operation}
+            />
           ))}
         </Grid>
       )}

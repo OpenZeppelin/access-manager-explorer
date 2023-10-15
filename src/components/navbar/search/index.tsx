@@ -68,7 +68,7 @@ const Search: FC<Props> = (props) => {
 
   useEffect(() => {
     setOpen(isInputAddress && isData);
-  }, [isData, data?.account, isInputAddress, address]);
+  }, [isData, data, isInputAddress, address]);
 
   return (
     <Root {...props}>

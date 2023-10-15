@@ -127,7 +127,7 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
                 <Info ml="3" mt="1">
                   <Text size="1">
                     Each role has a guardian who can can <Code>cancel</Code> on
-                    delayed operations before they're executed.
+                    delayed operations before they are executed.
                   </Text>
                 </Info>
               </Heading>
@@ -146,6 +146,7 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
                 <Grid columns="2" gap="3" width="auto">
                   {data.accessManagerRole.adminOf.map((role: any) => (
                     <RoleBadge
+                      key={role.id}
                       size="2"
                       icons={{ navigate: true }}
                       role={role}
@@ -162,6 +163,7 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
                 <Grid columns="2" gap="3" width="auto">
                   {data.accessManagerRole.guardianOf.map((role: any) => (
                     <RoleBadge
+                      key={role.id}
                       size="2"
                       icons={{ navigate: true }}
                       role={role}
@@ -180,7 +182,6 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
                     ({ id, asAccount }: any) => (
                       <Card key={id} size="1">
                         <Address
-                          key={id}
                           truncate={{
                             leading: 4,
                             trailing: 6,
@@ -219,6 +220,7 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
               <Flex direction="column">
                 {data.accessManagerRole.functions.map((method: any) => (
                   <FunctionBadge
+                    key={method.id}
                     my="1"
                     method={method}
                     icons={{

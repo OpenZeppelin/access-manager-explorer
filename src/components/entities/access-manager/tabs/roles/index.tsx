@@ -22,6 +22,7 @@ const Roles: FC<Props> = ({ roles }) => {
         <Grid columns="2" gap="3" width="auto">
           {roles.map((role: any) => (
             <Role
+              key={role.id}
               className="w-full"
               size="2"
               icons={{ unlabelled: true, navigate: true }}
