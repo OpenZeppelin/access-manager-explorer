@@ -1,7 +1,10 @@
+import AccessManaged from "@/components/entities/access-managed";
 import AccessManager from "@/components/entities/access-manager";
 import AccessManagerMember from "@/components/entities/access-manager-member";
+import AccessManagerTarget from "@/components/entities/access-manager-target";
 import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
+import { toGraphId } from "@/config/routes";
 import { EntityPrefix } from "@/types";
 import { Flex, ScrollArea } from "@radix-ui/themes";
 import { FC } from "react";
@@ -25,22 +28,25 @@ const Explorer: FC<Props> = ({ params: { entities } }) => {
               maxHeight: "calc(100vh - 64px)",
             }}
           />
-          {entities?.map((id, depth) => {
-            const [type, address] = id.split("-");
-
+          {entities?.map((prefixedId, depth) => {
+            const { type, id } = toGraphId(prefixedId);
             switch (type) {
               case "mgr":
                 return (
                   <AccessManager
-                    key={id}
-                    address={address as Address}
+                    key={prefixedId}
+                    address={id as Address}
                     depth={depth}
                     size="4"
                     variant="classic"
                     className="no-radius"
+                    truncate={{
+                      leading: 4,
+                      trailing: 6,
+                    }}
                     style={{
-                      maxWidth: 750,
-                      minWidth: 750,
+                      maxWidth: 500,
+                      minWidth: 500,
                       border: 0,
                       maxHeight: "calc(100vh - 64px)",
                     }}
@@ -49,15 +55,61 @@ const Explorer: FC<Props> = ({ params: { entities } }) => {
               case "mbr":
                 return (
                   <AccessManagerMember
-                    key={id}
-                    address={address as Address}
+                    key={prefixedId}
+                    id={id}
                     depth={depth}
                     size="4"
                     variant="classic"
                     className="no-radius"
+                    truncate={{
+                      leading: 2,
+                      trailing: 4,
+                    }}
                     style={{
-                      maxWidth: 750,
-                      minWidth: 750,
+                      maxWidth: 430,
+                      minWidth: 430,
+                      border: 0,
+                      maxHeight: "calc(100vh - 64px)",
+                    }}
+                  />
+                );
+              case "mgd":
+                return (
+                  <AccessManaged
+                    key={prefixedId}
+                    address={id as Address}
+                    depth={depth}
+                    size="4"
+                    variant="classic"
+                    className="no-radius"
+                    truncate={{
+                      leading: 2,
+                      trailing: 4,
+                    }}
+                    style={{
+                      maxWidth: 430,
+                      minWidth: 430,
+                      border: 0,
+                      maxHeight: "calc(100vh - 64px)",
+                    }}
+                  />
+                );
+              case "tgt":
+                return (
+                  <AccessManagerTarget
+                    key={prefixedId}
+                    id={id}
+                    depth={depth}
+                    size="4"
+                    variant="classic"
+                    className="no-radius"
+                    truncate={{
+                      leading: 2,
+                      trailing: 4,
+                    }}
+                    style={{
+                      maxWidth: 430,
+                      minWidth: 430,
                       border: 0,
                       maxHeight: "calc(100vh - 64px)",
                     }}

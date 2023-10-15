@@ -21,6 +21,7 @@ interface Props extends ComponentProps<typeof Card> {
   children: ReactNode;
   description: string;
   remove: () => void;
+  truncate: ComponentProps<typeof Address>["truncate"];
 }
 
 const Account: FC<Props> = ({
@@ -30,6 +31,7 @@ const Account: FC<Props> = ({
   description,
   className,
   remove,
+  truncate,
   ...props
 }) => {
   return (
@@ -39,24 +41,22 @@ const Account: FC<Props> = ({
     >
       <Flex align="center" mb="4">
         <Address
+          mr="auto"
           address={{
             value: address,
             weight: "medium",
             size: "6",
           }}
+          truncate={truncate}
           avatar={{
             size: "2",
-          }}
-          truncate={{
-            leading: 10,
-            trailing: 10,
           }}
           icons={{
             etherscan: true,
             copy: true,
           }}
         />
-        <Badge size="2">{entityType}</Badge>
+        <Badge>{entityType}</Badge>
         <IconButton
           onClick={remove}
           ml="4"
@@ -67,7 +67,7 @@ const Account: FC<Props> = ({
           <Cross2Icon />
         </IconButton>
       </Flex>
-      <Text size="3">{description}</Text>
+      <Text size="2">{description}</Text>
       <Separator orientation="horizontal" my="3" size="4" />
       {children}
     </Card>

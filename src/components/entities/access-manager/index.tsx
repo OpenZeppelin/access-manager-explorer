@@ -13,13 +13,21 @@ import Roles from "./tabs/roles";
 import Account from "../as/account";
 import { AddressEntity } from "@/types";
 import useRemoveEntity from "@/hooks/use-remove-entity";
+import Address from "@/components/address";
 
 interface Props extends ComponentProps<typeof Card> {
   depth: number;
   address: AddressType;
+  truncate: ComponentProps<typeof Address>["truncate"];
 }
 
-const AccessManager: FC<Props> = ({ address, className, depth, ...props }) => {
+const AccessManager: FC<Props> = ({
+  address,
+  truncate,
+  className,
+  depth,
+  ...props
+}) => {
   const [{ data, fetching, error }] = useQuery({
     query: ACCESS_MANAGER_QUERY,
     variables: {
@@ -36,6 +44,7 @@ const AccessManager: FC<Props> = ({ address, className, depth, ...props }) => {
       description="An AccessManager is a contract that keeps the permissions of a system"
       address={address}
       className={className}
+      truncate={truncate}
       {...props}
     >
       <Box>

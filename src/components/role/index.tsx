@@ -7,30 +7,46 @@ interface Role {
 }
 
 interface AccessManagerRole {
-  id: string;
   label?: string;
   asRole: Role;
 }
 
-interface Props extends Omit<ComponentProps<typeof Badge>, "role"> {
-  role: AccessManagerRole;
+interface UnlabelledIconProps extends ComponentProps<typeof Info> {}
+
+interface IconProps {
+  unlabelled?: boolean | UnlabelledIconProps;
 }
 
-const Role: FC<Props> = ({ role, ...props }) => {
+interface Props extends Omit<ComponentProps<typeof Badge>, "role"> {
+  role: AccessManagerRole;
+  icons?: IconProps;
+}
+
+const Role: FC<Props> = ({ role, icons, ...props }) => {
+  const isLabel = typeof role.label !== "undefined";
+
   return (
     <Badge color={role.label ? "blue" : "gray"} {...props}>
       {role.asRole.id}
-      <Separator orientation="vertical" />
-      {role.label ?? (
+      {isLabel && (
         <>
-          {"UNLABELED"}
-          {props.size == "2" && (
-            <Info>
-              <Text size="1">
-                An role can be labeled by the AccessManager admins via the{" "}
-                <Code>labelRole</Code> function{" "}
-              </Text>
-            </Info>
+          <Separator orientation="vertical" />
+          {role.label ?? (
+            <>
+              {"UNLABELED"}
+              {icons?.unlabelled && (
+                <Info
+                  {...(icons.unlabelled == true
+                    ? undefined
+                    : { ...icons.unlabelled })}
+                >
+                  <Text size="1">
+                    An role can be labeled by the AccessManager admins via the{" "}
+                    <Code>labelRole</Code> function{" "}
+                  </Text>
+                </Info>
+              )}
+            </>
           )}
         </>
       )}

@@ -1,7 +1,8 @@
 export enum AddressEntity {
   AccessManager = "Access Manager",
   AccessManaged = "Access Managed",
-  AccessManagerRoleMember = "Role Member",
+  AccessManagerTarget = "Target",
+  AccessManagerRoleMember = "Role member",
 }
 
 export enum Entity {
@@ -12,6 +13,7 @@ export enum Entity {
 
 export enum EntityPrefix {
   AccessManager = "mgr",
-  // AccessManaged = "mgd",
+  AccessManaged = "mgd",
+  AccessManagerTarget = "tgt",
   AccessManagerRoleMember = "mbr",
 }

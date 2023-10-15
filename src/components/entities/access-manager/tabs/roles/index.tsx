@@ -19,9 +19,14 @@ const Roles: FC<Props> = ({ roles }) => {
           <Callout.Text>No roles found</Callout.Text>
         </Callout.Root>
       ) : (
-        <Grid columns="3" gap="3" width="auto">
+        <Grid columns="2" gap="3" width="auto">
           {roles.map((role: any) => (
-            <Role className="w-full" size="2" role={role} />
+            <Role
+              className="w-full"
+              size="2"
+              icons={{ unlabelled: true }}
+              role={role}
+            />
           ))}
         </Grid>
       )}

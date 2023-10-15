@@ -1,6 +1,6 @@
 import { Avatar, Flex, Heading, IconButton } from "@radix-ui/themes";
 import { truncateAddress } from "@/utils";
-import { ComponentProps, FC } from "react";
+import { ComponentProps, FC, useMemo } from "react";
 import Gradient from "./gradient";
 import { Address } from "viem";
 import {
@@ -22,7 +22,7 @@ interface AddressProps extends Partial<Omit<HeadingProps, "value">> {
   value: Address;
 }
 
-interface LinkProps {
+interface IconProps {
   etherscan?: IconButtonProps | boolean;
   copy?: IconButtonProps | boolean;
 }
@@ -31,15 +31,22 @@ interface Props extends FlexProps {
   address: AddressProps;
   avatar?: Partial<Omit<AvatarProps, "fallback">>;
   truncate?: Parameters<typeof truncateAddress>[1] | boolean;
-  icons?: LinkProps;
+  icons?: IconProps;
 }
 
 const DEFAULT_SIZE = "1";
 
 const Address: FC<Props> = ({ address, avatar, truncate, icons, ...props }) => {
-  const displayAddress = !!truncate
-    ? truncateAddress(address.value, truncate === true ? undefined : truncate)
-    : address.value;
+  const displayAddress = useMemo(
+    () =>
+      !!truncate
+        ? truncateAddress(
+            address.value,
+            truncate === true ? undefined : truncate
+          )
+        : address.value,
+    [address.value, truncate]
+  );
 
   const size = avatar?.size || DEFAULT_SIZE;
 
@@ -48,22 +55,23 @@ const Address: FC<Props> = ({ address, avatar, truncate, icons, ...props }) => {
   const { onCopy, hasCopied } = useClipboard(address.value);
 
   return (
-    <Flex align="center" width="100%" {...props}>
-      <Avatar
-        size={size}
-        className="mr-2"
-        radius="full"
-        fallback={
-          <Gradient
-            svgClassName={`rt-AvatarRoot rt-r-size-${size}`}
-            address={address.value}
-          />
-        }
-        {...avatar}
-      />
-      <Heading size="2" weight="light" mr="3" {...(address as HeadingProps)}>
-        {displayAddress}
-      </Heading>
+    <Flex align="center" justify="between" {...props}>
+      <Flex gap="2">
+        <Avatar
+          size={size}
+          radius="full"
+          fallback={
+            <Gradient
+              svgClassName={`rt-AvatarRoot rt-r-size-${size}`}
+              address={address.value}
+            />
+          }
+          {...avatar}
+        />
+        <Heading size="2" weight="light" mr="3" {...(address as HeadingProps)}>
+          {displayAddress}
+        </Heading>
+      </Flex>
       <Flex gap="2">
         {icons?.etherscan && chain?.blockExplorers && (
           <IconButton

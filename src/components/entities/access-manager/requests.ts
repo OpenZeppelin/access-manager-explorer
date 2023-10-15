@@ -12,10 +12,10 @@ const ACCESS_MANAGER_QUERY = gql`
       }
       roles {
         id
+        label
         asRole {
           id
         }
-        label
       }
       members {
         id

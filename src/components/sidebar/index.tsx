@@ -1,9 +1,9 @@
 "use client";
 
 import * as Collapsible from "@radix-ui/react-collapsible";
-import { ComponentProps, FC, useEffect, useState } from "react";
+import { ComponentProps, FC, useState } from "react";
 import Address from "@/components/address";
-import { Button, Card, Flex, Heading } from "@radix-ui/themes";
+import { Button, Card, Flex, Heading, Text } from "@radix-ui/themes";
 import {
   ChevronDownIcon,
   ChevronRightIcon,
@@ -12,8 +12,13 @@ import {
 import { cn } from "@/utils";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import useAccount from "@/hooks/use-account";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { join } from "path";
+import ROUTES from "@/config/routes";
+import { EntityPrefix } from "@/types";
+import { useQuery } from "urql";
+import { ACCESS_MANAGER_MEMBER_QUERY } from "./requests";
+import Role from "../role";
 
 interface Props extends ComponentProps<typeof Card> {}
 
@@ -21,12 +26,19 @@ const Sidebar: FC<Props> = (props) => {
   const [open, setOpen] = useState(true);
   const { address, isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
-  const { push } = useRouter();
-  const pathname = usePathname();
+  const { replace } = useRouter();
+
+  const [{ data, fetching }] = useQuery({
+    query: ACCESS_MANAGER_MEMBER_QUERY,
+    variables: {
+      address: address,
+    },
+    pause: !address,
+  });
 
   return (
     <Card
-      className={cn("no-radius flex border-r w-64", props.className)}
+      className={cn("no-radius flex border-r w-80", props.className)}
       size="2"
       style={{
         border: 0,
@@ -45,10 +57,27 @@ const Sidebar: FC<Props> = (props) => {
             <Button ml="1" size="2" variant="ghost" color="gray">
               <Collapsible.Trigger asChild>
                 <Flex>
-                  <Heading size="2" mr="2">
-                    My wallet
-                  </Heading>
-                  {!open ? (
+                  {address && (
+                    <Address
+                      address={{
+                        value: address,
+                        weight: "medium",
+                      }}
+                      truncate={{
+                        leading: 4,
+                        trailing: 8,
+                      }}
+                    />
+                  )}
+                  {fetching ? (
+                    <div
+                      className="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent text-gray-600 rounded-full"
+                      role="status"
+                      aria-label="loading"
+                    >
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  ) : !open ? (
                     <ChevronRightIcon width="16" height="16" />
                   ) : (
                     <ChevronDownIcon width="16" height="16" />
@@ -73,22 +102,54 @@ const Sidebar: FC<Props> = (props) => {
           )}
         </Flex>
         <Collapsible.Content className="pt-2">
-          <Button
-            onClick={() => push(join(pathname, `mbr-${address}`))}
-            variant="ghost"
-            color="gray"
-            className="w-full"
-          >
-            {address && (
+          {(data?.accessManagerRoleMembers ?? []).length == 0 ? (
+            <Text ml="4" size="2" color="gray">
+              No membership found
+            </Text>
+          ) : (
+            <Heading size="1" ml="4" mb="1">
+              Member of
+            </Heading>
+          )}
+          {data?.accessManagerRoleMembers?.map((membership: any) => (
+            <Button
+              my="1"
+              onClick={() =>
+                replace(
+                  join(
+                    ROUTES.EXPLORER.ROOT,
+                    ROUTES.EXPLORER.DETAILS(
+                      EntityPrefix.AccessManagerRoleMember,
+                      membership.id
+                    )
+                  )
+                )
+              }
+              variant="ghost"
+              color="gray"
+              className="w-full"
+            >
               <Address
                 address={{
-                  value: address,
+                  value: membership.manager.asAccount.id,
                 }}
-                truncate
-                className={cn("p-1", "ml-4")}
+                truncate={{
+                  leading: 4,
+                  trailing: 6,
+                }}
+                mr="auto"
+                ml="3"
+                p="1"
               />
-            )}
-          </Button>
+              <Role
+                role={{
+                  asRole: membership.role.label
+                    ? { id: membership.role.label }
+                    : membership.role.asRole,
+                }}
+              />
+            </Button>
+          ))}
         </Collapsible.Content>
       </Collapsible.Root>
     </Card>

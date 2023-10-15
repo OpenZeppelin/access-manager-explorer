@@ -10,6 +10,31 @@ const ACCOUNT_QUERY = gql`
       asAccessManaged {
         id
       }
+      membership {
+        id
+        manager {
+          id
+          asAccount {
+            id
+          }
+        }
+        role {
+          id
+          label
+          asRole {
+            id
+          }
+        }
+      }
+      targettedBy {
+        id
+        manager {
+          id
+          asAccount {
+            id
+          }
+        }
+      }
     }
   }
 `;
