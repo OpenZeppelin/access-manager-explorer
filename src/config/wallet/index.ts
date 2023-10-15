@@ -23,4 +23,4 @@ const config = createConfig({
   webSocketPublicClient,
 });
 
-export { config, chains };
+export { config, publicClient, chains };

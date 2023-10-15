@@ -7,6 +7,7 @@ import { TwitterLogoIcon, GitHubLogoIcon } from "@radix-ui/react-icons";
 import ConnectButton from "../connect-button";
 import Search from "./search";
 import ThemeIcon from "./theme-icon";
+import Menu from "./menu";
 
 const Navbar = () => {
   return (
@@ -72,6 +73,7 @@ const Navbar = () => {
                       },
                     }}
                   />
+                  <Menu />
                   <Separator orientation="vertical" mr="1" size="1" />
                   <IconButton
                     mx="2"

@@ -5,7 +5,7 @@ const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
 };
 
-const truncateAddress = (
+const truncateHex = (
   address: string,
   { leading, trailing } = { leading: 2, trailing: 4 }
 ) => {
@@ -18,4 +18,4 @@ const truncateAddress = (
   return `${match[1]}…${match[2]}`;
 };
 
-export { cn, truncateAddress };
+export { cn, truncateHex };

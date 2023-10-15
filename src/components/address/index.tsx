@@ -1,5 +1,5 @@
 import { Avatar, Flex, Heading, IconButton } from "@radix-ui/themes";
-import { truncateAddress } from "@/utils";
+import { truncateHex } from "@/utils";
 import { ComponentProps, FC, useMemo } from "react";
 import Gradient from "./gradient";
 import { Address } from "viem";
@@ -33,7 +33,7 @@ interface IconProps {
 interface Props extends FlexProps {
   address: AddressProps;
   avatar?: Partial<Omit<AvatarProps, "fallback">>;
-  truncate?: Parameters<typeof truncateAddress>[1] | boolean;
+  truncate?: Parameters<typeof truncateHex>[1] | boolean;
   icons?: IconProps;
 }
 
@@ -43,7 +43,7 @@ const Address: FC<Props> = ({ address, avatar, truncate, icons, ...props }) => {
   const displayAddress = useMemo(
     () =>
       !!truncate
-        ? truncateAddress(
+        ? truncateHex(
             address.value,
             truncate === true ? undefined : truncate
           )

@@ -1,7 +1,7 @@
 import { Badge, Code, Separator, Text } from "@radix-ui/themes";
 import { ComponentProps, FC } from "react";
 import Info from "../info";
-import { truncateAddress } from "@/utils";
+import { truncateHex } from "@/utils";
 
 interface Operation {
   id: string;
@@ -19,7 +19,7 @@ interface Props extends Omit<ComponentProps<typeof Badge>, "Operation"> {
 const Operation: FC<Props> = ({ operation, ...props }) => {
   return (
     <Badge color="gold" {...props}>
-      {truncateAddress(operation.asOperation.id, { leading: 4, trailing: 2 })}
+      {truncateHex(operation.asOperation.id, { leading: 4, trailing: 2 })}
       <Separator orientation="vertical" />
     </Badge>
   );
