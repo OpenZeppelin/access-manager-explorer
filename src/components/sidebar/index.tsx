@@ -5,6 +5,7 @@ import { ComponentProps, FC, useMemo, useState } from "react";
 import Address from "@/components/address";
 import { Button, Card, Flex, Heading, Separator, Text } from "@radix-ui/themes";
 import {
+  ArrowRightIcon,
   ChevronDownIcon,
   ChevronRightIcon,
   PlusIcon,
@@ -29,6 +30,8 @@ import Link from "next/link";
 import { join } from "path";
 
 interface Props extends ComponentProps<typeof Card> {}
+
+const DEMO_MANAGER = "0x4ee69a1703b717cb46cd12c71c6fe225f646ba1e";
 
 const Sidebar: FC<Props> = (props) => {
   const [open, setOpen] = useState(true);
@@ -141,9 +144,26 @@ const Sidebar: FC<Props> = (props) => {
         </Flex>
         <Collapsible.Content className="pt-2">
           {(data?.accessManagerRoleMembers ?? []).length == 0 ? (
-            <Text ml="4" size="2" color="gray">
-              No membership found
-            </Text>
+            <Flex ml="4" direction="column">
+              <Text size="2" color="gray">
+                No membership found 🤷🏻‍♂️
+              </Text>
+              <Separator my="3" size="4" />
+              <Button variant="surface" size="1" asChild>
+                <Link
+                  href={join(
+                    ROUTES.EXPLORER.ROOT,
+                    ROUTES.EXPLORER.DETAILS(
+                      EntityPrefix.AccessManager,
+                      DEMO_MANAGER
+                    )
+                  )}
+                  replace
+                >
+                  Try the demo manager <ArrowRightIcon className="ml-2" />
+                </Link>
+              </Button>
+            </Flex>
           ) : (
             <Heading size="1" ml="4" mb="1">
               Member of
