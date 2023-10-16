@@ -149,7 +149,6 @@ const Explorer: FC<Props> = ({ params: { entities } }) => {
             }}
           />
           {content}
-          <Box style={{ minWidth: "120vw" }} />
         </Flex>
       </ScrollArea>
     </>
