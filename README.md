@@ -4,35 +4,26 @@ An UI interface for OpenZeppelin Access Manager.
 
 ## Getting Started
 
-First, run the development server:
+Create a copy of the `env.example` into a fresh `.env` file, and fill in the values. Then, install the dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+yarn install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Running the app
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+In order to start a development server, run:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+yarn dev
+```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the UI.
 
-To learn more about Next.js, take a look at the following resources:
+### Changing GraphQL queries
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project uses [GraphQL Code Generator](https://graphql-code-generator.com/) to generate TypeScript types for the GraphQL queries. In order to update the types, run:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+yarn codegen
+```
