@@ -143,7 +143,9 @@ const Sidebar: FC<Props> = (props) => {
           )}
         </Flex>
         <Collapsible.Content className="pt-2">
-          {(data?.accessManagerRoleMembers ?? []).length == 0 ? (
+          {!data?.accessManagerRoleMembers ? (
+            <></>
+          ) : data?.accessManagerRoleMembers.length == 0 ? (
             <Flex ml="4" direction="column">
               <Text size="2" color="gray">
                 No membership found 🤷🏻‍♂️
