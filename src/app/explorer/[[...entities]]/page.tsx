@@ -47,8 +47,8 @@ const Explorer: FC<Props> = ({ params: { entities } }) => {
                       trailing: 6,
                     }}
                     style={{
-                      maxWidth: 530,
-                      minWidth: 530,
+                      maxWidth: 580,
+                      minWidth: 580,
                       border: 0,
                       maxHeight: "calc(100vh - 64px)",
                     }}
@@ -68,8 +68,8 @@ const Explorer: FC<Props> = ({ params: { entities } }) => {
                       trailing: 4,
                     }}
                     style={{
-                      maxWidth: 470,
-                      minWidth: 470,
+                      maxWidth: 520,
+                      minWidth: 520,
                       border: 0,
                       maxHeight: "calc(100vh - 64px)",
                     }}
@@ -89,8 +89,8 @@ const Explorer: FC<Props> = ({ params: { entities } }) => {
                       trailing: 4,
                     }}
                     style={{
-                      maxWidth: 470,
-                      minWidth: 470,
+                      maxWidth: 520,
+                      minWidth: 520,
                       border: 0,
                       maxHeight: "calc(100vh - 64px)",
                     }}
@@ -110,8 +110,8 @@ const Explorer: FC<Props> = ({ params: { entities } }) => {
                       trailing: 4,
                     }}
                     style={{
-                      maxWidth: 430,
-                      minWidth: 430,
+                      maxWidth: 460,
+                      minWidth: 460,
                       border: 0,
                       maxHeight: "calc(100vh - 64px)",
                     }}
@@ -127,8 +127,8 @@ const Explorer: FC<Props> = ({ params: { entities } }) => {
                     variant="classic"
                     className="no-radius"
                     style={{
-                      maxWidth: 430,
-                      minWidth: 430,
+                      maxWidth: 460,
+                      minWidth: 460,
                       border: 0,
                       maxHeight: "calc(100vh - 64px)",
                     }}
@@ -144,8 +144,8 @@ const Explorer: FC<Props> = ({ params: { entities } }) => {
                     variant="classic"
                     className="no-radius"
                     style={{
-                      maxWidth: 430,
-                      minWidth: 430,
+                      maxWidth: 460,
+                      minWidth: 460,
                       border: 0,
                       maxHeight: "calc(100vh - 64px)",
                     }}
