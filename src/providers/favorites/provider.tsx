@@ -85,8 +85,11 @@ const FavoritesProvider: FC<Props> = ({ children }) => {
   };
 
   const removeFavorite = (kind: Kind, displayName: DisplayName) => {
-    const newFavoritesKiund = { ...favorites[kind] };
-    const newFavorites = { ...favorites, [kind]: { ...favorites[kind] } };
+    const newFavoritesKind = { ...favorites[kind] };
+    const newFavorites = {
+      ...favorites,
+      [kind]: { ...newFavoritesKind },
+    };
     delete newFavorites[kind][displayName];
     window.localStorage.setItem(FAVORITES_KEY, JSON.stringify(newFavorites));
     setFavorites(newFavorites);
@@ -94,7 +97,6 @@ const FavoritesProvider: FC<Props> = ({ children }) => {
 
   const getFavorites = (kind: Kind) => {
     const favoritesKind = favorites[kind];
-    console.log(favoritesKind);
     return Object.entries(favoritesKind ?? {});
   };
 
