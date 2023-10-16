@@ -10,9 +10,6 @@ interface Props extends ComponentProps<typeof IconButton> {}
 
 const Menu: FC<Props> = (props) => {
   const [deployManager, toggleDeployManager] = useState(false);
-  const { isConnected } = useAccount();
-
-  if (!isConnected) return <></>;
 
   return (
     <>

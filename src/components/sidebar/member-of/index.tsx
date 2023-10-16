@@ -37,7 +37,6 @@ const MemberOf: FC<Props> = ({ membership }) => {
             membership.id
           )
         )}
-        replace
       >
         <Role ml="3" accessManagerRole={roleFragment} />
         <Address

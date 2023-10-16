@@ -52,7 +52,7 @@ const DeployManager: FC<Props> = ({ open, ...props }) => {
         </Flex>
 
         <Flex gap="3" mt="4" justify="end">
-          <Dialog.Close onClick={close}>
+          <Dialog.Close>
             <Button variant="soft" color="gray">
               Cancel
             </Button>

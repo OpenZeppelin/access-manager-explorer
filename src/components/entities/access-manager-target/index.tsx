@@ -1,7 +1,6 @@
 "use client";
 import {
   Box,
-  Card,
   Callout,
   Flex,
   Separator,
@@ -10,6 +9,7 @@ import {
   Text,
   Code,
   Button,
+  Card,
 } from "@radix-ui/themes";
 import { ComponentProps, FC, useMemo } from "react";
 import { Address as AddressType } from "viem";
@@ -38,6 +38,7 @@ interface Props extends ComponentProps<typeof Card> {
   depth: number;
   id: string;
   truncate: ComponentProps<typeof Address>["truncate"];
+  isLast: boolean;
 }
 
 const AccessManagerTarget: FC<Props> = ({
@@ -45,6 +46,7 @@ const AccessManagerTarget: FC<Props> = ({
   truncate,
   className,
   depth,
+  isLast,
   ...props
 }) => {
   const [{ data, fetching, error }] = useQuery({
@@ -95,6 +97,7 @@ const AccessManagerTarget: FC<Props> = ({
       address={address as AddressType}
       className={className}
       truncate={truncate}
+      isLast={isLast}
       {...props}
     >
       <Box>

@@ -3,13 +3,13 @@ import { useCallback } from "react";
 
 const useRemoveEntity = (depth: number) => {
   const pathname = usePathname();
-  const { replace } = useRouter();
+  const { push } = useRouter();
 
   return useCallback(() => {
     const [_, explorer, ...items] = pathname.split("/");
     items.splice(depth, 1);
-    replace([_, explorer, ...items].join("/"));
-  }, [depth, replace]);
+    push([_, explorer, ...items].join("/"));
+  }, [depth, push]);
 };
 
 export default useRemoveEntity;

@@ -158,7 +158,7 @@ const Sidebar: FC<Props> = (props) => {
                       DEMO_MANAGER
                     )
                   )}
-                  replace
+                  scroll={false}
                 >
                   Try the demo manager <ArrowRightIcon className="ml-2" />
                 </Link>
@@ -181,6 +181,7 @@ const Sidebar: FC<Props> = (props) => {
           data={accessManagerFavorites}
           onRender={([displayName, id]) => (
             <Button
+              key={`${EntityPrefix.AccessManager}-${id}`}
               my="1"
               variant="ghost"
               color="gray"
@@ -193,7 +194,6 @@ const Sidebar: FC<Props> = (props) => {
                   ROUTES.EXPLORER.ROOT,
                   ROUTES.EXPLORER.DETAILS(EntityPrefix.AccessManager, id)
                 )}
-                replace
               >
                 <Address
                   p="1"
@@ -218,6 +218,7 @@ const Sidebar: FC<Props> = (props) => {
           data={accessManagedFavorites}
           onRender={([displayName, id]) => (
             <Button
+              key={`${EntityPrefix.AccessManaged}-${id}`}
               my="1"
               variant="ghost"
               color="gray"
@@ -230,7 +231,6 @@ const Sidebar: FC<Props> = (props) => {
                   ROUTES.EXPLORER.ROOT,
                   ROUTES.EXPLORER.DETAILS(EntityPrefix.AccessManaged, id)
                 )}
-                replace
               >
                 <Address
                   p="1"
@@ -257,6 +257,7 @@ const Sidebar: FC<Props> = (props) => {
             const [roleId, accessManager] = id.split("/").reverse();
             return (
               <Button
+                key={`${EntityPrefix.AccessManagerRole}-${id}`}
                 my="1"
                 variant="ghost"
                 color="gray"
@@ -269,7 +270,6 @@ const Sidebar: FC<Props> = (props) => {
                     ROUTES.EXPLORER.ROOT,
                     ROUTES.EXPLORER.DETAILS(EntityPrefix.AccessManagerRole, id)
                   )}
-                  replace
                 >
                   <Flex align="center" width="100%" key={displayName}>
                     <Role
@@ -310,6 +310,7 @@ const Sidebar: FC<Props> = (props) => {
             const [member, roleId, accessManager] = id.split("/").reverse();
             return (
               <Button
+                key={`${EntityPrefix.AccessManagerRoleMember}-${id}`}
                 my="1"
                 variant="ghost"
                 color="gray"
@@ -325,7 +326,6 @@ const Sidebar: FC<Props> = (props) => {
                       id
                     )
                   )}
-                  replace
                 >
                   <Flex align="center" width="100%" key={displayName}>
                     <Address
@@ -376,6 +376,7 @@ const Sidebar: FC<Props> = (props) => {
             const [target] = id.split("/").reverse();
             return (
               <Button
+                key={`${EntityPrefix.AccessManagerTarget}-${id}`}
                 my="1"
                 variant="ghost"
                 color="gray"
@@ -391,7 +392,6 @@ const Sidebar: FC<Props> = (props) => {
                       id
                     )
                   )}
-                  replace
                 >
                   <Address
                     p="1"
@@ -419,6 +419,7 @@ const Sidebar: FC<Props> = (props) => {
             const [method, target] = id.split("/").reverse();
             return (
               <Button
+                key={`${EntityPrefix.AccessManagerTargetFunction}-${id}`}
                 my="1"
                 variant="ghost"
                 color="gray"
@@ -434,7 +435,6 @@ const Sidebar: FC<Props> = (props) => {
                       id
                     )
                   )}
-                  replace
                 >
                   <Flex align="center" width="100%" key={displayName}>
                     <Address

@@ -7,7 +7,14 @@ import {
   Separator,
   IconButton,
 } from "@radix-ui/themes";
-import { ComponentProps, FC, ReactNode, useEffect, useRef } from "react";
+import {
+  ComponentProps,
+  FC,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Cross2Icon, StarFilledIcon, StarIcon } from "@radix-ui/react-icons";
 import { cn } from "@/utils";
 
@@ -24,6 +31,7 @@ interface Props extends Omit<ComponentProps<typeof Card>, "role"> {
   description: string;
   remove: () => void;
   header: ReactNode;
+  isLast: boolean;
   favorites: Favorites;
 }
 
@@ -35,13 +43,18 @@ const Entity: FC<Props> = ({
   remove,
   favorites,
   header,
+  isLast,
   ...props
 }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    ref.current?.scrollIntoView({ behavior: "smooth" });
-  }, []);
+    if (isLast && !scrolled) {
+      ref.current?.scrollIntoView({ behavior: "smooth" });
+      setScrolled(true);
+    }
+  }, [isLast]);
 
   return (
     <Card

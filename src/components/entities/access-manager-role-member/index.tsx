@@ -29,6 +29,7 @@ interface Props extends ComponentProps<typeof Card> {
   id: string;
   depth: number;
   truncate: ComponentProps<typeof Address>["truncate"];
+  isLast: boolean;
 }
 
 const AccessManagerMember: FC<Props> = ({
@@ -36,6 +37,7 @@ const AccessManagerMember: FC<Props> = ({
   className,
   depth,
   truncate,
+  isLast,
   ...props
 }) => {
   const [{ data, fetching, error }] = useQuery({
@@ -60,7 +62,12 @@ const AccessManagerMember: FC<Props> = ({
       id={id}
       favorites={{
         toggle: () => {
-          if (!favorites.isFavorite(AddressEntity.AccessManagerRoleMember, address)) {
+          if (
+            !favorites.isFavorite(
+              AddressEntity.AccessManagerRoleMember,
+              address
+            )
+          ) {
             favorites.setFavorite([
               AddressEntity.AccessManagerRoleMember,
               {
@@ -68,7 +75,10 @@ const AccessManagerMember: FC<Props> = ({
               },
             ]);
           } else {
-            favorites.removeFavorite(AddressEntity.AccessManagerRoleMember, address);
+            favorites.removeFavorite(
+              AddressEntity.AccessManagerRoleMember,
+              address
+            );
           }
         },
         isFavorite: favorites.isFavorite(
@@ -82,6 +92,7 @@ const AccessManagerMember: FC<Props> = ({
       remove={remove}
       className={className}
       truncate={truncate}
+      isLast={isLast}
       {...props}
     >
       {error ? (

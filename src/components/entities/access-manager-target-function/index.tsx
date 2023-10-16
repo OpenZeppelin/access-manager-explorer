@@ -28,12 +28,14 @@ import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "@/components/function/r
 interface Props extends ComponentProps<typeof Card> {
   id: string;
   depth: number;
+  isLast: boolean;
 }
 
 const AccessManagerTargetFunction: FC<Props> = ({
   id,
   className,
   depth,
+  isLast,
   ...props
 }) => {
   const favorites = useFavorites();
@@ -92,6 +94,7 @@ const AccessManagerTargetFunction: FC<Props> = ({
       description="A permissioned function defined by an AccessManager"
       method={method}
       className={className}
+      isLast={isLast}
       {...props}
     >
       <Box>

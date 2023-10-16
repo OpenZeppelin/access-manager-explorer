@@ -50,7 +50,7 @@ type Props = { children: ReactNode };
 const RootLayout: FC<Props> = ({ children }) => {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn(inter.className)}>
+      <body className={cn(inter.className)} suppressHydrationWarning>
         <main>
           <WagmiConfig config={config}>
             <Theme>

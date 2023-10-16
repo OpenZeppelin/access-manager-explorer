@@ -24,7 +24,7 @@ const Navbar = () => {
           >
             <Link href="/" className="flex items-center">
               <Logo className="h-auto w-6" />
-              <Text ml="1" as="span" weight="bold" className="sm:inline-block">
+              <Text ml="1" as="span" weight="bold" className="sm:inline-block whitespace-nowrap">
                 OpenZeppelin{" "}
                 <Text as="span" weight="light">
                   | AccessManager

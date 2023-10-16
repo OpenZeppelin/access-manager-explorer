@@ -32,9 +32,16 @@ import { useFavorites } from "@/providers/favorites";
 interface Props extends ComponentProps<typeof Card> {
   id: string;
   depth: number;
+  isLast: boolean;
 }
 
-const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
+const AccessManagerRole: FC<Props> = ({
+  id,
+  className,
+  depth,
+  isLast,
+  ...props
+}) => {
   const [{ data, fetching, error }] = useQuery({
     query: ACCESS_MANAGER_ROLE_QUERY,
     variables: {
@@ -84,6 +91,7 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
       description="A role is allowed to call functions by an AccessManager"
       accessManagerRole={role}
       className={className}
+      isLast={isLast}
       {...props}
     >
       <Box>

@@ -113,8 +113,8 @@ const Search: FC<Props> = (props) => {
                     data?.account?.asAccessManager?.id
                   )
                 )}
+                scroll={false}
                 onClick={() => setAddress("")}
-                replace
               >
                 <Address
                   address={{ value: data?.account?.asAccessManager?.id }}
@@ -135,8 +135,8 @@ const Search: FC<Props> = (props) => {
                     data?.account?.asAccessManaged?.id
                   )
                 )}
+                scroll={false}
                 onClick={() => setAddress("")}
-                replace
               >
                 <Address
                   mr="2"
@@ -167,8 +167,8 @@ const Search: FC<Props> = (props) => {
                             membership.id
                           )
                         )}
+                        scroll={false}
                         onClick={() => setAddress("")}
-                        replace
                       >
                         <Address
                           mr="2"
@@ -214,8 +214,8 @@ const Search: FC<Props> = (props) => {
                           targettedBy.id
                         )
                       )}
+                      scroll={false}
                       onClick={() => setAddress("")}
-                      replace
                     >
                       <Address
                         mr="2"

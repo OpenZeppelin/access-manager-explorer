@@ -17,6 +17,7 @@ interface Props extends ComponentProps<typeof Card> {
   depth: number;
   address: AddressType;
   truncate: ComponentProps<typeof Address>["truncate"];
+  isLast: boolean;
 }
 
 const AccessManaged: FC<Props> = ({
@@ -24,6 +25,7 @@ const AccessManaged: FC<Props> = ({
   truncate,
   className,
   depth,
+  isLast,
   ...props
 }) => {
   const [{ data, fetching, error }] = useQuery({
@@ -63,6 +65,7 @@ const AccessManaged: FC<Props> = ({
       address={address}
       className={className}
       truncate={truncate}
+      isLast={isLast}
       {...props}
     >
       <Box>
