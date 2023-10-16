@@ -14,6 +14,7 @@ import Account from "../as/account";
 import { AddressEntity } from "@/types";
 import useRemoveEntity from "@/hooks/use-remove-entity";
 import Address from "@/components/address";
+import { useFavorites } from "@/providers/favorites";
 
 interface Props extends ComponentProps<typeof Card> {
   depth: number;
@@ -39,8 +40,26 @@ const AccessManager: FC<Props> = ({
 
   const accessManager = data?.accessManager;
 
+  const favorites = useFavorites();
+
   return (
     <Account
+      id={address}
+      favorites={{
+        toggle: () => {
+          if (!favorites.isFavorite(AddressEntity.AccessManager, address)) {
+            favorites.setFavorite([
+              AddressEntity.AccessManager,
+              {
+                [address]: address,
+              },
+            ]);
+          } else {
+            favorites.removeFavorite(AddressEntity.AccessManager, address);
+          }
+        },
+        isFavorite: favorites.isFavorite(AddressEntity.AccessManager, address),
+      }}
       remove={remove}
       entityType={AddressEntity.AccessManager}
       description="An AccessManager is a contract that keeps the permissions of a system"

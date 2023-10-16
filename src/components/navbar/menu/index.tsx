@@ -4,11 +4,16 @@ import DeployManager from "@/components/deploy/manager";
 import { HamburgerMenuIcon, PlusIcon } from "@radix-ui/react-icons";
 import { DropdownMenu, IconButton } from "@radix-ui/themes";
 import { ComponentProps, FC, useState } from "react";
+import { useAccount } from "wagmi";
 
 interface Props extends ComponentProps<typeof IconButton> {}
 
 const Menu: FC<Props> = (props) => {
   const [deployManager, toggleDeployManager] = useState(false);
+  const { isConnected } = useAccount();
+
+  if (!isConnected) return <></>;
+
   return (
     <>
       <DropdownMenu.Root>

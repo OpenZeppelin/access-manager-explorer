@@ -23,6 +23,7 @@ import { useFormatter, useNow } from "next-intl";
 import Skeleton from "./skeleton";
 import ROUTES from "@/config/routes";
 import Info from "@/components/info";
+import { useFavorites } from "@/providers/favorites";
 
 interface Props extends ComponentProps<typeof Card> {
   id: string;
@@ -52,8 +53,29 @@ const AccessManagerMember: FC<Props> = ({
   const address = useMemo(() => id.split("/").reverse()[0], [id]);
   const accessManagerRoleMember = data?.accessManagerRoleMember;
 
+  const favorites = useFavorites();
+
   return (
     <Account
+      id={id}
+      favorites={{
+        toggle: () => {
+          if (!favorites.isFavorite(AddressEntity.AccessManagerRoleMember, address)) {
+            favorites.setFavorite([
+              AddressEntity.AccessManagerRoleMember,
+              {
+                [address]: id,
+              },
+            ]);
+          } else {
+            favorites.removeFavorite(AddressEntity.AccessManagerRoleMember, address);
+          }
+        },
+        isFavorite: favorites.isFavorite(
+          AddressEntity.AccessManagerRoleMember,
+          address
+        ),
+      }}
       entityType={AddressEntity.AccessManagerRoleMember}
       description="A member represents the access level an address has under an AccessManager."
       address={address as AddressType}

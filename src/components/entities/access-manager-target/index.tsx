@@ -32,6 +32,7 @@ import Link from "next/link";
 import { join } from "path";
 import ROUTES from "@/config/routes";
 import { usePathname } from "next/navigation";
+import { useFavorites } from "@/providers/favorites";
 
 interface Props extends ComponentProps<typeof Card> {
   depth: number;
@@ -60,8 +61,34 @@ const AccessManagerTarget: FC<Props> = ({
   const pathname = usePathname();
   const accessManagerTarget = data?.accessManagerTarget;
 
+  const favorites = useFavorites();
+
   return (
     <Account
+      id={id}
+      favorites={{
+        toggle: () => {
+          if (
+            !favorites.isFavorite(AddressEntity.AccessManagerTarget, address)
+          ) {
+            favorites.setFavorite([
+              AddressEntity.AccessManagerTarget,
+              {
+                [address]: id,
+              },
+            ]);
+          } else {
+            favorites.removeFavorite(
+              AddressEntity.AccessManagerTarget,
+              address
+            );
+          }
+        },
+        isFavorite: favorites.isFavorite(
+          AddressEntity.AccessManagerTarget,
+          address
+        ),
+      }}
       remove={remove}
       entityType={AddressEntity.AccessManagerTarget}
       description="An address targetted by an AccessManager"
@@ -87,25 +114,27 @@ const AccessManagerTarget: FC<Props> = ({
           <Flex direction="column">
             <Flex align="center" width="100%" justify="between">
               <Heading size="2">Targetted by</Heading>
-              <Address
-                truncate={{
-                  leading: 10,
-                  trailing: 10,
-                }}
-                icons={{
-                  etherscan: true,
-                  copy: true,
-                  navigate: {
-                    id: ROUTES.EXPLORER.DETAILS(
-                      EntityPrefix.AccessManager,
-                      accessManagerTarget?.manager.asAccount.id
-                    ),
-                  },
-                }}
-                address={{
-                  value: accessManagerTarget?.manager.asAccount.id,
-                }}
-              />
+              {accessManagerTarget?.manager.asAccount.id && (
+                <Address
+                  truncate={{
+                    leading: 10,
+                    trailing: 10,
+                  }}
+                  icons={{
+                    etherscan: true,
+                    copy: true,
+                    navigate: {
+                      id: ROUTES.EXPLORER.DETAILS(
+                        EntityPrefix.AccessManager,
+                        accessManagerTarget.manager.asAccount.id
+                      ),
+                    },
+                  }}
+                  address={{
+                    value: accessManagerTarget.manager.asAccount.id,
+                  }}
+                />
+              )}
             </Flex>
             <Separator size="4" my="3" />
             <Flex align="center" width="100%" justify="between">

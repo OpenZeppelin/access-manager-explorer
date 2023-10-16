@@ -31,8 +31,8 @@ interface Props extends Omit<ComponentProps<typeof Badge>, "role"> {
 
 const Role: FC<Props> = ({ accessManagerRole, icons, ...props }) => {
   const role = asFragment(ACCESS_MANAGER_ROLE_FRAGMENT, accessManagerRole);
-  if (!role.label && role.asRole.id == "0") role.label = "ADMIN";
   const isLabel = typeof role.label !== "undefined";
+  if (isLabel && !role.label && role.asRole.id == "0") role.label = "ADMIN";
 
   const pathname = usePathname();
 

@@ -11,6 +11,7 @@ import useRemoveEntity from "@/hooks/use-remove-entity";
 import Address from "@/components/address";
 import { ACCESS_MANAGED_QUERY } from "./requests";
 import ROUTES from "@/config/routes";
+import { useFavorites } from "@/providers/favorites";
 
 interface Props extends ComponentProps<typeof Card> {
   depth: number;
@@ -36,8 +37,26 @@ const AccessManaged: FC<Props> = ({
 
   const accessManaged = data?.accessManaged;
 
+  const favorites = useFavorites();
+
   return (
     <Account
+      id={address}
+      favorites={{
+        toggle: () => {
+          if (!favorites.isFavorite(AddressEntity.AccessManaged, address)) {
+            favorites.setFavorite([
+              AddressEntity.AccessManaged,
+              {
+                [address]: address,
+              },
+            ]);
+          } else {
+            favorites.removeFavorite(AddressEntity.AccessManaged, address);
+          }
+        },
+        isFavorite: favorites.isFavorite(AddressEntity.AccessManaged, address),
+      }}
       remove={remove}
       entityType={AddressEntity.AccessManaged}
       description="An contract that inherits from AccessManaged and obeys to an authority."

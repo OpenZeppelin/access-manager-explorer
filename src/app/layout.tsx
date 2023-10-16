@@ -10,6 +10,7 @@ import { config } from "@/config/wallet";
 import { FC, ReactNode } from "react";
 import { RainbowKit, Theme, Urql } from "@/components/providers";
 import { NextIntlClientProvider } from "next-intl";
+import { FavoritesProvider } from "@/providers/favorites";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -56,7 +57,7 @@ const RootLayout: FC<Props> = ({ children }) => {
               <Urql>
                 <RainbowKit>
                   <NextIntlClientProvider locale="en" messages={{}}>
-                    {children}
+                    <FavoritesProvider>{children}</FavoritesProvider>
                   </NextIntlClientProvider>
                 </RainbowKit>
               </Urql>

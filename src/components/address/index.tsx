@@ -43,10 +43,7 @@ const Address: FC<Props> = ({ address, avatar, truncate, icons, ...props }) => {
   const displayAddress = useMemo(
     () =>
       !!truncate
-        ? truncateHex(
-            address.value,
-            truncate === true ? undefined : truncate
-          )
+        ? truncateHex(address.value, truncate === true ? undefined : truncate)
         : address.value,
     [address.value, truncate]
   );
@@ -73,7 +70,13 @@ const Address: FC<Props> = ({ address, avatar, truncate, icons, ...props }) => {
           }
           {...avatar}
         />
-        <Heading size="2" weight="light" mr="3" {...(address as HeadingProps)}>
+        <Heading
+          size="2"
+          weight="light"
+          mr="3"
+          className="whitespace-nowrap"
+          {...(address as HeadingProps)}
+        >
           {displayAddress}
         </Heading>
       </Flex>

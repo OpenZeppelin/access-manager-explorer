@@ -21,6 +21,9 @@ import Address from "@/components/address";
 import ROUTES from "@/config/routes";
 import Role from "@/components/role";
 import Info from "@/components/info";
+import { useFavorites } from "@/providers/favorites";
+import { makeFragmentData } from "@/gql";
+import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "@/components/function/requests";
 
 interface Props extends ComponentProps<typeof Card> {
   id: string;
@@ -33,6 +36,7 @@ const AccessManagerTargetFunction: FC<Props> = ({
   depth,
   ...props
 }) => {
+  const favorites = useFavorites();
   const [{ data, fetching, error }] = useQuery({
     query: ACCESS_MANAGER_TARGET_FUNCTION_QUERY,
     variables: {
@@ -45,19 +49,44 @@ const AccessManagerTargetFunction: FC<Props> = ({
   const selector = useMemo(() => id.split("/").reverse()[0], [id]);
 
   const accessManagedTargetFunction = data?.accessManagerTargetFunction;
-  const method = accessManagedTargetFunction ?? {
-    " $fragmentRefs": {
-      AccessManagerTargetFunctionFragmentFragment: {
+  const method =
+    accessManagedTargetFunction ??
+    makeFragmentData(
+      {
         id: selector,
         asSelector: {
           id: selector,
         },
       },
-    },
-  };
+      ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT
+    );
 
   return (
     <Function
+      id={id}
+      favorites={{
+        toggle: () => {
+          if (
+            !favorites.isFavorite(Entity.AccessManagerTargetFunction, selector)
+          ) {
+            favorites.setFavorite([
+              Entity.AccessManagerTargetFunction,
+              {
+                [selector]: id,
+              },
+            ]);
+          } else {
+            favorites.removeFavorite(
+              Entity.AccessManagerTargetFunction,
+              selector
+            );
+          }
+        },
+        isFavorite: favorites.isFavorite(
+          Entity.AccessManagerTargetFunction,
+          selector
+        ),
+      }}
       remove={remove}
       entityType={Entity.AccessManagerTargetFunction}
       description="A permissioned function defined by an AccessManager"
@@ -118,7 +147,7 @@ const AccessManagerTargetFunction: FC<Props> = ({
                     copy: true,
                     navigate: {
                       id: ROUTES.EXPLORER.DETAILS(
-                        EntityPrefix.AccessManager,
+                        EntityPrefix.AccessManagerTarget,
                         accessManagedTargetFunction.target.asAccount.id
                       ),
                     },

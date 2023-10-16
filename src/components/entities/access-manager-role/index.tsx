@@ -27,6 +27,7 @@ import FunctionBadge from "@/components/function";
 import { makeFragmentData, useFragment as asFragment } from "@/gql";
 import { ACCESS_MANAGER_ROLE_FRAGMENT } from "@/components/role/requests";
 import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "@/components/function/requests";
+import { useFavorites } from "@/providers/favorites";
 
 interface Props extends ComponentProps<typeof Card> {
   id: string;
@@ -58,8 +59,26 @@ const AccessManagerRole: FC<Props> = ({ id, className, depth, ...props }) => {
       ACCESS_MANAGER_ROLE_FRAGMENT
     );
 
+  const favorites = useFavorites();
+
   return (
     <Role
+      id={id}
+      favorites={{
+        toggle: () => {
+          if (!favorites.isFavorite(Entity.AccessManagerRole, roleId)) {
+            favorites.setFavorite([
+              Entity.AccessManagerRole,
+              {
+                [roleId]: id,
+              },
+            ]);
+          } else {
+            favorites.removeFavorite(Entity.AccessManagerRole, roleId);
+          }
+        },
+        isFavorite: favorites.isFavorite(Entity.AccessManagerRole, roleId),
+      }}
       remove={remove}
       entityType={Entity.AccessManagerRole}
       description="A role is allowed to call functions by an AccessManager"

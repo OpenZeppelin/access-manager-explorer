@@ -68,8 +68,8 @@ const Explorer: FC<Props> = ({ params: { entities } }) => {
                       trailing: 4,
                     }}
                     style={{
-                      maxWidth: 430,
-                      minWidth: 430,
+                      maxWidth: 470,
+                      minWidth: 470,
                       border: 0,
                       maxHeight: "calc(100vh - 64px)",
                     }}
@@ -89,8 +89,8 @@ const Explorer: FC<Props> = ({ params: { entities } }) => {
                       trailing: 4,
                     }}
                     style={{
-                      maxWidth: 430,
-                      minWidth: 430,
+                      maxWidth: 470,
+                      minWidth: 470,
                       border: 0,
                       maxHeight: "calc(100vh - 64px)",
                     }}
