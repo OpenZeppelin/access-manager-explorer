@@ -24,6 +24,7 @@ import Skeleton from "./skeleton";
 import ROUTES from "@/config/routes";
 import Info from "@/components/info";
 import { useFavorites } from "@/providers/favorites";
+import Empty from "./empty";
 
 interface Props extends ComponentProps<typeof Card> {
   id: string;
@@ -107,7 +108,7 @@ const AccessManagerMember: FC<Props> = ({
         </Callout.Root>
       ) : fetching ? (
         <Skeleton />
-      ) : (
+      ) : accessManagerRoleMember ? (
         <Flex direction="column">
           <Flex align="center" width="100%" justify="between">
             <Heading size="2">Manager</Heading>
@@ -183,6 +184,8 @@ const AccessManagerMember: FC<Props> = ({
             </Flex>
           </Flex>
         </Flex>
+      ) : (
+        <Empty />
       )}
     </Account>
   );

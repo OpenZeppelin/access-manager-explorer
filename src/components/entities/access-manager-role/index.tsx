@@ -28,6 +28,7 @@ import { makeFragmentData, useFragment as asFragment } from "@/gql";
 import { ACCESS_MANAGER_ROLE_FRAGMENT } from "@/components/role/requests";
 import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "@/components/function/requests";
 import { useFavorites } from "@/providers/favorites";
+import Empty from "./empty";
 
 interface Props extends ComponentProps<typeof Card> {
   id: string;
@@ -55,7 +56,7 @@ const AccessManagerRole: FC<Props> = ({
   const accessManagerRole = data?.accessManagerRole;
 
   const role =
-    data?.accessManagerRole ??
+    accessManagerRole ??
     makeFragmentData(
       {
         id: roleId,
@@ -107,7 +108,7 @@ const AccessManagerRole: FC<Props> = ({
           </Callout.Root>
         ) : fetching ? (
           <Skeleton />
-        ) : (
+        ) : accessManagerRole ? (
           <Flex direction="column">
             <Flex align="center" width="100%" justify="between">
               <Heading size="2">Manager</Heading>
@@ -297,6 +298,8 @@ const AccessManagerRole: FC<Props> = ({
               </Callout.Root>
             )}
           </Flex>
+        ) : (
+          <Empty />
         )}
       </Box>
     </Role>

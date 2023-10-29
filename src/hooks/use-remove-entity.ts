@@ -6,10 +6,10 @@ const useRemoveEntity = (depth: number) => {
   const { push } = useRouter();
 
   return useCallback(() => {
-    const [_, explorer, ...items] = pathname.split("/");
+    const [_, explorer, chainId, ...items] = pathname.split("/");
     items.splice(depth, 1);
-    push([_, explorer, ...items].join("/"));
-  }, [depth, push]);
+    push([_, explorer, chainId, ...items].join("/"));
+  }, [depth, pathname, push]);
 };
 
 export default useRemoveEntity;

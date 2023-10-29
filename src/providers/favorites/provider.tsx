@@ -1,7 +1,17 @@
 "use client";
-import { useState, createContext, ReactNode, FC, useEffect } from "react";
-import { AddressEntity, Entity } from "@/types";
+import {
+  useState,
+  createContext,
+  ReactNode,
+  FC,
+  useEffect,
+  useCallback,
+} from "react";
+import { AddressEntity, Entity, SupportedChainId } from "@/types";
 import Address from "@/components/address";
+import { useRouteNetwork } from "../route-network";
+
+import { chains as supportedChains } from "@/config/chains";
 
 interface Props {
   children: ReactNode;
@@ -23,26 +33,39 @@ export interface Favorites {
   [Entity.AccessManagerOperation]: Record<DisplayName, ID>;
 }
 
+type SupportedChainIdFavorites = {
+  [key in SupportedChainId]?: Favorites;
+};
+
 export type Entry<T> = { [K in keyof T]: [K, T[K]] }[keyof T];
 
 const FAVORITES_KEY = "favorites";
 
-interface Context extends Favorites {
+interface Context extends SupportedChainIdFavorites {
   setFavorite: (entry: Entry<Favorites>) => void;
   isFavorite: (kind: Kind, displayName: DisplayName) => boolean;
   removeFavorite: (kind: Kind, displayName: DisplayName) => void;
   getFavorites: (kind: Kind) => Entry<Favorites[Kind]>[];
 }
 
-const defaultContext = {
-  [AddressEntity.AccessManager]: {},
-  [AddressEntity.AccessManaged]: {},
-  [AddressEntity.AccessManagerTarget]: {},
-  [AddressEntity.AccessManagerRoleMember]: {},
-  [Entity.AccessManagerTargetFunction]: {},
-  [Entity.AccessManagerRole]: {},
-  [Entity.AccessManagerOperation]: {},
-};
+const defaultContext: Omit<
+  Context,
+  "setFavorite" | "isFavorite" | "removeFavorite" | "getFavorites"
+> = supportedChains.reduce(
+  (acc, chain) =>
+    Object.assign(acc, {
+      [chain.definition.id]: {
+        [AddressEntity.AccessManager]: {},
+        [AddressEntity.AccessManaged]: {},
+        [AddressEntity.AccessManagerTarget]: {},
+        [AddressEntity.AccessManagerRoleMember]: {},
+        [Entity.AccessManagerTargetFunction]: {},
+        [Entity.AccessManagerRole]: {},
+        [Entity.AccessManagerOperation]: {},
+      },
+    }),
+  {}
+);
 
 const favoritesContext = createContext<Context>({
   setFavorite: () => {},
@@ -54,7 +77,9 @@ const favoritesContext = createContext<Context>({
 
 const FavoritesProvider: FC<Props> = ({ children }) => {
   const [rendered, setRendered] = useState(false);
-  const [favorites, setFavorites] = useState<Favorites>(defaultContext);
+  const [favorites, setFavorites] =
+    useState<SupportedChainIdFavorites>(defaultContext);
+  const { currentChainId } = useRouteNetwork();
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -71,39 +96,50 @@ const FavoritesProvider: FC<Props> = ({ children }) => {
     const kind = entry[0];
     const newFavorites = {
       ...favorites,
-      [kind]: {
-        ...favorites[kind],
-        ...entry[1],
+      [currentChainId]: {
+        ...favorites[currentChainId],
+        [kind]: {
+          ...favorites[currentChainId]?.[kind],
+          ...entry[1],
+        },
       },
     };
     window.localStorage.setItem(FAVORITES_KEY, JSON.stringify(newFavorites));
     setFavorites(newFavorites);
   };
 
-  const isFavorite = (kind: Kind, displayName: DisplayName) => {
-    return !!favorites[kind]?.[displayName];
-  };
+  const isFavorite = useCallback(
+    (kind: Kind, displayName: DisplayName) => {
+      return !!favorites[currentChainId]?.[kind]?.[displayName];
+    },
+    [favorites, currentChainId]
+  );
 
   const removeFavorite = (kind: Kind, displayName: DisplayName) => {
-    const newFavoritesKind = { ...favorites[kind] };
     const newFavorites = {
       ...favorites,
-      [kind]: { ...newFavoritesKind },
+      [currentChainId]: {
+        ...favorites[currentChainId],
+        [kind]: { ...favorites[currentChainId]?.[kind] },
+      },
     };
-    delete newFavorites[kind][displayName];
+    delete newFavorites[currentChainId]?.[kind][displayName];
     window.localStorage.setItem(FAVORITES_KEY, JSON.stringify(newFavorites));
     setFavorites(newFavorites);
   };
 
-  const getFavorites = (kind: Kind) => {
-    const favoritesKind = favorites[kind];
-    return Object.entries(favoritesKind ?? {});
-  };
+  const getFavorites = useCallback(
+    (kind: Kind) => {
+      const favoritesKind = favorites[currentChainId]?.[kind];
+      return Object.entries(favoritesKind ?? {});
+    },
+    [favorites, currentChainId]
+  );
 
   return (
     <favoritesContext.Provider
       value={{
-        ...favorites,
+        ...favorites[currentChainId],
         isFavorite,
         setFavorite,
         removeFavorite,

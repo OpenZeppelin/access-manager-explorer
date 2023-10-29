@@ -12,6 +12,7 @@ import Address from "@/components/address";
 import { ACCESS_MANAGED_QUERY } from "./requests";
 import ROUTES from "@/config/routes";
 import { useFavorites } from "@/providers/favorites";
+import Empty from "./empty";
 
 interface Props extends ComponentProps<typeof Card> {
   depth: number;
@@ -81,7 +82,7 @@ const AccessManaged: FC<Props> = ({
           </Callout.Root>
         ) : fetching ? (
           <Skeleton />
-        ) : (
+        ) : accessManaged ? (
           <Flex direction="column">
             <Flex align="center" width="100%" justify="between">
               <Heading size="2">Authority</Heading>
@@ -136,6 +137,8 @@ const AccessManaged: FC<Props> = ({
               </Card>
             ))}
           </Flex>
+        ) : (
+          <Empty />
         )}
       </Box>
     </Account>

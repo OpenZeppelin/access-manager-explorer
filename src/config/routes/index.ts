@@ -1,4 +1,5 @@
-import { EntityPrefix } from "@/types";
+import { EntityPrefix, SupportedChainId } from "@/types";
+import { join } from "path";
 
 const toGraphId = (id: string) => {
   const [type, ...rest] = id.split("-");
@@ -8,12 +9,13 @@ const toGraphId = (id: string) => {
     id: rest.join("/"),
   };
 };
+
 const toNavigationId = (prefix: EntityPrefix, id: string) =>
   `${prefix}-${id.replace(/\//g, "-")}`;
 
 const ROUTES = {
   EXPLORER: {
-    ROOT: "/explorer",
+    ROOT: (network: SupportedChainId) => join("/explorer", network.toString()),
     DETAILS: toNavigationId,
   },
 };

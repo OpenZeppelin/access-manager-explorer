@@ -1,3 +1,5 @@
+import { chains } from "@/config/chains";
+
 export enum AddressEntity {
   AccessManager = "Access Manager",
   AccessManaged = "Access Managed",
@@ -19,3 +21,7 @@ export enum EntityPrefix {
   AccessManagerRole = "role",
   AccessManagerRoleMember = "mbr",
 }
+
+export type SupportedChain = (typeof chains)[number];
+export type SupportedChainDefinition = SupportedChain["definition"];
+export type SupportedChainId = SupportedChainDefinition["id"];

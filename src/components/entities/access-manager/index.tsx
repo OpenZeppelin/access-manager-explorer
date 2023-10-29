@@ -1,5 +1,5 @@
 "use client";
-import { Box, Card, Callout, Tabs } from "@radix-ui/themes";
+import { Box, Card, Callout, Tabs, Button } from "@radix-ui/themes";
 import { ComponentProps, FC } from "react";
 import { Address as AddressType } from "viem";
 import { useQuery } from "urql";
@@ -15,6 +15,7 @@ import { AddressEntity } from "@/types";
 import useRemoveEntity from "@/hooks/use-remove-entity";
 import Address from "@/components/address";
 import { useFavorites } from "@/providers/favorites";
+import Empty from "./empty";
 
 interface Props extends ComponentProps<typeof Card> {
   depth: number;
@@ -84,7 +85,7 @@ const AccessManager: FC<Props> = ({
           </Callout.Root>
         ) : fetching ? (
           <Skeleton />
-        ) : (
+        ) : accessManager ? (
           <>
             <Tabs.Root defaultValue="targets">
               <Tabs.List>
@@ -109,6 +110,8 @@ const AccessManager: FC<Props> = ({
               </Box>
             </Tabs.Root>
           </>
+        ) : (
+          <Empty />
         )}
       </Box>
     </Account>

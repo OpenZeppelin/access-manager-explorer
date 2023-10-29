@@ -17,7 +17,7 @@ import { useQuery } from "urql";
 import { ACCESS_MANAGER_ROLE_MEMBERS_QUERY } from "./requests";
 import MemberOf from "./member-of";
 import { useFavorites } from "@/providers/favorites";
-import { AddressEntity, Entity, EntityPrefix } from "@/types";
+import { AddressEntity, Entity, EntityPrefix, SupportedChainId } from "@/types";
 import { Address as AddressType } from "viem";
 import ROUTES from "@/config/routes";
 import FavoritesSection from "./favorites-section";
@@ -28,6 +28,7 @@ import Selector from "../function";
 import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "../function/requests";
 import Link from "next/link";
 import { join } from "path";
+import { useRouteNetwork } from "@/providers/route-network";
 
 interface Props extends ComponentProps<typeof Card> {}
 
@@ -37,6 +38,7 @@ const Sidebar: FC<Props> = (props) => {
   const [open, setOpen] = useState(true);
   const { address, isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
+  const { currentChainId } = useRouteNetwork();
 
   const [{ data, fetching }] = useQuery({
     query: ACCESS_MANAGER_ROLE_MEMBERS_QUERY,
@@ -154,7 +156,7 @@ const Sidebar: FC<Props> = (props) => {
               <Button variant="surface" size="1" asChild>
                 <Link
                   href={join(
-                    ROUTES.EXPLORER.ROOT,
+                    ROUTES.EXPLORER.ROOT(currentChainId),
                     ROUTES.EXPLORER.DETAILS(
                       EntityPrefix.AccessManager,
                       DEMO_MANAGER
@@ -193,7 +195,7 @@ const Sidebar: FC<Props> = (props) => {
               <Link
                 scroll={false}
                 href={join(
-                  ROUTES.EXPLORER.ROOT,
+                  ROUTES.EXPLORER.ROOT(currentChainId),
                   ROUTES.EXPLORER.DETAILS(EntityPrefix.AccessManager, id)
                 )}
               >
@@ -230,7 +232,7 @@ const Sidebar: FC<Props> = (props) => {
               <Link
                 scroll={false}
                 href={join(
-                  ROUTES.EXPLORER.ROOT,
+                  ROUTES.EXPLORER.ROOT(currentChainId),
                   ROUTES.EXPLORER.DETAILS(EntityPrefix.AccessManaged, id)
                 )}
               >
@@ -269,7 +271,7 @@ const Sidebar: FC<Props> = (props) => {
                 <Link
                   scroll={false}
                   href={join(
-                    ROUTES.EXPLORER.ROOT,
+                    ROUTES.EXPLORER.ROOT(currentChainId),
                     ROUTES.EXPLORER.DETAILS(EntityPrefix.AccessManagerRole, id)
                   )}
                 >
@@ -322,7 +324,7 @@ const Sidebar: FC<Props> = (props) => {
                 <Link
                   scroll={false}
                   href={join(
-                    ROUTES.EXPLORER.ROOT,
+                    ROUTES.EXPLORER.ROOT(currentChainId),
                     ROUTES.EXPLORER.DETAILS(
                       EntityPrefix.AccessManagerRoleMember,
                       id
@@ -388,7 +390,7 @@ const Sidebar: FC<Props> = (props) => {
                 <Link
                   scroll={false}
                   href={join(
-                    ROUTES.EXPLORER.ROOT,
+                    ROUTES.EXPLORER.ROOT(currentChainId),
                     ROUTES.EXPLORER.DETAILS(
                       EntityPrefix.AccessManagerTarget,
                       id
@@ -431,7 +433,7 @@ const Sidebar: FC<Props> = (props) => {
                 <Link
                   scroll={false}
                   href={join(
-                    ROUTES.EXPLORER.ROOT,
+                    ROUTES.EXPLORER.ROOT(currentChainId),
                     ROUTES.EXPLORER.DETAILS(
                       EntityPrefix.AccessManagerTargetFunction,
                       id

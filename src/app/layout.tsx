@@ -8,9 +8,7 @@ import { WagmiConfig } from "wagmi";
 import { cn } from "@/utils";
 import { config } from "@/config/wallet";
 import { FC, ReactNode } from "react";
-import { RainbowKit, Theme, Urql } from "@/components/providers";
-import { NextIntlClientProvider } from "next-intl";
-import { FavoritesProvider } from "@/providers/favorites";
+import { Theme } from "@/components/providers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -53,15 +51,7 @@ const RootLayout: FC<Props> = ({ children }) => {
       <body className={cn(inter.className)} suppressHydrationWarning>
         <main>
           <WagmiConfig config={config}>
-            <Theme>
-              <Urql>
-                <RainbowKit>
-                  <NextIntlClientProvider locale="en" messages={{}}>
-                    <FavoritesProvider>{children}</FavoritesProvider>
-                  </NextIntlClientProvider>
-                </RainbowKit>
-              </Urql>
-            </Theme>
+            <Theme>{children}</Theme>
           </WagmiConfig>
         </main>
       </body>

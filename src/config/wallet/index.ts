@@ -1,12 +1,12 @@
 "use client";
 import { configureChains, createConfig } from "wagmi";
-import { goerli } from "viem/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { getDefaultWallets } from "@rainbow-me/rainbowkit";
 import { title } from "../site";
+import { chains as supportedChains } from "../chains";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [goerli],
+  supportedChains.map((chain) => chain.definition),
   [publicProvider()]
 );
 

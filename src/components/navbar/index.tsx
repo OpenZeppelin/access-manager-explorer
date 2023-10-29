@@ -8,8 +8,9 @@ import ConnectButton from "../connect-button";
 import Search from "./search";
 import ThemeIcon from "./theme-icon";
 import Menu from "./menu";
+import { FC } from "react";
 
-const Navbar = () => {
+const Navbar: FC<{}> = () => {
   return (
     <Box className="sticky top-0 z-40 w-full">
       <Card asChild size="2" className="no-radius">
@@ -24,7 +25,12 @@ const Navbar = () => {
           >
             <Link href="/" className="flex items-center">
               <Logo className="h-auto w-6" />
-              <Text ml="1" as="span" weight="bold" className="sm:inline-block whitespace-nowrap">
+              <Text
+                ml="1"
+                as="span"
+                weight="bold"
+                className="sm:inline-block whitespace-nowrap"
+              >
                 OpenZeppelin{" "}
                 <Text as="span" weight="light">
                   | AccessManager
@@ -68,7 +74,7 @@ const Navbar = () => {
                         chain: {
                           variant: "soft",
                           color: "gray",
-                          ml: "2",
+                          mr: "2",
                         },
                       },
                     }}

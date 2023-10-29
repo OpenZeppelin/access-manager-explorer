@@ -3,7 +3,6 @@ import {
   Box,
   Card,
   Callout,
-  Tabs,
   Flex,
   Heading,
   Separator,
@@ -24,6 +23,7 @@ import Info from "@/components/info";
 import { useFavorites } from "@/providers/favorites";
 import { makeFragmentData } from "@/gql";
 import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "@/components/function/requests";
+import Empty from "./empty";
 
 interface Props extends ComponentProps<typeof Card> {
   id: string;
@@ -110,7 +110,7 @@ const AccessManagerTargetFunction: FC<Props> = ({
           </Callout.Root>
         ) : fetching ? (
           <Skeleton />
-        ) : (
+        ) : accessManagedTargetFunction ? (
           <Flex direction="column">
             <Flex align="center" width="100%" justify="between">
               <Heading size="2">Manager</Heading>
@@ -180,6 +180,8 @@ const AccessManagerTargetFunction: FC<Props> = ({
               )}
             </Flex>
           </Flex>
+        ) : (
+          <Empty />
         )}
       </Box>
     </Function>

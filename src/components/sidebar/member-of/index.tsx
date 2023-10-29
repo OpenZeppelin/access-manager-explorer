@@ -4,6 +4,7 @@ import { ACCESS_MANAGER_ROLE_FRAGMENT } from "@/components/role/requests";
 import ROUTES from "@/config/routes";
 import { makeFragmentData, useFragment as asFragment } from "@/gql";
 import { AccessManagerRoleMembersQuery } from "@/gql/graphql";
+import { useRouteNetwork } from "@/providers/route-network";
 import { EntityPrefix } from "@/types";
 import { Button } from "@radix-ui/themes";
 import Link from "next/link";
@@ -15,6 +16,7 @@ interface Props {
 }
 
 const MemberOf: FC<Props> = ({ membership }) => {
+  const { currentChainId } = useRouteNetwork();
   const role = asFragment(ACCESS_MANAGER_ROLE_FRAGMENT, membership.role);
 
   const asRole = role?.label ? { id: role.label } : role.asRole;
@@ -31,7 +33,7 @@ const MemberOf: FC<Props> = ({ membership }) => {
       <Link
         scroll={false}
         href={join(
-          ROUTES.EXPLORER.ROOT,
+          ROUTES.EXPLORER.ROOT(currentChainId),
           ROUTES.EXPLORER.DETAILS(
             EntityPrefix.AccessManagerRoleMember,
             membership.id

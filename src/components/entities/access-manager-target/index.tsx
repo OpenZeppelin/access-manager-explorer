@@ -33,6 +33,7 @@ import { join } from "path";
 import ROUTES from "@/config/routes";
 import { usePathname } from "next/navigation";
 import { useFavorites } from "@/providers/favorites";
+import Empty from "./empty";
 
 interface Props extends ComponentProps<typeof Card> {
   depth: number;
@@ -113,7 +114,7 @@ const AccessManagerTarget: FC<Props> = ({
           </Callout.Root>
         ) : fetching ? (
           <Skeleton />
-        ) : (
+        ) : accessManagerTarget ? (
           <Flex direction="column">
             <Flex align="center" width="100%" justify="between">
               <Heading size="2">Targetted by</Heading>
@@ -226,6 +227,8 @@ const AccessManagerTarget: FC<Props> = ({
               </Callout.Root>
             )}
           </Flex>
+        ) : (
+          <Empty />
         )}
       </Box>
     </Account>

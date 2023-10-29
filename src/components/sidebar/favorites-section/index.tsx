@@ -1,12 +1,8 @@
-import Address from "@/components/address";
-import ROUTES from "@/config/routes";
 import { Entry, Favorites, Kind } from "@/providers/favorites/provider";
-import { EntityPrefix } from "@/types";
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { ChevronDownIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { Flex, Heading } from "@radix-ui/themes";
 import { ReactNode, useState } from "react";
-import { Address as AddressType } from "viem";
 
 interface Props<T extends Kind> {
   name: string;

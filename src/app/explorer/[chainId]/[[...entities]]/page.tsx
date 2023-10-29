@@ -7,18 +7,23 @@ import AccessManagerTargetFunction from "@/components/entities/access-manager-ta
 import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
 import { toGraphId } from "@/config/routes";
-import { EntityPrefix } from "@/types";
-import { Box, Flex, ScrollArea } from "@radix-ui/themes";
-import { FC, memo, useMemo, useRef } from "react";
+import { EntityPrefix, SupportedChainId } from "@/types";
+import { Flex, ScrollArea } from "@radix-ui/themes";
+import { FC, useMemo } from "react";
 import { Address } from "viem";
+import { RainbowKit, Urql } from "@/components/providers";
+import { NextIntlClientProvider } from "next-intl";
+import { FavoritesProvider } from "@/providers/favorites";
+import { RouteNetworkProvider } from "@/providers/route-network";
 
 interface Props {
   params: {
     entities: `${EntityPrefix}-${Address}`[];
+    chainId: SupportedChainId;
   };
 }
 
-const Explorer: FC<Props> = ({ params: { entities } }) => {
+const Explorer: FC<Props> = ({ params: { entities, chainId } }) => {
   const content = useMemo(
     () =>
       entities?.map((prefixedId, depth) => {
@@ -138,20 +143,28 @@ const Explorer: FC<Props> = ({ params: { entities } }) => {
   );
 
   return (
-    <>
-      <Navbar />
-      <ScrollArea size="2" scrollbars="horizontal">
-        <Flex className="min-w-130vw">
-          <Sidebar
-            style={{
-              minHeight: "calc(100vh - 64px)",
-              maxHeight: "calc(100vh - 64px)",
-            }}
-          />
-          {content}
-        </Flex>
-      </ScrollArea>
-    </>
+    <RouteNetworkProvider routeChainId={chainId}>
+      <Urql>
+        <RainbowKit>
+          <NextIntlClientProvider locale="en" messages={{}}>
+            <FavoritesProvider>
+              <Navbar />
+              <ScrollArea size="2" scrollbars="horizontal">
+                <Flex className="min-w-130vw">
+                  <Sidebar
+                    style={{
+                      minHeight: "calc(100vh - 64px)",
+                      maxHeight: "calc(100vh - 64px)",
+                    }}
+                  />
+                  {content}
+                </Flex>
+              </ScrollArea>
+            </FavoritesProvider>
+          </NextIntlClientProvider>
+        </RainbowKit>
+      </Urql>
+    </RouteNetworkProvider>
   );
 };
 

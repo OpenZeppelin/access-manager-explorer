@@ -16,6 +16,8 @@
     "@radix-ui/themes": "^2.0.0",
     "@rainbow-me/rainbowkit": "^1.1.2",
     "@types/qs": "^6.9.8",
+    "@urql/exchange-graphcache": "^6.3.3",
+    "@urql/next": "^1.0.0",
     "clsx": "^2.0.0",
     "hsl-rgb": "^1.0.0",
     "hsl-triad": "^1.0.0",

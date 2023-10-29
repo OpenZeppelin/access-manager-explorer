@@ -83,6 +83,19 @@ const Inner: FC<Props> = ({
 
         return (
           <Flex>
+            <Button onClick={openChainModal} {...states?.connected?.chain}>
+              {chain.hasIcon && chain.iconUrl && (
+                <Image
+                  width="16"
+                  height="16"
+                  alt={chain.name ?? "Chain icon"}
+                  src={chain.iconUrl}
+                />
+              )}
+              <Text size="1" className="whitespace-nowrap">
+                {chain.name}
+              </Text>
+            </Button>
             <Button onClick={openAccountModal} {...states?.connected?.account}>
               <Address
                 address={{
@@ -105,16 +118,6 @@ const Inner: FC<Props> = ({
               >
                 <span className="sr-only">Loading...</span>
               </div>
-            </Button>
-            <Button onClick={openChainModal} {...states?.connected?.chain}>
-              {chain.hasIcon && chain.iconUrl && (
-                <Image
-                  width="16"
-                  height="16"
-                  alt={chain.name ?? "Chain icon"}
-                  src={chain.iconUrl}
-                />
-              )}
             </Button>
           </Flex>
         );

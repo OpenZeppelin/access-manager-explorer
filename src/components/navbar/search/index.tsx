@@ -10,12 +10,13 @@ import { isAddress } from "viem";
 import { useQuery } from "urql";
 import Address from "@/components/address";
 import { cn } from "@/utils";
-import { EntityPrefix } from "@/types";
+import { EntityPrefix, SupportedChainId } from "@/types";
 import ROUTES from "@/config/routes";
 import Role from "@/components/role";
 import Link from "next/link";
 import { makeFragmentData, useFragment as asFragment } from "@/gql";
 import { ACCESS_MANAGER_ROLE_FRAGMENT } from "@/components/role/requests";
+import { useRouteNetwork } from "@/providers/route-network";
 const { Root, Slot, Input } = TextField;
 
 interface Props extends ComponentProps<typeof Root> {
@@ -26,6 +27,7 @@ const Search: FC<Props> = (props) => {
   const [address, setAddress] = useState("");
   const [debouncedAddress] = useDebounce(address, 300);
   const [open, setOpen] = useState(false);
+  const { currentChainId } = useRouteNetwork();
 
   const isInputAddress = useMemo(
     () => isAddress(debouncedAddress),
@@ -67,7 +69,7 @@ const Search: FC<Props> = (props) => {
         result.isTarget;
 
       return result;
-    }, [data?.account]);
+    }, [data]);
 
   useEffect(() => {
     setOpen(isInputAddress && isData);
@@ -107,7 +109,7 @@ const Search: FC<Props> = (props) => {
               <Link
                 id={data?.account?.asAccessManager?.id}
                 href={join(
-                  ROUTES.EXPLORER.ROOT,
+                  ROUTES.EXPLORER.ROOT(currentChainId),
                   ROUTES.EXPLORER.DETAILS(
                     EntityPrefix.AccessManager,
                     data?.account?.asAccessManager?.id
@@ -129,7 +131,7 @@ const Search: FC<Props> = (props) => {
             <DropdownMenu.Item id={data?.account?.asAccessManaged?.id} asChild>
               <Link
                 href={join(
-                  ROUTES.EXPLORER.ROOT,
+                  ROUTES.EXPLORER.ROOT(currentChainId),
                   ROUTES.EXPLORER.DETAILS(
                     EntityPrefix.AccessManaged,
                     data?.account?.asAccessManaged?.id
@@ -161,7 +163,7 @@ const Search: FC<Props> = (props) => {
                     <DropdownMenu.Item key={membership.id} asChild>
                       <Link
                         href={join(
-                          ROUTES.EXPLORER.ROOT,
+                          ROUTES.EXPLORER.ROOT(currentChainId),
                           ROUTES.EXPLORER.DETAILS(
                             EntityPrefix.AccessManagerRoleMember,
                             membership.id
@@ -208,7 +210,7 @@ const Search: FC<Props> = (props) => {
                   <DropdownMenu.Item key={targettedBy.id} asChild>
                     <Link
                       href={join(
-                        ROUTES.EXPLORER.ROOT,
+                        ROUTES.EXPLORER.ROOT(currentChainId),
                         ROUTES.EXPLORER.DETAILS(
                           EntityPrefix.AccessManagerTarget,
                           targettedBy.id

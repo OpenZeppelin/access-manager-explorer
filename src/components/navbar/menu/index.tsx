@@ -4,7 +4,6 @@ import DeployManager from "@/components/deploy/manager";
 import { HamburgerMenuIcon, PlusIcon } from "@radix-ui/react-icons";
 import { DropdownMenu, IconButton } from "@radix-ui/themes";
 import { ComponentProps, FC, useState } from "react";
-import { useAccount } from "wagmi";
 
 interface Props extends ComponentProps<typeof IconButton> {}
 
