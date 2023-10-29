@@ -39,6 +39,7 @@ const Address: FC<Props> = ({ navigation, addreth, hidePopup, ...props }) => {
         explorer={(address) => ({
           name: chain?.name ?? "Explorer",
           accountUrl: join(
+            "https://",
             chain?.blockExplorers?.default.url ?? "",
             "addresss",
             address
