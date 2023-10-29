@@ -25,6 +25,7 @@
     "next-themes": "^0.2.1",
     "react": "^18",
     "react-dom": "^18",
+    "swr": "^2.2.4",
     "tailwind-merge": "^1.14.0",
     "urql": "^4.0.5",
     "use-debounce": "^9.0.4",

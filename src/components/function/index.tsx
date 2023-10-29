@@ -6,6 +6,8 @@ import { join } from "path";
 import { ComponentProps, FC } from "react";
 import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "./requests";
 import { FragmentType, useFragment as asFragment } from "@/gql";
+import { useSignatures } from "@/hooks/useSignatureDatabase";
+import { Hex } from "viem";
 
 type IconButtonProps = ComponentProps<typeof IconButton>;
 
@@ -21,10 +23,14 @@ interface Props extends ComponentProps<typeof Code> {
 const Selector: FC<Props> = ({ method: fn, icons, ...props }) => {
   const method = asFragment(ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT, fn);
   const pathname = usePathname();
+  const { functionWithFallback } = useSignatures({
+    function: [method.asSelector.id] as Hex[],
+  });
+
   return (
     <Flex align="center">
       <Code key={method.id} {...props}>
-        {method.asSelector.id}
+        {functionWithFallback(method.asSelector.id)}
       </Code>
       {icons?.navigate && (
         <IconButton
