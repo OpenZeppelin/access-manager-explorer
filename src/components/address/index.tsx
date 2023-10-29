@@ -37,7 +37,7 @@ const Address: FC<Props> = ({ navigation, addreth, hidePopup, ...props }) => {
       <div ref={ref} style={{ display: "none" }}></div>
       <Addreth
         explorer={(address) => ({
-          name: chain?.name ?? "Explorer",
+          name: chain?.blockExplorers?.default.name ?? "Explorer",
           accountUrl: join(
             "https://",
             chain?.blockExplorers?.default.url ?? "",
