@@ -39,7 +39,7 @@ const Address: FC<Props> = ({ navigation, addreth, hidePopup, ...props }) => {
         explorer={(address) => ({
           name: chain?.blockExplorers?.default.name ?? "Explorer",
           accountUrl: new URL(
-            join("addresss", address),
+            join("address", address),
             chain?.blockExplorers?.default.url ?? ""
           ).href,
         })}
