@@ -125,6 +125,7 @@ const Search: FC<Props> = (props) => {
                 onClick={() => setAddress("")}
               >
                 <Address
+                  hidePopup
                   addreth={{
                     shortenAddress: false,
                     actions: "none",
@@ -152,6 +153,7 @@ const Search: FC<Props> = (props) => {
               >
                 <Flex mr="2">
                   <Address
+                    hidePopup
                     addreth={{
                       shortenAddress: false,
                       actions: "none",
@@ -189,6 +191,7 @@ const Search: FC<Props> = (props) => {
                       >
                         <Flex mr="6">
                           <Address
+                            hidePopup
                             addreth={{
                               actions: "none",
                               shortenAddress: 6,
@@ -237,6 +240,7 @@ const Search: FC<Props> = (props) => {
                     >
                       <Flex mr="2">
                         <Address
+                          hidePopup
                           addreth={{
                             actions: "none",
                             shortenAddress: 6,
