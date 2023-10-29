@@ -21,19 +21,16 @@ import {
   ExclamationTriangleIcon,
 } from "@radix-ui/react-icons";
 import Account from "../as/account";
-import { AddressEntity, EntityPrefix } from "@/types";
-import useRemoveEntity from "@/hooks/use-remove-entity";
+import { AddressEntity, Entity } from "@/types";
 import Address from "@/components/address";
 import Function from "@/components/function";
 import { ACCESS_MANAGER_TARGET_QUERY } from "./request";
 import DelayedValue from "@/components/delayed-value";
 import Info from "@/components/info";
-import Link from "next/link";
-import { join } from "path";
-import ROUTES from "@/config/routes";
-import { usePathname } from "next/navigation";
+
 import { useFavorites } from "@/providers/favorites";
 import Empty from "./empty";
+import { useEntities } from "@/providers/entities";
 
 interface Props extends ComponentProps<typeof Card> {
   depth: number;
@@ -57,14 +54,15 @@ const AccessManagerTarget: FC<Props> = ({
     },
   });
 
-  const remove = useRemoveEntity(depth);
+  const { remove } = useEntities();
 
   const address = useMemo(() => id.split("/").reverse()[0], [id]);
 
-  const pathname = usePathname();
   const accessManagerTarget = data?.accessManagerTarget;
 
   const favorites = useFavorites();
+
+  const entities = useEntities();
 
   return (
     <Account
@@ -92,7 +90,7 @@ const AccessManagerTarget: FC<Props> = ({
           address
         ),
       }}
-      remove={remove}
+      remove={() => remove(depth)}
       entityType={AddressEntity.AccessManagerTarget}
       description="An address targetted by an AccessManager"
       address={address as AddressType}
@@ -124,11 +122,9 @@ const AccessManagerTarget: FC<Props> = ({
                     shortenAddress: 10,
                     address: accessManagerTarget.manager.asAccount.id,
                   }}
-                  navigation={{
-                    id: ROUTES.EXPLORER.DETAILS(
-                      EntityPrefix.AccessManager,
-                      accessManagerTarget.manager.asAccount.id
-                    ),
+                  onDetail={{
+                    type: AddressEntity.AccessManager,
+                    id: accessManagerTarget.manager.asAccount.id,
                   }}
                 />
               )}
@@ -174,19 +170,19 @@ const AccessManagerTarget: FC<Props> = ({
               )}
             </Flex>
             {accessManagerTarget?.asAccount.asAccessManaged?.id && (
-              <Button asChild variant="surface" size="1" mt="4" color="gray">
-                <Link
-                  scroll={false}
-                  href={join(
-                    pathname,
-                    ROUTES.EXPLORER.DETAILS(
-                      EntityPrefix.AccessManaged,
-                      accessManagerTarget?.asAccount.asAccessManaged?.id
-                    )
-                  )}
-                >
-                  See as AccessManaged <ArrowRightIcon />
-                </Link>
+              <Button
+                variant="surface"
+                size="1"
+                mt="4"
+                color="gray"
+                onClick={() =>
+                  entities.push({
+                    type: AddressEntity.AccessManaged,
+                    id: accessManagerTarget?.asAccount.asAccessManaged?.id,
+                  })
+                }
+              >
+                See as AccessManaged <ArrowRightIcon />
               </Button>
             )}
             <Heading size="3" mt="4" mb="2">
@@ -201,11 +197,9 @@ const AccessManagerTarget: FC<Props> = ({
                     size="4"
                     method={method}
                     icons={{
-                      navigate: {
-                        id: ROUTES.EXPLORER.DETAILS(
-                          EntityPrefix.AccessManagerTargetFunction,
-                          method.id
-                        ),
+                      onDetail: {
+                        type: Entity.AccessManagerTargetFunction,
+                        id: method.id,
                       },
                     }}
                   />

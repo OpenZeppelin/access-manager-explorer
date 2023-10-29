@@ -1,8 +1,7 @@
 import Address from "@/components/address";
-import ROUTES from "@/config/routes";
-import { EntityPrefix } from "@/types";
+import { AddressEntity } from "@/types";
 import { CircleIcon } from "@radix-ui/react-icons";
-import { Callout, Card, Flex, Text } from "@radix-ui/themes";
+import { Callout, Card, Flex } from "@radix-ui/themes";
 import { FC } from "react";
 
 interface Props {
@@ -29,11 +28,9 @@ const Members: FC<Props> = ({ members }) => {
                   address: asAccount.id,
                   shortenAddress: false,
                 }}
-                navigation={{
-                  id: ROUTES.EXPLORER.DETAILS(
-                    EntityPrefix.AccessManagerRoleMember,
-                    id
-                  ),
+                onDetail={{
+                  type: AddressEntity.AccessManagerRoleMember,
+                  id,
                 }}
               />
             </Card>

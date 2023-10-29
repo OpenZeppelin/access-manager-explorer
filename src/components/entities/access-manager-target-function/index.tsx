@@ -12,18 +12,17 @@ import { ComponentProps, FC, useMemo } from "react";
 import { useQuery } from "urql";
 import { ACCESS_MANAGER_TARGET_FUNCTION_QUERY } from "./requests";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { Entity, EntityPrefix } from "@/types";
-import useRemoveEntity from "@/hooks/use-remove-entity";
+import { AddressEntity, Entity } from "@/types";
 import Skeleton from "./skeleton";
 import Function from "../as/function";
 import Address from "@/components/address";
-import ROUTES from "@/config/routes";
 import Role from "@/components/role";
 import Info from "@/components/info";
 import { useFavorites } from "@/providers/favorites";
 import { makeFragmentData } from "@/gql";
 import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "@/components/function/requests";
 import Empty from "./empty";
+import { useEntities } from "@/providers/entities";
 
 interface Props extends ComponentProps<typeof Card> {
   id: string;
@@ -46,7 +45,7 @@ const AccessManagerTargetFunction: FC<Props> = ({
     },
   });
 
-  const remove = useRemoveEntity(depth);
+  const { remove } = useEntities();
 
   const selector = useMemo(() => id.split("/").reverse()[0], [id]);
 
@@ -89,7 +88,7 @@ const AccessManagerTargetFunction: FC<Props> = ({
           selector
         ),
       }}
-      remove={remove}
+      remove={() => remove(depth)}
       entityType={Entity.AccessManagerTargetFunction}
       description="A permissioned function defined by an AccessManager"
       method={method}
@@ -120,11 +119,9 @@ const AccessManagerTargetFunction: FC<Props> = ({
                     shortenAddress: 10,
                     address: accessManagedTargetFunction.manager.asAccount.id,
                   }}
-                  navigation={{
-                    id: ROUTES.EXPLORER.DETAILS(
-                      EntityPrefix.AccessManager,
-                      accessManagedTargetFunction.manager.asAccount.id
-                    ),
+                  onDetail={{
+                    type: AddressEntity.AccessManager,
+                    id: accessManagedTargetFunction.manager.asAccount.id,
                   }}
                 />
               )}
@@ -138,11 +135,9 @@ const AccessManagerTargetFunction: FC<Props> = ({
                     shortenAddress: 10,
                     address: accessManagedTargetFunction.target.asAccount.id,
                   }}
-                  navigation={{
-                    id: ROUTES.EXPLORER.DETAILS(
-                      EntityPrefix.AccessManagerTarget,
-                      accessManagedTargetFunction.target.asAccount.id
-                    ),
+                  onDetail={{
+                    type: AddressEntity.AccessManagerTarget,
+                    id: accessManagedTargetFunction.target.asAccount.id,
                   }}
                 />
               )}

@@ -1,6 +1,5 @@
 import Address from "@/components/address";
-import ROUTES from "@/config/routes";
-import { EntityPrefix } from "@/types";
+import { AddressEntity } from "@/types";
 import { CircleIcon } from "@radix-ui/react-icons";
 import { Callout, Flex, Card } from "@radix-ui/themes";
 import { FC } from "react";
@@ -29,11 +28,9 @@ const Targets: FC<Props> = ({ targets }) => {
                   address: asAccount.id,
                   shortenAddress: false,
                 }}
-                navigation={{
-                  id: ROUTES.EXPLORER.DETAILS(
-                    EntityPrefix.AccessManagerTarget,
-                    id
-                  ),
+                onDetail={{
+                  type: AddressEntity.AccessManagerTarget,
+                  id,
                 }}
               />
             </Card>

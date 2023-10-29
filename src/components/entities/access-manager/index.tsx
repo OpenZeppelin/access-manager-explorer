@@ -12,10 +12,10 @@ import Targets from "./tabs/targets";
 import Roles from "./tabs/roles";
 import Account from "../as/account";
 import { AddressEntity } from "@/types";
-import useRemoveEntity from "@/hooks/use-remove-entity";
 import Address from "@/components/address";
 import { useFavorites } from "@/providers/favorites";
 import Empty from "./empty";
+import { useEntities } from "@/providers/entities";
 
 interface Props extends ComponentProps<typeof Card> {
   depth: number;
@@ -39,7 +39,7 @@ const AccessManager: FC<Props> = ({
     },
   });
 
-  const remove = useRemoveEntity(depth);
+  const { remove } = useEntities();
 
   const accessManager = data?.accessManager;
 
@@ -63,7 +63,7 @@ const AccessManager: FC<Props> = ({
         },
         isFavorite: favorites.isFavorite(AddressEntity.AccessManager, address),
       }}
-      remove={remove}
+      remove={() => remove(depth)}
       entityType={AddressEntity.AccessManager}
       description="An AccessManager is a contract that keeps the permissions of a system"
       address={address}

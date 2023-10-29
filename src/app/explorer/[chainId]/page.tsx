@@ -1,36 +1,23 @@
+"use client";
 import AccessManaged from "@/components/entities/access-managed";
 import AccessManager from "@/components/entities/access-manager";
 import AccessManagerRole from "@/components/entities/access-manager-role";
 import AccessManagerMember from "@/components/entities/access-manager-role-member";
 import AccessManagerTarget from "@/components/entities/access-manager-target";
 import AccessManagerTargetFunction from "@/components/entities/access-manager-target-function";
-import Navbar from "@/components/navbar";
-import Sidebar from "@/components/sidebar";
-import { toGraphId } from "@/config/routes";
-import { EntityPrefix, SupportedChainId } from "@/types";
-import { Flex, ScrollArea } from "@radix-ui/themes";
+import { AddressEntity, Entity } from "@/types";
 import { FC, useMemo } from "react";
 import { Address } from "viem";
-import { RainbowKit, Urql } from "@/components/providers";
-import { NextIntlClientProvider } from "next-intl";
-import { FavoritesProvider } from "@/providers/favorites";
-import { RouteNetworkProvider } from "@/providers/route-network";
+import { useEntities } from "@/providers/entities";
 
-interface Props {
-  params: {
-    entities: `${EntityPrefix}-${Address}`[];
-    chainId: SupportedChainId;
-  };
-}
+const Explorer: FC<{}> = () => {
+  const { entities } = useEntities();
 
-const Explorer: FC<Props> = ({ params: { entities, chainId } }) => {
-  const content = useMemo(
+  return useMemo(
     () =>
-      entities?.map((prefixedId, depth) => {
-        const { type, id } = toGraphId(prefixedId);
-
+      entities?.map(({ type, id }, depth) => {
         const commonProps = {
-          key: prefixedId,
+          key: id,
           depth,
           size: "4",
           variant: "classic",
@@ -44,7 +31,7 @@ const Explorer: FC<Props> = ({ params: { entities, chainId } }) => {
         };
 
         switch (type) {
-          case "mgr":
+          case AddressEntity.AccessManager:
             return (
               <AccessManager
                 {...commonProps}
@@ -57,11 +44,11 @@ const Explorer: FC<Props> = ({ params: { entities, chainId } }) => {
                 }}
               />
             );
-          case "mbr":
+          case AddressEntity.AccessManagerRoleMember:
             return (
               <AccessManagerMember
                 {...commonProps}
-                key={prefixedId}
+                key={id}
                 id={id}
                 shortenAddress={false}
                 style={{
@@ -71,11 +58,11 @@ const Explorer: FC<Props> = ({ params: { entities, chainId } }) => {
                 }}
               />
             );
-          case "mgd":
+          case AddressEntity.AccessManaged:
             return (
               <AccessManaged
                 {...commonProps}
-                key={prefixedId}
+                key={id}
                 address={id as Address}
                 shortenAddress={false}
                 style={{
@@ -85,11 +72,11 @@ const Explorer: FC<Props> = ({ params: { entities, chainId } }) => {
                 }}
               />
             );
-          case "tgt":
+          case AddressEntity.AccessManagerTarget:
             return (
               <AccessManagerTarget
                 {...commonProps}
-                key={prefixedId}
+                key={id}
                 id={id}
                 shortenAddress={false}
                 style={{
@@ -99,11 +86,11 @@ const Explorer: FC<Props> = ({ params: { entities, chainId } }) => {
                 }}
               />
             );
-          case "role":
+          case Entity.AccessManagerRole:
             return (
               <AccessManagerRole
                 {...commonProps}
-                key={prefixedId}
+                key={id}
                 id={id}
                 style={{
                   maxWidth: 460,
@@ -112,11 +99,11 @@ const Explorer: FC<Props> = ({ params: { entities, chainId } }) => {
                 }}
               />
             );
-          case "fn":
+          case Entity.AccessManagerTargetFunction:
             return (
               <AccessManagerTargetFunction
                 {...commonProps}
-                key={prefixedId}
+                key={id}
                 id={id}
                 style={{
                   maxWidth: 460,
@@ -128,31 +115,6 @@ const Explorer: FC<Props> = ({ params: { entities, chainId } }) => {
         }
       }),
     [entities]
-  );
-
-  return (
-    <RouteNetworkProvider routeChainId={chainId}>
-      <Urql>
-        <RainbowKit>
-          <NextIntlClientProvider locale="en" messages={{}}>
-            <FavoritesProvider>
-              <Navbar />
-              <ScrollArea size="2" scrollbars="horizontal">
-                <Flex className="min-w-130vw">
-                  <Sidebar
-                    style={{
-                      minHeight: "calc(100vh - 64px)",
-                      maxHeight: "calc(100vh - 64px)",
-                    }}
-                  />
-                  {content}
-                </Flex>
-              </ScrollArea>
-            </FavoritesProvider>
-          </NextIntlClientProvider>
-        </RainbowKit>
-      </Urql>
-    </RouteNetworkProvider>
   );
 };
 

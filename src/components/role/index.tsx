@@ -2,16 +2,14 @@ import { Badge, Code, IconButton, Separator, Text } from "@radix-ui/themes";
 import { ComponentProps, FC } from "react";
 import Info from "../info";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
-import ROUTES from "@/config/routes";
-import { EntityPrefix } from "@/types";
-import Link from "next/link";
-import { join } from "path";
 import { usePathname } from "next/navigation";
 import {
   FragmentType,
   useFragment as asFragment,
 } from "@/gql/fragment-masking";
 import { ACCESS_MANAGER_ROLE_FRAGMENT } from "./requests";
+import { useEntities } from "@/providers/entities";
+import { Entity } from "@/types";
 
 interface Role {
   id: string;
@@ -35,6 +33,7 @@ const Role: FC<Props> = ({ accessManagerRole, icons, ...props }) => {
   if (isLabel && !role.label && role.asRole.id == "0") role.label = "ADMIN";
 
   const pathname = usePathname();
+  const entities = useEntities();
 
   return (
     <Badge color={role.label ? "blue" : "gray"} {...props}>
@@ -68,17 +67,11 @@ const Role: FC<Props> = ({ accessManagerRole, icons, ...props }) => {
           ml="auto"
           size="1"
           {...(icons.navigate == true ? undefined : { ...icons.navigate })}
-          asChild
+          onClick={() =>
+            entities.push({ type: Entity.AccessManagerRole, id: role.id })
+          }
         >
-          <Link
-            scroll={false}
-            href={join(
-              pathname,
-              ROUTES.EXPLORER.DETAILS(EntityPrefix.AccessManagerRole, role.id)
-            )}
-          >
-            <ArrowRightIcon />
-          </Link>
+          <ArrowRightIcon />
         </IconButton>
       )}
     </Badge>

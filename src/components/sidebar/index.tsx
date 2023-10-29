@@ -17,18 +17,17 @@ import { useQuery } from "urql";
 import { ACCESS_MANAGER_ROLE_MEMBERS_QUERY } from "./requests";
 import MemberOf from "./member-of";
 import { useFavorites } from "@/providers/favorites";
-import { AddressEntity, Entity, EntityPrefix, SupportedChainId } from "@/types";
+import { AddressEntity, Entity } from "@/types";
 import { Address as AddressType } from "viem";
-import ROUTES from "@/config/routes";
 import FavoritesSection from "./favorites-section";
 import Role from "../role";
 import { makeFragmentData } from "@/gql";
 import { ACCESS_MANAGER_ROLE_FRAGMENT } from "../role/requests";
 import Selector from "../function";
 import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "../function/requests";
-import Link from "next/link";
-import { join } from "path";
 import { useRouteNetwork } from "@/providers/route-network";
+import { EntityInstance } from "@/providers/entities/provider";
+import { useEntities } from "@/providers/entities";
 
 interface Props extends ComponentProps<typeof Card> {}
 
@@ -39,6 +38,7 @@ const Sidebar: FC<Props> = (props) => {
   const { address, isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
   const { currentChainId } = useRouteNetwork();
+  const entities = useEntities();
 
   const [{ data, fetching }] = useQuery({
     query: ACCESS_MANAGER_ROLE_MEMBERS_QUERY,
@@ -78,6 +78,11 @@ const Sidebar: FC<Props> = (props) => {
   //   () => getFavorites(Entity.AccessManagerOperation),
   //   [getFavorites]
   // );
+
+  const clearAndSet = (entity: EntityInstance) => {
+    entities.clear();
+    entities.push(entity);
+  };
 
   return (
     <Card
@@ -151,19 +156,17 @@ const Sidebar: FC<Props> = (props) => {
                 No membership found 🤷🏻‍♂️
               </Text>
               <Separator my="3" size="4" />
-              <Button variant="surface" size="1" asChild>
-                <Link
-                  href={join(
-                    ROUTES.EXPLORER.ROOT(currentChainId),
-                    ROUTES.EXPLORER.DETAILS(
-                      EntityPrefix.AccessManager,
-                      DEMO_MANAGER
-                    )
-                  )}
-                  scroll={false}
-                >
-                  Try the demo manager <ArrowRightIcon className="ml-2" />
-                </Link>
+              <Button
+                variant="surface"
+                size="1"
+                onClick={() =>
+                  clearAndSet({
+                    type: AddressEntity.AccessManager,
+                    id: DEMO_MANAGER,
+                  })
+                }
+              >
+                Try the demo manager <ArrowRightIcon className="ml-2" />
               </Button>
             </Flex>
           ) : (
@@ -183,32 +186,29 @@ const Sidebar: FC<Props> = (props) => {
           data={accessManagerFavorites}
           onRender={([displayName, id]) => (
             <Button
-              key={`${EntityPrefix.AccessManager}-${id}`}
+              key={`${AddressEntity.AccessManager}-${id}`}
               my="1"
               variant="ghost"
               color="gray"
               className="w-full"
-              asChild
+              onClick={() =>
+                clearAndSet({
+                  type: AddressEntity.AccessManager,
+                  id,
+                })
+              }
             >
-              <Link
-                scroll={false}
-                href={join(
-                  ROUTES.EXPLORER.ROOT(currentChainId),
-                  ROUTES.EXPLORER.DETAILS(EntityPrefix.AccessManager, id)
-                )}
-              >
-                <Address
-                  p="1"
-                  width="100%"
-                  key={displayName}
-                  hidePopup
-                  addreth={{
-                    actions: "none",
-                    shortenAddress: 6,
-                    address: id as AddressType,
-                  }}
-                />
-              </Link>
+              <Address
+                p="1"
+                width="100%"
+                key={displayName}
+                hidePopup
+                addreth={{
+                  actions: "none",
+                  shortenAddress: 6,
+                  address: id as AddressType,
+                }}
+              />
             </Button>
           )}
         />
@@ -219,32 +219,29 @@ const Sidebar: FC<Props> = (props) => {
           data={accessManagedFavorites}
           onRender={([displayName, id]) => (
             <Button
-              key={`${EntityPrefix.AccessManaged}-${id}`}
+              key={`${AddressEntity.AccessManaged}-${id}`}
               my="1"
               variant="ghost"
               color="gray"
               className="w-full"
-              asChild
+              onClick={() =>
+                clearAndSet({
+                  type: AddressEntity.AccessManaged,
+                  id,
+                })
+              }
             >
-              <Link
-                scroll={false}
-                href={join(
-                  ROUTES.EXPLORER.ROOT(currentChainId),
-                  ROUTES.EXPLORER.DETAILS(EntityPrefix.AccessManaged, id)
-                )}
-              >
-                <Address
-                  p="1"
-                  width="100%"
-                  key={displayName}
-                  hidePopup
-                  addreth={{
-                    actions: "none",
-                    shortenAddress: 6,
-                    address: id as AddressType,
-                  }}
-                />
-              </Link>
+              <Address
+                p="1"
+                width="100%"
+                key={displayName}
+                hidePopup
+                addreth={{
+                  actions: "none",
+                  shortenAddress: 6,
+                  address: id as AddressType,
+                }}
+              />
             </Button>
           )}
         />
@@ -257,45 +254,42 @@ const Sidebar: FC<Props> = (props) => {
             const [roleId, accessManager] = id.split("/").reverse();
             return (
               <Button
-                key={`${EntityPrefix.AccessManagerRole}-${id}`}
+                key={`${Entity.AccessManagerRole}-${id}`}
                 my="1"
                 variant="ghost"
                 color="gray"
                 className="w-full"
-                asChild
+                onClick={() =>
+                  clearAndSet({
+                    type: Entity.AccessManagerRole,
+                    id,
+                  })
+                }
               >
-                <Link
-                  scroll={false}
-                  href={join(
-                    ROUTES.EXPLORER.ROOT(currentChainId),
-                    ROUTES.EXPLORER.DETAILS(EntityPrefix.AccessManagerRole, id)
-                  )}
-                >
-                  <Flex align="center" width="100%" key={displayName}>
-                    <Role
-                      accessManagerRole={makeFragmentData(
-                        {
+                <Flex align="center" width="100%" key={displayName}>
+                  <Role
+                    accessManagerRole={makeFragmentData(
+                      {
+                        id: roleId,
+                        asRole: {
                           id: roleId,
-                          asRole: {
-                            id: roleId,
-                          },
                         },
-                        ACCESS_MANAGER_ROLE_FRAGMENT
-                      )}
-                    />
-                    <Address
-                      p="1"
-                      ml="2"
-                      width="100%"
-                      hidePopup
-                      addreth={{
-                        actions: "none",
-                        shortenAddress: 6,
-                        address: accessManager as AddressType,
-                      }}
-                    />
-                  </Flex>
-                </Link>
+                      },
+                      ACCESS_MANAGER_ROLE_FRAGMENT
+                    )}
+                  />
+                  <Address
+                    p="1"
+                    ml="2"
+                    width="100%"
+                    hidePopup
+                    addreth={{
+                      actions: "none",
+                      shortenAddress: 6,
+                      address: accessManager as AddressType,
+                    }}
+                  />
+                </Flex>
               </Button>
             );
           }}
@@ -309,58 +303,52 @@ const Sidebar: FC<Props> = (props) => {
             const [member, roleId, accessManager] = id.split("/").reverse();
             return (
               <Button
-                key={`${EntityPrefix.AccessManagerRoleMember}-${id}`}
+                key={`${AddressEntity.AccessManagerRoleMember}-${id}`}
                 my="1"
                 variant="ghost"
                 color="gray"
                 className="w-full"
-                asChild
+                onClick={() =>
+                  clearAndSet({
+                    type: AddressEntity.AccessManagerRoleMember,
+                    id,
+                  })
+                }
               >
-                <Link
-                  scroll={false}
-                  href={join(
-                    ROUTES.EXPLORER.ROOT(currentChainId),
-                    ROUTES.EXPLORER.DETAILS(
-                      EntityPrefix.AccessManagerRoleMember,
-                      id
-                    )
-                  )}
-                >
-                  <Flex align="center" width="100%" key={displayName}>
-                    <Address
-                      p="1"
-                      grow="1"
-                      hidePopup
-                      addreth={{
-                        actions: "none",
-                        shortenAddress: false,
-                        address: member as AddressType,
-                      }}
-                    />
-                    <Role
-                      accessManagerRole={makeFragmentData(
-                        {
+                <Flex align="center" width="100%" key={displayName}>
+                  <Address
+                    p="1"
+                    grow="1"
+                    hidePopup
+                    addreth={{
+                      actions: "none",
+                      shortenAddress: false,
+                      address: member as AddressType,
+                    }}
+                  />
+                  <Role
+                    accessManagerRole={makeFragmentData(
+                      {
+                        id: roleId,
+                        asRole: {
                           id: roleId,
-                          asRole: {
-                            id: roleId,
-                          },
                         },
-                        ACCESS_MANAGER_ROLE_FRAGMENT
-                      )}
-                    />
-                    <Address
-                      p="1"
-                      ml="2"
-                      grow="1"
-                      hidePopup
-                      addreth={{
-                        actions: "none",
-                        shortenAddress: false,
-                        address: accessManager as AddressType,
-                      }}
-                    />
-                  </Flex>
-                </Link>
+                      },
+                      ACCESS_MANAGER_ROLE_FRAGMENT
+                    )}
+                  />
+                  <Address
+                    p="1"
+                    ml="2"
+                    grow="1"
+                    hidePopup
+                    addreth={{
+                      actions: "none",
+                      shortenAddress: false,
+                      address: accessManager as AddressType,
+                    }}
+                  />
+                </Flex>
               </Button>
             );
           }}
@@ -374,35 +362,29 @@ const Sidebar: FC<Props> = (props) => {
             const [target] = id.split("/").reverse();
             return (
               <Button
-                key={`${EntityPrefix.AccessManagerTarget}-${id}`}
+                key={`${AddressEntity.AccessManagerTarget}-${id}`}
                 my="1"
                 variant="ghost"
                 color="gray"
                 className="w-full"
-                asChild
+                onClick={() =>
+                  clearAndSet({
+                    type: AddressEntity.AccessManagerTarget,
+                    id,
+                  })
+                }
               >
-                <Link
-                  scroll={false}
-                  href={join(
-                    ROUTES.EXPLORER.ROOT(currentChainId),
-                    ROUTES.EXPLORER.DETAILS(
-                      EntityPrefix.AccessManagerTarget,
-                      id
-                    )
-                  )}
-                >
-                  <Address
-                    key={displayName}
-                    p="1"
-                    width="100%"
-                    hidePopup
-                    addreth={{
-                      actions: "none",
-                      shortenAddress: 6,
-                      address: target as AddressType,
-                    }}
-                  />
-                </Link>
+                <Address
+                  key={displayName}
+                  p="1"
+                  width="100%"
+                  hidePopup
+                  addreth={{
+                    actions: "none",
+                    shortenAddress: 6,
+                    address: target as AddressType,
+                  }}
+                />
               </Button>
             );
           }}
@@ -416,48 +398,42 @@ const Sidebar: FC<Props> = (props) => {
             const [method, target] = id.split("/").reverse();
             return (
               <Button
-                key={`${EntityPrefix.AccessManagerTargetFunction}-${id}`}
+                key={`${Entity.AccessManagerTargetFunction}-${id}`}
                 my="1"
                 variant="ghost"
                 color="gray"
                 className="w-full"
-                asChild
+                onClick={() =>
+                  clearAndSet({
+                    type: Entity.AccessManagerTargetFunction,
+                    id,
+                  })
+                }
               >
-                <Link
-                  scroll={false}
-                  href={join(
-                    ROUTES.EXPLORER.ROOT(currentChainId),
-                    ROUTES.EXPLORER.DETAILS(
-                      EntityPrefix.AccessManagerTargetFunction,
-                      id
-                    )
-                  )}
-                >
-                  <Flex align="center" width="100%" key={displayName}>
-                    <Address
-                      p="1"
-                      key={displayName}
-                      hidePopup
-                      addreth={{
-                        actions: "none",
-                        shortenAddress: 6,
-                        address: target as AddressType,
-                      }}
-                    />
-                    <Selector
-                      size="2"
-                      method={makeFragmentData(
-                        {
-                          id: id,
-                          asSelector: {
-                            id: method,
-                          },
+                <Flex align="center" width="100%" key={displayName}>
+                  <Address
+                    p="1"
+                    key={displayName}
+                    hidePopup
+                    addreth={{
+                      actions: "none",
+                      shortenAddress: 6,
+                      address: target as AddressType,
+                    }}
+                  />
+                  <Selector
+                    size="2"
+                    method={makeFragmentData(
+                      {
+                        id: id,
+                        asSelector: {
+                          id: method,
                         },
-                        ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT
-                      )}
-                    />
-                  </Flex>
-                </Link>
+                      },
+                      ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT
+                    )}
+                  />
+                </Flex>
               </Button>
             );
           }}

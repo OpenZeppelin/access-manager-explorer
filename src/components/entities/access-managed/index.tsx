@@ -6,13 +6,12 @@ import { useQuery } from "urql";
 import Skeleton from "./skeleton";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import Account from "../as/account";
-import { AddressEntity, EntityPrefix } from "@/types";
-import useRemoveEntity from "@/hooks/use-remove-entity";
+import { AddressEntity } from "@/types";
 import Address from "@/components/address";
 import { ACCESS_MANAGED_QUERY } from "./requests";
-import ROUTES from "@/config/routes";
 import { useFavorites } from "@/providers/favorites";
 import Empty from "./empty";
+import { useEntities } from "@/providers/entities";
 
 interface Props extends ComponentProps<typeof Card> {
   depth: number;
@@ -36,7 +35,7 @@ const AccessManaged: FC<Props> = ({
     },
   });
 
-  const remove = useRemoveEntity(depth);
+  const { remove } = useEntities();
 
   const accessManaged = data?.accessManaged;
 
@@ -60,7 +59,7 @@ const AccessManaged: FC<Props> = ({
         },
         isFavorite: favorites.isFavorite(AddressEntity.AccessManaged, address),
       }}
-      remove={remove}
+      remove={() => remove(depth)}
       entityType={AddressEntity.AccessManaged}
       description="An contract that inherits from AccessManaged and obeys to an authority."
       address={address}
@@ -91,16 +90,10 @@ const AccessManaged: FC<Props> = ({
                   shortenAddress: 10,
                   address: accessManaged?.authority.id,
                 }}
-                navigation={
-                  accessManaged?.authority.asAccessManager?.id
-                    ? {
-                        id: ROUTES.EXPLORER.DETAILS(
-                          EntityPrefix.AccessManager,
-                          accessManaged?.authority.asAccessManager.id
-                        ),
-                      }
-                    : undefined
-                }
+                onDetail={{
+                  type: AddressEntity.AccessManager,
+                  id: accessManaged?.authority.asAccessManager?.id,
+                }}
               />
             </Flex>
             <Separator size="4" my="3" />
@@ -115,11 +108,9 @@ const AccessManaged: FC<Props> = ({
                     shortenAddress: 10,
                     address: target.manager.asAccount.id,
                   }}
-                  navigation={{
-                    id: ROUTES.EXPLORER.DETAILS(
-                      EntityPrefix.AccessManager,
-                      target.manager.asAccount.id
-                    ),
+                  onDetail={{
+                    type: AddressEntity.AccessManager,
+                    id: target.manager.asAccount.id,
                   }}
                 />
               </Card>

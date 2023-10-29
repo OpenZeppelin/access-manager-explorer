@@ -5,25 +5,35 @@ import { useNetwork } from "wagmi";
 import { join } from "path";
 import { Flex, IconButton } from "@radix-ui/themes";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
+import { useEntities } from "@/providers/entities";
+import { EntityInstance } from "@/providers/entities/provider";
 
 type IconButtonProps = ComponentProps<typeof IconButton>;
 
 interface Props extends ComponentProps<typeof Flex> {
   addreth: ComponentProps<typeof Addreth>;
-  navigation?: IconButtonProps & { id: string }; // TODO: Do something with this
+  onDetail?: Omit<IconButtonProps, "type"> & EntityInstance;
   hidePopup?: boolean;
 }
 
-const Address: FC<Props> = ({ navigation, addreth, hidePopup, ...props }) => {
+const Address: FC<Props> = ({ onDetail, addreth, hidePopup, ...props }) => {
   const { theme } = useTheme();
   const { chain } = useNetwork();
   const ref = useRef<HTMLDivElement>(null);
 
-  const pathname = usePathname();
+  const entities = useEntities();
 
   const [isSSR, setIsSSR] = useState(true);
+
+  const onDetailClick = () => {
+    if (onDetail?.type && onDetail?.id) {
+      entities.push({
+        type: onDetail.type,
+        id: onDetail.id,
+      });
+    }
+  };
 
   useEffect(() => {
     setIsSSR(false);
@@ -50,18 +60,17 @@ const Address: FC<Props> = ({ navigation, addreth, hidePopup, ...props }) => {
         }}
         popupNode={hidePopup ? ref.current ?? undefined : undefined}
       />
-      {!isSSR && navigation && (
+      {!isSSR && onDetail && (
         <IconButton
           variant="soft"
           color="gray"
           size="1"
           ml="1"
-          {...navigation}
-          asChild
+          onClick={onDetailClick}
+          {...onDetail}
+          type="button"
         >
-          <Link scroll={false} href={join(pathname, navigation.id)}>
-            <ArrowRightIcon width="13" height="13" />
-          </Link>
+          <ArrowRightIcon width="13" height="13" />
         </IconButton>
       )}
     </Flex>

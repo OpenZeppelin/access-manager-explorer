@@ -14,17 +14,16 @@ import { useQuery } from "urql";
 import { ACCESS_MANAGER_MEMBER_QUERY } from "./requests";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import Account from "../as/account";
-import { AddressEntity, EntityPrefix } from "@/types";
-import useRemoveEntity from "@/hooks/use-remove-entity";
+import { AddressEntity } from "@/types";
 import Address from "@/components/address";
 import Role from "@/components/role";
 import DelayedValue from "@/components/delayed-value";
 import { useFormatter, useNow } from "next-intl";
 import Skeleton from "./skeleton";
-import ROUTES from "@/config/routes";
 import Info from "@/components/info";
 import { useFavorites } from "@/providers/favorites";
 import Empty from "./empty";
+import { useEntities } from "@/providers/entities";
 
 interface Props extends ComponentProps<typeof Card> {
   id: string;
@@ -48,7 +47,7 @@ const AccessManagerMember: FC<Props> = ({
     },
   });
 
-  const remove = useRemoveEntity(depth);
+  const { remove } = useEntities();
 
   const format = useFormatter();
   const now = useNow();
@@ -90,7 +89,7 @@ const AccessManagerMember: FC<Props> = ({
       entityType={AddressEntity.AccessManagerRoleMember}
       description="A member represents the access level an address has under an AccessManager."
       address={address as AddressType}
-      remove={remove}
+      remove={() => remove(depth)}
       className={className}
       shortenAddress={shortenAddress}
       isLast={isLast}
@@ -117,11 +116,9 @@ const AccessManagerMember: FC<Props> = ({
                 shortenAddress: 10,
                 address: accessManagerRoleMember?.manager.asAccount.id,
               }}
-              navigation={{
-                id: ROUTES.EXPLORER.DETAILS(
-                  EntityPrefix.AccessManager,
-                  accessManagerRoleMember?.manager.asAccount.id
-                ),
+              onDetail={{
+                type: AddressEntity.AccessManager,
+                id: accessManagerRoleMember?.manager.asAccount.id,
               }}
             />
           </Flex>

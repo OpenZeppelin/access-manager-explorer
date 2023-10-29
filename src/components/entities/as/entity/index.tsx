@@ -51,7 +51,7 @@ const Entity: FC<Props> = ({
 
   useEffect(() => {
     if (isLast && !scrolled) {
-      ref.current?.scrollIntoView({ behavior: "instant" });
+      ref.current?.scrollIntoView({ behavior: "smooth" });
       setScrolled(true);
     }
   }, [isLast]);

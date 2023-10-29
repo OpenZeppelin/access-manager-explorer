@@ -15,10 +15,8 @@ import { useQuery } from "urql";
 import { ACCESS_MANAGER_ROLE_QUERY } from "./requests";
 import Skeleton from "./skeleton";
 import { CircleIcon, ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { Entity, EntityPrefix } from "@/types";
-import useRemoveEntity from "@/hooks/use-remove-entity";
+import { AddressEntity, Entity } from "@/types";
 import Role from "../as/role";
-import ROUTES from "@/config/routes";
 import Address from "@/components/address";
 import DelayedValue from "@/components/delayed-value";
 import Info from "@/components/info";
@@ -29,6 +27,7 @@ import { ACCESS_MANAGER_ROLE_FRAGMENT } from "@/components/role/requests";
 import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "@/components/function/requests";
 import { useFavorites } from "@/providers/favorites";
 import Empty from "./empty";
+import { useEntities } from "@/providers/entities";
 
 interface Props extends ComponentProps<typeof Card> {
   id: string;
@@ -50,7 +49,7 @@ const AccessManagerRole: FC<Props> = ({
     },
   });
 
-  const remove = useRemoveEntity(depth);
+  const { remove } = useEntities();
   const roleId = useMemo(() => id.split("/").reverse()[0], [id]);
 
   const accessManagerRole = data?.accessManagerRole;
@@ -87,7 +86,7 @@ const AccessManagerRole: FC<Props> = ({
         },
         isFavorite: favorites.isFavorite(Entity.AccessManagerRole, roleId),
       }}
-      remove={remove}
+      remove={() => remove(depth)}
       entityType={Entity.AccessManagerRole}
       description="A role is allowed to call functions by an AccessManager"
       accessManagerRole={role}
@@ -117,11 +116,9 @@ const AccessManagerRole: FC<Props> = ({
                   address: accessManagerRole?.manager.asAccount.id,
                   shortenAddress: 10,
                 }}
-                navigation={{
-                  id: ROUTES.EXPLORER.DETAILS(
-                    EntityPrefix.AccessManager,
-                    accessManagerRole?.manager.asAccount.id
-                  ),
+                onDetail={{
+                  type: AddressEntity.AccessManager,
+                  id: accessManagerRole?.manager.asAccount.id,
                 }}
               />
             </Flex>
@@ -229,11 +226,9 @@ const AccessManagerRole: FC<Props> = ({
                           shortenAddress: false,
                           address: asAccount.id,
                         }}
-                        navigation={{
-                          id: ROUTES.EXPLORER.DETAILS(
-                            EntityPrefix.AccessManagerRoleMember,
-                            id
-                          ),
+                        onDetail={{
+                          type: AddressEntity.AccessManagerRoleMember,
+                          id,
                         }}
                       />
                     </Card>
@@ -264,11 +259,9 @@ const AccessManagerRole: FC<Props> = ({
                       my="1"
                       method={method}
                       icons={{
-                        navigate: {
-                          id: ROUTES.EXPLORER.DETAILS(
-                            EntityPrefix.AccessManagerTargetFunction,
-                            id
-                          ),
+                        onDetail: {
+                          type: Entity.AccessManagerTargetFunction,
+                          id,
                         },
                       }}
                     />

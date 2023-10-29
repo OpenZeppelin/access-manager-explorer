@@ -13,15 +13,6 @@ export enum Entity {
   AccessManagerOperation = "Operation",
 }
 
-export enum EntityPrefix {
-  AccessManager = "mgr",
-  AccessManaged = "mgd",
-  AccessManagerTarget = "tgt",
-  AccessManagerTargetFunction = "fn",
-  AccessManagerRole = "role",
-  AccessManagerRoleMember = "mbr",
-}
-
 export type SupportedChain = (typeof chains)[number];
 export type SupportedChainDefinition = SupportedChain["definition"];
 export type SupportedChainId = SupportedChainDefinition["id"];

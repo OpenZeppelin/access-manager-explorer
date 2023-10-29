@@ -6,13 +6,15 @@ import { join } from "path";
 import { ComponentProps, FC } from "react";
 import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "./requests";
 import { FragmentType, useFragment as asFragment } from "@/gql";
-import { useSignatures } from "@/hooks/useSignatureDatabase";
+import { useSignatures } from "@/hooks/use-signature-database";
 import { Hex } from "viem";
+import { EntityInstance } from "@/providers/entities/provider";
+import { useEntities } from "@/providers/entities";
 
 type IconButtonProps = ComponentProps<typeof IconButton>;
 
 interface IconProps {
-  navigate?: IconButtonProps & { id: string };
+  onDetail?: Omit<IconButtonProps, "type"> & EntityInstance;
 }
 
 interface Props extends ComponentProps<typeof Code> {
@@ -32,6 +34,16 @@ const Selector: FC<Props> = ({ method: fn, icons, ...props }) => {
   const { functionWithFallback } = useSignatures({
     function: [method.asSelector.id] as Hex[],
   });
+  const entities = useEntities();
+
+  const onDetailClick = () => {
+    if (icons?.onDetail?.type && icons?.onDetail?.id) {
+      entities.push({
+        type: icons.onDetail.type,
+        id: icons.onDetail.id,
+      });
+    }
+  };
 
   return (
     <Flex align="center" style={ellipsis}>
@@ -45,18 +57,17 @@ const Selector: FC<Props> = ({ method: fn, icons, ...props }) => {
       >
         {functionWithFallback(method.asSelector.id)}
       </Code>
-      {icons?.navigate && (
+      {icons?.onDetail && (
         <IconButton
           ml="2"
           variant="ghost"
           color="gray"
           size="1"
-          {...icons.navigate}
-          asChild
+          onClick={onDetailClick}
+          {...icons.onDetail}
+          type="button"
         >
-          <Link scroll={false} href={join(pathname, icons.navigate.id)}>
-            <ArrowRightIcon width="16" height="16" />
-          </Link>
+          <ArrowRightIcon width="16" height="16" />
         </IconButton>
       )}
     </Flex>
