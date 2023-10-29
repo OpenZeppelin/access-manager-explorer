@@ -38,12 +38,9 @@ const Address: FC<Props> = ({ navigation, addreth, hidePopup, ...props }) => {
       <Addreth
         explorer={(address) => ({
           name: chain?.blockExplorers?.default.name ?? "Explorer",
-          accountUrl: join(
-            "https://",
-            chain?.blockExplorers?.default.url ?? "",
-            "addresss",
-            address
-          ),
+          accountUrl:
+            "https://" +
+            join(chain?.blockExplorers?.default.url ?? "", "addresss", address),
         })}
         {...addreth}
         theme={{
