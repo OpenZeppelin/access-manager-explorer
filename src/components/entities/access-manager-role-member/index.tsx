@@ -29,7 +29,7 @@ import Empty from "./empty";
 interface Props extends ComponentProps<typeof Card> {
   id: string;
   depth: number;
-  truncate: ComponentProps<typeof Address>["truncate"];
+  shortenAddress: ComponentProps<typeof Address>["addreth"]["shortenAddress"];
   isLast: boolean;
 }
 
@@ -37,7 +37,7 @@ const AccessManagerMember: FC<Props> = ({
   id,
   className,
   depth,
-  truncate,
+  shortenAddress,
   isLast,
   ...props
 }) => {
@@ -92,7 +92,7 @@ const AccessManagerMember: FC<Props> = ({
       address={address as AddressType}
       remove={remove}
       className={className}
-      truncate={truncate}
+      shortenAddress={shortenAddress}
       isLast={isLast}
       {...props}
     >
@@ -113,22 +113,15 @@ const AccessManagerMember: FC<Props> = ({
           <Flex align="center" width="100%" justify="between">
             <Heading size="2">Manager</Heading>
             <Address
-              truncate={{
-                leading: 10,
-                trailing: 10,
+              addreth={{
+                shortenAddress: 10,
+                address: accessManagerRoleMember?.manager.asAccount.id,
               }}
-              icons={{
-                etherscan: true,
-                copy: true,
-                navigate: {
-                  id: ROUTES.EXPLORER.DETAILS(
-                    EntityPrefix.AccessManager,
-                    accessManagerRoleMember?.manager.asAccount.id
-                  ),
-                },
-              }}
-              address={{
-                value: accessManagerRoleMember?.manager.asAccount.id,
+              navigation={{
+                id: ROUTES.EXPLORER.DETAILS(
+                  EntityPrefix.AccessManager,
+                  accessManagerRoleMember?.manager.asAccount.id
+                ),
               }}
             />
           </Flex>

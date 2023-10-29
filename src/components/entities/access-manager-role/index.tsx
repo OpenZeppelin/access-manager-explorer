@@ -113,22 +113,15 @@ const AccessManagerRole: FC<Props> = ({
             <Flex align="center" width="100%" justify="between">
               <Heading size="2">Manager</Heading>
               <Address
-                truncate={{
-                  leading: 10,
-                  trailing: 10,
+                addreth={{
+                  address: accessManagerRole?.manager.asAccount.id,
+                  shortenAddress: 10,
                 }}
-                icons={{
-                  etherscan: true,
-                  copy: true,
-                  navigate: {
-                    id: ROUTES.EXPLORER.DETAILS(
-                      EntityPrefix.AccessManager,
-                      accessManagerRole?.manager.asAccount.id
-                    ),
-                  },
-                }}
-                address={{
-                  value: accessManagerRole?.manager.asAccount.id,
+                navigation={{
+                  id: ROUTES.EXPLORER.DETAILS(
+                    EntityPrefix.AccessManager,
+                    accessManagerRole?.manager.asAccount.id
+                  ),
                 }}
               />
             </Flex>
@@ -232,22 +225,15 @@ const AccessManagerRole: FC<Props> = ({
                   {accessManagerRole?.members.map(({ id, asAccount }) => (
                     <Card key={id} size="1">
                       <Address
-                        truncate={{
-                          leading: 4,
-                          trailing: 6,
+                        addreth={{
+                          shortenAddress: false,
+                          address: asAccount.id,
                         }}
-                        address={{
-                          value: asAccount.id,
-                        }}
-                        icons={{
-                          etherscan: true,
-                          copy: true,
-                          navigate: {
-                            id: ROUTES.EXPLORER.DETAILS(
-                              EntityPrefix.AccessManagerRoleMember,
-                              id
-                            ),
-                          },
+                        navigation={{
+                          id: ROUTES.EXPLORER.DETAILS(
+                            EntityPrefix.AccessManagerRoleMember,
+                            id
+                          ),
                         }}
                       />
                     </Card>

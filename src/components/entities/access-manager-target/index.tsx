@@ -38,13 +38,13 @@ import Empty from "./empty";
 interface Props extends ComponentProps<typeof Card> {
   depth: number;
   id: string;
-  truncate: ComponentProps<typeof Address>["truncate"];
+  shortenAddress: ComponentProps<typeof Address>["addreth"]["shortenAddress"];
   isLast: boolean;
 }
 
 const AccessManagerTarget: FC<Props> = ({
   id,
-  truncate,
+  shortenAddress,
   className,
   depth,
   isLast,
@@ -97,7 +97,7 @@ const AccessManagerTarget: FC<Props> = ({
       description="An address targetted by an AccessManager"
       address={address as AddressType}
       className={className}
-      truncate={truncate}
+      shortenAddress={shortenAddress}
       isLast={isLast}
       {...props}
     >
@@ -120,22 +120,15 @@ const AccessManagerTarget: FC<Props> = ({
               <Heading size="2">Targetted by</Heading>
               {accessManagerTarget?.manager.asAccount.id && (
                 <Address
-                  truncate={{
-                    leading: 10,
-                    trailing: 10,
+                  addreth={{
+                    shortenAddress: 10,
+                    address: accessManagerTarget.manager.asAccount.id,
                   }}
-                  icons={{
-                    etherscan: true,
-                    copy: true,
-                    navigate: {
-                      id: ROUTES.EXPLORER.DETAILS(
-                        EntityPrefix.AccessManager,
-                        accessManagerTarget.manager.asAccount.id
-                      ),
-                    },
-                  }}
-                  address={{
-                    value: accessManagerTarget.manager.asAccount.id,
+                  navigation={{
+                    id: ROUTES.EXPLORER.DETAILS(
+                      EntityPrefix.AccessManager,
+                      accessManagerTarget.manager.asAccount.id
+                    ),
                   }}
                 />
               )}

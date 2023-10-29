@@ -25,18 +25,15 @@ const Targets: FC<Props> = ({ targets }) => {
             <Card key={id} size="1">
               <Address
                 key={id}
-                address={{
-                  value: asAccount.id,
+                addreth={{
+                  address: asAccount.id,
+                  shortenAddress: false,
                 }}
-                icons={{
-                  etherscan: true,
-                  copy: true,
-                  navigate: {
-                    id: ROUTES.EXPLORER.DETAILS(
-                      EntityPrefix.AccessManagerTarget,
-                      id
-                    ),
-                  },
+                navigation={{
+                  id: ROUTES.EXPLORER.DETAILS(
+                    EntityPrefix.AccessManagerTarget,
+                    id
+                  ),
                 }}
               />
             </Card>

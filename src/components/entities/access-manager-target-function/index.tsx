@@ -116,22 +116,15 @@ const AccessManagerTargetFunction: FC<Props> = ({
               <Heading size="2">Manager</Heading>
               {accessManagedTargetFunction?.manager.asAccount.id && (
                 <Address
-                  truncate={{
-                    leading: 10,
-                    trailing: 10,
+                  addreth={{
+                    shortenAddress: 10,
+                    address: accessManagedTargetFunction.manager.asAccount.id,
                   }}
-                  icons={{
-                    etherscan: true,
-                    copy: true,
-                    navigate: {
-                      id: ROUTES.EXPLORER.DETAILS(
-                        EntityPrefix.AccessManager,
-                        accessManagedTargetFunction.manager.asAccount.id
-                      ),
-                    },
-                  }}
-                  address={{
-                    value: accessManagedTargetFunction.manager.asAccount.id,
+                  navigation={{
+                    id: ROUTES.EXPLORER.DETAILS(
+                      EntityPrefix.AccessManager,
+                      accessManagedTargetFunction.manager.asAccount.id
+                    ),
                   }}
                 />
               )}
@@ -141,22 +134,15 @@ const AccessManagerTargetFunction: FC<Props> = ({
               <Heading size="2">Target</Heading>
               {accessManagedTargetFunction?.target.asAccount.id && (
                 <Address
-                  truncate={{
-                    leading: 10,
-                    trailing: 10,
+                  addreth={{
+                    shortenAddress: 10,
+                    address: accessManagedTargetFunction.target.asAccount.id,
                   }}
-                  icons={{
-                    etherscan: true,
-                    copy: true,
-                    navigate: {
-                      id: ROUTES.EXPLORER.DETAILS(
-                        EntityPrefix.AccessManagerTarget,
-                        accessManagedTargetFunction.target.asAccount.id
-                      ),
-                    },
-                  }}
-                  address={{
-                    value: accessManagedTargetFunction.target.asAccount.id,
+                  navigation={{
+                    id: ROUTES.EXPLORER.DETAILS(
+                      EntityPrefix.AccessManagerTarget,
+                      accessManagedTargetFunction.target.asAccount.id
+                    ),
                   }}
                 />
               )}

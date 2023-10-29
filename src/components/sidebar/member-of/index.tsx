@@ -42,12 +42,9 @@ const MemberOf: FC<Props> = ({ membership }) => {
       >
         <Role ml="3" accessManagerRole={roleFragment} />
         <Address
-          address={{
-            value: membership.manager.asAccount.id,
-          }}
-          truncate={{
-            leading: 4,
-            trailing: 6,
+          addreth={{
+            address: membership.manager.asAccount.id,
+            shortenAddress: 6,
           }}
           p="1"
           mr="auto"

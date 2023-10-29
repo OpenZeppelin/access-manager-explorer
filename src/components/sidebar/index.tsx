@@ -99,16 +99,14 @@ const Sidebar: FC<Props> = (props) => {
           {isConnected && (
             <Button ml="1" size="2" variant="ghost" color="gray">
               <Collapsible.Trigger asChild>
-                <Flex>
+                <Flex align="center">
                   {address && (
                     <Address
-                      address={{
-                        value: address,
-                        weight: "medium",
-                      }}
-                      truncate={{
-                        leading: 4,
-                        trailing: 8,
+                      hidePopup
+                      addreth={{
+                        address,
+                        actions: "none",
+                        shortenAddress: 6,
                       }}
                     />
                   )}
@@ -203,12 +201,11 @@ const Sidebar: FC<Props> = (props) => {
                   p="1"
                   width="100%"
                   key={displayName}
-                  truncate={{
-                    leading: 4,
-                    trailing: 6,
-                  }}
-                  address={{
-                    value: id as AddressType,
+                  hidePopup
+                  addreth={{
+                    actions: "none",
+                    shortenAddress: 6,
+                    address: id as AddressType,
                   }}
                 />
               </Link>
@@ -240,12 +237,11 @@ const Sidebar: FC<Props> = (props) => {
                   p="1"
                   width="100%"
                   key={displayName}
-                  truncate={{
-                    leading: 4,
-                    trailing: 6,
-                  }}
-                  address={{
-                    value: id as AddressType,
+                  hidePopup
+                  addreth={{
+                    actions: "none",
+                    shortenAddress: 6,
+                    address: id as AddressType,
                   }}
                 />
               </Link>
@@ -291,12 +287,11 @@ const Sidebar: FC<Props> = (props) => {
                       p="1"
                       ml="2"
                       width="100%"
-                      truncate={{
-                        leading: 4,
-                        trailing: 6,
-                      }}
-                      address={{
-                        value: accessManager as AddressType,
+                      hidePopup
+                      addreth={{
+                        actions: "none",
+                        shortenAddress: 6,
+                        address: accessManager as AddressType,
                       }}
                     />
                   </Flex>
@@ -334,12 +329,12 @@ const Sidebar: FC<Props> = (props) => {
                   <Flex align="center" width="100%" key={displayName}>
                     <Address
                       p="1"
-                      truncate={{
-                        leading: 2,
-                        trailing: 6,
-                      }}
-                      address={{
-                        value: member as AddressType,
+                      grow="1"
+                      hidePopup
+                      addreth={{
+                        actions: "none",
+                        shortenAddress: false,
+                        address: member as AddressType,
                       }}
                     />
                     <Role
@@ -356,13 +351,12 @@ const Sidebar: FC<Props> = (props) => {
                     <Address
                       p="1"
                       ml="2"
-                      width="100%"
-                      truncate={{
-                        leading: 2,
-                        trailing: 4,
-                      }}
-                      address={{
-                        value: accessManager as AddressType,
+                      grow="1"
+                      hidePopup
+                      addreth={{
+                        actions: "none",
+                        shortenAddress: false,
+                        address: accessManager as AddressType,
                       }}
                     />
                   </Flex>
@@ -398,15 +392,14 @@ const Sidebar: FC<Props> = (props) => {
                   )}
                 >
                   <Address
+                    key={displayName}
                     p="1"
                     width="100%"
-                    key={displayName}
-                    truncate={{
-                      leading: 4,
-                      trailing: 6,
-                    }}
-                    address={{
-                      value: target as AddressType,
+                    hidePopup
+                    addreth={{
+                      actions: "none",
+                      shortenAddress: 6,
+                      address: target as AddressType,
                     }}
                   />
                 </Link>
@@ -444,12 +437,11 @@ const Sidebar: FC<Props> = (props) => {
                     <Address
                       p="1"
                       key={displayName}
-                      truncate={{
-                        leading: 4,
-                        trailing: 6,
-                      }}
-                      address={{
-                        value: target as AddressType,
+                      hidePopup
+                      addreth={{
+                        actions: "none",
+                        shortenAddress: 6,
+                        address: target as AddressType,
                       }}
                     />
                     <Selector

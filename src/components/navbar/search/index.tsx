@@ -1,7 +1,13 @@
 "use client";
 
 import { CircleIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { Badge, Callout, DropdownMenu, TextField } from "@radix-ui/themes";
+import {
+  Badge,
+  Callout,
+  DropdownMenu,
+  Flex,
+  TextField,
+} from "@radix-ui/themes";
 import { join } from "path";
 import { ComponentProps, FC, useEffect, useMemo, useState } from "react";
 import { ACCOUNT_QUERY } from "./requests";
@@ -119,7 +125,11 @@ const Search: FC<Props> = (props) => {
                 onClick={() => setAddress("")}
               >
                 <Address
-                  address={{ value: data?.account?.asAccessManager?.id }}
+                  addreth={{
+                    shortenAddress: false,
+                    actions: "none",
+                    address: data?.account?.asAccessManager?.id,
+                  }}
                 />
                 <Badge color="amber" ml="auto" size="1" variant="solid">
                   Manager
@@ -140,10 +150,15 @@ const Search: FC<Props> = (props) => {
                 scroll={false}
                 onClick={() => setAddress("")}
               >
-                <Address
-                  mr="2"
-                  address={{ value: data?.account?.asAccessManaged?.id }}
-                />
+                <Flex mr="2">
+                  <Address
+                    addreth={{
+                      shortenAddress: false,
+                      actions: "none",
+                      address: data?.account?.asAccessManaged?.id,
+                    }}
+                  />
+                </Flex>
                 <Badge color="amber" ml="auto" size="1" variant="solid">
                   Managed
                 </Badge>
@@ -172,14 +187,15 @@ const Search: FC<Props> = (props) => {
                         scroll={false}
                         onClick={() => setAddress("")}
                       >
-                        <Address
-                          mr="2"
-                          truncate={{
-                            leading: 4,
-                            trailing: 6,
-                          }}
-                          address={{ value: membership.manager.asAccount.id }}
-                        />
+                        <Flex mr="6">
+                          <Address
+                            addreth={{
+                              actions: "none",
+                              shortenAddress: 6,
+                              address: membership.manager.asAccount.id,
+                            }}
+                          />
+                        </Flex>
                         <Role
                           mr="2"
                           accessManagerRole={makeFragmentData(
@@ -219,14 +235,15 @@ const Search: FC<Props> = (props) => {
                       scroll={false}
                       onClick={() => setAddress("")}
                     >
-                      <Address
-                        mr="2"
-                        truncate={{
-                          leading: 4,
-                          trailing: 6,
-                        }}
-                        address={{ value: targettedBy.manager.asAccount.id }}
-                      />
+                      <Flex mr="2">
+                        <Address
+                          addreth={{
+                            actions: "none",
+                            shortenAddress: 6,
+                            address: targettedBy.manager.asAccount.id,
+                          }}
+                        />
+                      </Flex>
                       <Badge color="amber" ml="auto" size="1" variant="solid">
                         Target
                       </Badge>

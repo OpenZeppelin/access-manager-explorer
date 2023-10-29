@@ -49,10 +49,7 @@ const Explorer: FC<Props> = ({ params: { entities, chainId } }) => {
               <AccessManager
                 {...commonProps}
                 address={id as Address}
-                truncate={{
-                  leading: 4,
-                  trailing: 6,
-                }}
+                shortenAddress={false}
                 style={{
                   maxWidth: 580,
                   minWidth: 580,
@@ -66,10 +63,7 @@ const Explorer: FC<Props> = ({ params: { entities, chainId } }) => {
                 {...commonProps}
                 key={prefixedId}
                 id={id}
-                truncate={{
-                  leading: 2,
-                  trailing: 4,
-                }}
+                shortenAddress={false}
                 style={{
                   maxWidth: 520,
                   minWidth: 520,
@@ -83,10 +77,7 @@ const Explorer: FC<Props> = ({ params: { entities, chainId } }) => {
                 {...commonProps}
                 key={prefixedId}
                 address={id as Address}
-                truncate={{
-                  leading: 2,
-                  trailing: 4,
-                }}
+                shortenAddress={false}
                 style={{
                   maxWidth: 520,
                   minWidth: 520,
@@ -100,10 +91,7 @@ const Explorer: FC<Props> = ({ params: { entities, chainId } }) => {
                 {...commonProps}
                 key={prefixedId}
                 id={id}
-                truncate={{
-                  leading: 2,
-                  trailing: 4,
-                }}
+                shortenAddress={false}
                 style={{
                   maxWidth: 460,
                   minWidth: 460,

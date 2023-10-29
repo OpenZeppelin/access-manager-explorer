@@ -1,70 +1,70 @@
-import { Avatar, Flex, Heading, IconButton } from "@radix-ui/themes";
-import { truncateHex } from "@/utils";
-import { ComponentProps, FC, useMemo } from "react";
-import Gradient from "./gradient";
-import { Address } from "viem";
-import Icons from "./icons";
+import { ComponentProps, FC, useEffect, useRef, useState } from "react";
+import { Addreth } from "addreth";
+import { useTheme } from "next-themes";
+import { useNetwork } from "wagmi";
+import { join } from "path";
+import { Flex, IconButton } from "@radix-ui/themes";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
 
-type AvatarProps = ComponentProps<typeof Avatar>;
-type HeadingProps = ComponentProps<typeof Heading>;
-type FlexProps = ComponentProps<typeof Flex>;
 type IconButtonProps = ComponentProps<typeof IconButton>;
 
-interface AddressProps extends Partial<Omit<HeadingProps, "value">> {
-  value: Address;
+interface Props extends ComponentProps<typeof Flex> {
+  addreth: ComponentProps<typeof Addreth>;
+  navigation?: IconButtonProps & { id: string }; // TODO: Do something with this
+  hidePopup?: boolean;
 }
 
-interface IconProps {
-  etherscan?: IconButtonProps | boolean;
-  copy?: IconButtonProps | boolean;
-  navigate?: IconButtonProps & { id: string };
-}
+const Address: FC<Props> = ({ navigation, addreth, hidePopup, ...props }) => {
+  const { theme } = useTheme();
+  const { chain } = useNetwork();
+  const ref = useRef<HTMLDivElement>(null);
 
-interface Props extends FlexProps {
-  address: AddressProps;
-  avatar?: Partial<Omit<AvatarProps, "fallback">>;
-  truncate?: Parameters<typeof truncateHex>[1] | boolean;
-  icons?: IconProps;
-}
+  const pathname = usePathname();
 
-const DEFAULT_SIZE = "1";
+  const [isSSR, setIsSSR] = useState(true);
 
-const Address: FC<Props> = ({ address, avatar, truncate, icons, ...props }) => {
-  const displayAddress = useMemo(
-    () =>
-      !!truncate
-        ? truncateHex(address.value, truncate === true ? undefined : truncate)
-        : address.value,
-    [address.value, truncate]
-  );
+  useEffect(() => {
+    setIsSSR(false);
+  }, []);
 
-  const size = avatar?.size || DEFAULT_SIZE;
+  if (typeof addreth.theme === "string")
+    addreth.theme = { base: addreth.theme };
 
   return (
-    <Flex align="center" justify="between" {...props}>
-      <Flex gap="2">
-        <Avatar
-          size={size}
-          radius="full"
-          fallback={
-            <Gradient
-              svgClassName={`rt-AvatarRoot rt-r-size-${size}`}
-              address={address.value}
-            />
-          }
-          {...avatar}
-        />
-        <Heading
-          size="2"
-          weight="light"
-          mr="3"
-          className="whitespace-nowrap"
-          {...(address as HeadingProps)}
+    <Flex align="center" {...props}>
+      <div ref={ref} style={{ display: "none" }}></div>
+      <Addreth
+        explorer={(address) => ({
+          name: chain?.name ?? "Explorer",
+          accountUrl: join(
+            chain?.blockExplorers?.default.url ?? "",
+            "addresss",
+            address
+          ),
+        })}
+        {...addreth}
+        theme={{
+          base: theme == "dark" ? "simple-dark" : "simple-light",
+          ...addreth.theme,
+        }}
+        popupNode={hidePopup ? ref.current ?? undefined : undefined}
+      />
+      {!isSSR && navigation && (
+        <IconButton
+          variant="soft"
+          color="gray"
+          size="1"
+          ml="1"
+          {...navigation}
+          asChild
         >
-          {displayAddress}
-        </Heading>
-      </Flex>
-      <Icons icons={icons} address={address} />
+          <Link scroll={false} href={join(pathname, navigation.id)}>
+            <ArrowRightIcon width="13" height="13" />
+          </Link>
+        </IconButton>
+      )}
     </Flex>
   );
 };

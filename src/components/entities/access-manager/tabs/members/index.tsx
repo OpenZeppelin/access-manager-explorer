@@ -25,18 +25,15 @@ const Members: FC<Props> = ({ members }) => {
             <Card key={id} size="1">
               <Address
                 key={id}
-                address={{
-                  value: asAccount.id,
+                addreth={{
+                  address: asAccount.id,
+                  shortenAddress: false,
                 }}
-                icons={{
-                  etherscan: true,
-                  copy: true,
-                  navigate: {
-                    id: ROUTES.EXPLORER.DETAILS(
-                      EntityPrefix.AccessManagerRoleMember,
-                      id
-                    ),
-                  },
+                navigation={{
+                  id: ROUTES.EXPLORER.DETAILS(
+                    EntityPrefix.AccessManagerRoleMember,
+                    id
+                  ),
                 }}
               />
             </Card>

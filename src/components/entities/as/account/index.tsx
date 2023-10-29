@@ -1,35 +1,37 @@
 "use client";
-import { Card } from "@radix-ui/themes";
-import { ComponentProps, FC, ReactNode } from "react";
+import { Flex } from "@radix-ui/themes";
+import { ComponentProps, FC } from "react";
 import Address from "@/components/address";
 import { Address as AddressType } from "viem";
 import Entity from "../entity";
 
 interface Props extends Omit<ComponentProps<typeof Entity>, "header"> {
   address: AddressType;
-  truncate: ComponentProps<typeof Address>["truncate"];
+  shortenAddress?: ComponentProps<typeof Address>["addreth"]["shortenAddress"];
 }
 
-const Account: FC<Props> = ({ address, truncate, children, ...props }) => {
+const Account: FC<Props> = ({
+  address,
+  shortenAddress,
+  children,
+  ...props
+}) => {
   return (
     <Entity
       header={
-        <Address
-          mr="auto"
-          address={{
-            value: address,
-            weight: "medium",
-            size: "6",
-          }}
-          avatar={{
-            size: "2",
-          }}
-          icons={{
-            etherscan: true,
-            copy: true,
-          }}
-          truncate={truncate}
-        />
+        <Flex mr="auto">
+          <Address
+            mr="2"
+            addreth={{
+              address,
+              shortenAddress,
+              theme: {
+                fontSize: 18,
+                badgeGap: 6,
+              },
+            }}
+          />
+        </Flex>
       }
       {...props}
     >

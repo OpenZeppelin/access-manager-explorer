@@ -18,9 +18,7 @@ interface Props {
 const Theme: FC<Props> = ({ children }) => {
   return (
     <ThemeProvider attribute="class">
-      <Themes scaling="110%" accentColor="blue">
-        {children}
-      </Themes>
+      <Themes accentColor="blue">{children}</Themes>
     </ThemeProvider>
   );
 };

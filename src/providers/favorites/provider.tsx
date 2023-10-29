@@ -8,10 +8,10 @@ import {
   useCallback,
 } from "react";
 import { AddressEntity, Entity, SupportedChainId } from "@/types";
-import Address from "@/components/address";
 import { useRouteNetwork } from "../route-network";
 
 import { chains as supportedChains } from "@/config/chains";
+import { Address } from "viem";
 
 interface Props {
   children: ReactNode;

@@ -20,13 +20,13 @@ import Empty from "./empty";
 interface Props extends ComponentProps<typeof Card> {
   depth: number;
   address: AddressType;
-  truncate: ComponentProps<typeof Address>["truncate"];
+  shortenAddress?: ComponentProps<typeof Address>["addreth"]["shortenAddress"];
   isLast: boolean;
 }
 
 const AccessManager: FC<Props> = ({
   address,
-  truncate,
+  shortenAddress,
   className,
   depth,
   isLast,
@@ -68,7 +68,7 @@ const AccessManager: FC<Props> = ({
       description="An AccessManager is a contract that keeps the permissions of a system"
       address={address}
       className={className}
-      truncate={truncate}
+      shortenAddress={shortenAddress}
       isLast={isLast}
       {...props}
     >

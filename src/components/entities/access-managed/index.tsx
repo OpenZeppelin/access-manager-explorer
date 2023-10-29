@@ -17,13 +17,13 @@ import Empty from "./empty";
 interface Props extends ComponentProps<typeof Card> {
   depth: number;
   address: AddressType;
-  truncate: ComponentProps<typeof Address>["truncate"];
+  shortenAddress: ComponentProps<typeof Address>["addreth"]["shortenAddress"];
   isLast: boolean;
 }
 
 const AccessManaged: FC<Props> = ({
   address,
-  truncate,
+  shortenAddress,
   className,
   depth,
   isLast,
@@ -65,7 +65,7 @@ const AccessManaged: FC<Props> = ({
       description="An contract that inherits from AccessManaged and obeys to an authority."
       address={address}
       className={className}
-      truncate={truncate}
+      shortenAddress={shortenAddress}
       isLast={isLast}
       {...props}
     >
@@ -87,25 +87,20 @@ const AccessManaged: FC<Props> = ({
             <Flex align="center" width="100%" justify="between">
               <Heading size="2">Authority</Heading>
               <Address
-                truncate={{
-                  leading: 10,
-                  trailing: 10,
+                addreth={{
+                  shortenAddress: 10,
+                  address: accessManaged?.authority.id,
                 }}
-                icons={{
-                  etherscan: true,
-                  copy: true,
-                  navigate: accessManaged?.authority.asAccessManager?.id
+                navigation={
+                  accessManaged?.authority.asAccessManager?.id
                     ? {
                         id: ROUTES.EXPLORER.DETAILS(
                           EntityPrefix.AccessManager,
                           accessManaged?.authority.asAccessManager.id
                         ),
                       }
-                    : undefined,
-                }}
-                address={{
-                  value: accessManaged?.authority.id,
-                }}
+                    : undefined
+                }
               />
             </Flex>
             <Separator size="4" my="3" />
@@ -116,22 +111,15 @@ const AccessManaged: FC<Props> = ({
               <Card key={target.id} my="2" size="1">
                 <Address
                   key={target.id}
-                  truncate={{
-                    leading: 10,
-                    trailing: 10,
+                  addreth={{
+                    shortenAddress: 10,
+                    address: target.manager.asAccount.id,
                   }}
-                  address={{
-                    value: target.manager.asAccount.id,
-                  }}
-                  icons={{
-                    etherscan: true,
-                    copy: true,
-                    navigate: {
-                      id: ROUTES.EXPLORER.DETAILS(
-                        EntityPrefix.AccessManager,
-                        target.manager.asAccount.id
-                      ),
-                    },
+                  navigation={{
+                    id: ROUTES.EXPLORER.DETAILS(
+                      EntityPrefix.AccessManager,
+                      target.manager.asAccount.id
+                    ),
                   }}
                 />
               </Card>

@@ -1,10 +1,10 @@
-import Address from "@/components/address";
 import { cn } from "@/utils";
 import { Box, Button, Flex, Text } from "@radix-ui/themes";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import { ComponentProps, FC } from "react";
 import { Address as AddressType } from "viem";
+import Address from "@/components/address";
 
 type ButtonProps = ComponentProps<typeof Button>;
 type BoxProps = ComponentProps<typeof Box>;
@@ -98,10 +98,10 @@ const Inner: FC<Props> = ({
             </Button>
             <Button onClick={openAccountModal} {...states?.connected?.account}>
               <Address
-                address={{
-                  value: account.address as AddressType,
+                addreth={{
+                  actions: "none",
+                  address: account.address as AddressType,
                 }}
-                truncate
               />
               <Text size="1" className="whitespace-nowrap">
                 {account.displayBalance ? ` (${account.displayBalance})` : ""}

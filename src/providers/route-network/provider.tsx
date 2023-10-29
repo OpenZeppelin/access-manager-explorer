@@ -2,7 +2,7 @@
 import { createContext, ReactNode, FC, useEffect } from "react";
 import { SupportedChainId } from "@/types";
 import { useNetwork } from "wagmi";
-import { watchNetwork } from "wagmi/actions";
+import { switchNetwork, watchNetwork } from "wagmi/actions";
 import { usePathname, useRouter } from "next/navigation";
 
 interface Props {
