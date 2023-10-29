@@ -2,6 +2,7 @@
 import { ComponentProps, FC } from "react";
 import Entity from "../entity";
 import FunctionHeader from "@/components/function";
+import { Flex } from "@radix-ui/themes";
 
 interface Props extends Omit<ComponentProps<typeof Entity>, "header" | "role"> {
   method: ComponentProps<typeof FunctionHeader>["method"];
@@ -10,7 +11,7 @@ interface Props extends Omit<ComponentProps<typeof Entity>, "header" | "role"> {
 const Function: FC<Props> = ({ method, children, ...props }) => {
   return (
     <Entity
-      header={<FunctionHeader size="5" mr="auto" method={method} />}
+      header={<FunctionHeader size="5" mr="2" method={method} />}
       {...props}
     >
       {children}

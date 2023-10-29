@@ -20,6 +20,12 @@ interface Props extends ComponentProps<typeof Code> {
   icons?: IconProps;
 }
 
+const ellipsis = {
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+} as const;
+
 const Selector: FC<Props> = ({ method: fn, icons, ...props }) => {
   const method = asFragment(ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT, fn);
   const pathname = usePathname();
@@ -28,8 +34,15 @@ const Selector: FC<Props> = ({ method: fn, icons, ...props }) => {
   });
 
   return (
-    <Flex align="center">
-      <Code key={method.id} {...props}>
+    <Flex align="center" style={ellipsis}>
+      <Code
+        key={method.id}
+        style={{
+          ...ellipsis,
+          ...props?.style,
+        }}
+        {...props}
+      >
         {functionWithFallback(method.asSelector.id)}
       </Code>
       {icons?.navigate && (
