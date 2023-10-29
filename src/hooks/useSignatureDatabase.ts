@@ -33,11 +33,9 @@ const useSignatures = (config: UseSignaturesConfig) => {
   }
 
   const response = useSWR<Response, string>(
-    join(
-      process.env.NEXT_PUBLIC_SIGNATURE_DATABASE!,
-      "api",
-      "v1",
-      "signatures"
+    new URL(
+      join("api", "v1", "signatures"),
+      process.env.NEXT_PUBLIC_SIGNATURE_DATABASE!
     ) +
       "?" +
       query.toString(),
