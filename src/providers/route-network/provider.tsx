@@ -1,9 +1,11 @@
 "use client";
-import { createContext, ReactNode, FC, useEffect } from "react";
-import { SupportedChainId } from "@/types";
+import { createContext, ReactNode, FC, useEffect, useMemo } from "react";
+import { SupportedChainDefinition, SupportedChainId } from "@/types";
 import { useNetwork } from "wagmi";
-import { switchNetwork, watchNetwork } from "wagmi/actions";
-import { usePathname, useRouter } from "next/navigation";
+import { watchNetwork } from "wagmi/actions";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { chains } from "@/config/chains";
+import { Chain } from "viem/chains";
 
 interface Props {
   children: ReactNode;
@@ -11,14 +13,14 @@ interface Props {
 }
 
 interface Context {
-  routeChainId: SupportedChainId;
-  clientChainId?: number;
-  currentChainId: SupportedChainId;
+  routeChain: SupportedChainDefinition;
+  clientChain?: Chain;
+  currentChain: SupportedChainDefinition;
 }
 
 const defaultContext: Context = {
-  routeChainId: 1,
-  currentChainId: 1,
+  routeChain: chains[0].definition,
+  currentChain: chains[0].definition,
 };
 
 const routeNetworkContext = createContext<Context>(defaultContext);
@@ -28,27 +30,35 @@ const RouteNetworkProvider: FC<Props> = ({
   routeChainId: routeChainIdString,
 }) => {
   const routeChainId = Number(routeChainIdString) as SupportedChainId;
-  const { chain } = useNetwork();
+  const { chain: clientChain } = useNetwork();
   const { replace } = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const routeChain = useMemo(
+    () =>
+      chains.find(({ definition }) => definition.id == routeChainId)!
+        .definition,
+    [routeChainId]
+  );
 
   useEffect(() => {
     watchNetwork(({ chain }) => {
       const [_, network, chainId, ...items] = pathname.split("/");
       replace(
-        [_, network, chain?.id.toString() ?? chainId, ...items].join("/")
+        `${[_, network, chain?.id.toString() ?? chainId, ...items].join(
+          "/"
+        )}?${searchParams}`
       );
     });
   }, [pathname, replace]);
 
-  const clientChainId = chain?.id;
-
   return (
     <routeNetworkContext.Provider
       value={{
-        routeChainId,
-        clientChainId: clientChainId,
-        currentChainId: routeChainId ?? clientChainId,
+        routeChain,
+        clientChain,
+        currentChain: routeChain ?? clientChain,
       }}
     >
       {children}

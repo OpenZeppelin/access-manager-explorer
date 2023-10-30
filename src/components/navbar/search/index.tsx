@@ -18,7 +18,6 @@ import { cn } from "@/utils";
 import Role from "@/components/role";
 import { makeFragmentData, useFragment as asFragment } from "@/gql";
 import { ACCESS_MANAGER_ROLE_FRAGMENT } from "@/components/role/requests";
-import { useRouteNetwork } from "@/providers/route-network";
 import { useEntities } from "@/providers/entities";
 import { AddressEntity } from "@/types";
 import { EntityInstance } from "@/providers/entities/provider";
@@ -32,7 +31,6 @@ const Search: FC<Props> = (props) => {
   const [address, setAddress] = useState("");
   const [debouncedAddress] = useDebounce(address, 300);
   const [open, setOpen] = useState(false);
-  const { currentChainId } = useRouteNetwork();
   const entities = useEntities();
 
   const isInputAddress = useMemo(

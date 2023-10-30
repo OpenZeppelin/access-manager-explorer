@@ -79,7 +79,7 @@ const FavoritesProvider: FC<Props> = ({ children }) => {
   const [rendered, setRendered] = useState(false);
   const [favorites, setFavorites] =
     useState<SupportedChainIdFavorites>(defaultContext);
-  const { currentChainId } = useRouteNetwork();
+  const { currentChain } = useRouteNetwork();
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -96,10 +96,10 @@ const FavoritesProvider: FC<Props> = ({ children }) => {
     const kind = entry[0];
     const newFavorites = {
       ...favorites,
-      [currentChainId]: {
-        ...favorites[currentChainId],
+      [currentChain.id]: {
+        ...favorites[currentChain.id],
         [kind]: {
-          ...favorites[currentChainId]?.[kind],
+          ...favorites[currentChain.id]?.[kind],
           ...entry[1],
         },
       },
@@ -110,36 +110,36 @@ const FavoritesProvider: FC<Props> = ({ children }) => {
 
   const isFavorite = useCallback(
     (kind: Kind, displayName: DisplayName) => {
-      return !!favorites[currentChainId]?.[kind]?.[displayName];
+      return !!favorites[currentChain.id]?.[kind]?.[displayName];
     },
-    [favorites, currentChainId]
+    [favorites, currentChain.id]
   );
 
   const removeFavorite = (kind: Kind, displayName: DisplayName) => {
     const newFavorites = {
       ...favorites,
-      [currentChainId]: {
-        ...favorites[currentChainId],
-        [kind]: { ...favorites[currentChainId]?.[kind] },
+      [currentChain.id]: {
+        ...favorites[currentChain.id],
+        [kind]: { ...favorites[currentChain.id]?.[kind] },
       },
     };
-    delete newFavorites[currentChainId]?.[kind][displayName];
+    delete newFavorites[currentChain.id]?.[kind][displayName];
     window.localStorage.setItem(FAVORITES_KEY, JSON.stringify(newFavorites));
     setFavorites(newFavorites);
   };
 
   const getFavorites = useCallback(
     (kind: Kind) => {
-      const favoritesKind = favorites[currentChainId]?.[kind];
+      const favoritesKind = favorites[currentChain.id]?.[kind];
       return Object.entries(favoritesKind ?? {});
     },
-    [favorites, currentChainId]
+    [favorites, currentChain.id]
   );
 
   return (
     <favoritesContext.Provider
       value={{
-        ...favorites[currentChainId],
+        ...favorites[currentChain.id],
         isFavorite,
         setFavorite,
         removeFavorite,

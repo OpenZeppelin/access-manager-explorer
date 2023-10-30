@@ -24,15 +24,17 @@ const Theme: FC<Props> = ({ children }) => {
 };
 
 const Urql: FC<Props> = ({ children }) => {
-  const { currentChainId } = useRouteNetwork();
+  const { currentChain } = useRouteNetwork();
 
   const client = useMemo(() => {
     const supportedChain = suportedChains.find(
-      ({ definition }) => definition.id == currentChainId
+      ({ definition }) => definition.id == currentChain.id
     );
-    if (!supportedChain) return redirect(ROUTES.EXPLORER.ROOT(1));
+    if (!supportedChain) return;
     return getUrqlClient(supportedChain);
-  }, [currentChainId]);
+  }, [currentChain.id]);
+
+  if (!client) return <></>;
 
   return <Provider value={client}>{children}</Provider>;
 };

@@ -22,7 +22,7 @@ import { useFormatter, useNow } from "next-intl";
 import Skeleton from "./skeleton";
 import Info from "@/components/info";
 import { useFavorites } from "@/providers/favorites";
-import Empty from "./empty";
+import Empty from "../empty";
 import { useEntities } from "@/providers/entities";
 
 interface Props extends ComponentProps<typeof Card> {
@@ -175,7 +175,12 @@ const AccessManagerMember: FC<Props> = ({
           </Flex>
         </Flex>
       ) : (
-        <Empty />
+        <Empty
+          callout={{
+            text: (clientChain) =>
+              `Role Member contract not found for ${clientChain.name} (${clientChain.id}).`,
+          }}
+        />
       )}
     </Account>
   );

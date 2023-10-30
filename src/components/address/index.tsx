@@ -4,7 +4,6 @@ import { useTheme } from "next-themes";
 import { useNetwork } from "wagmi";
 import { join } from "path";
 import { Flex, IconButton } from "@radix-ui/themes";
-import { usePathname } from "next/navigation";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { useEntities } from "@/providers/entities";
 import { EntityInstance } from "@/providers/entities/provider";
@@ -45,13 +44,16 @@ const Address: FC<Props> = ({ onDetail, addreth, hidePopup, ...props }) => {
   return (
     <Flex align="center" {...props}>
       <div ref={ref} style={{ display: "none" }}></div>
+
       <Addreth
         explorer={(address) => ({
           name: chain?.blockExplorers?.default.name ?? "Explorer",
-          accountUrl: new URL(
-            join("address", address),
-            chain?.blockExplorers?.default.url ?? ""
-          ).href,
+          accountUrl: chain?.blockExplorers
+            ? new URL(
+                join("address", address),
+                chain?.blockExplorers?.default.url
+              ).href
+            : "",
         })}
         {...addreth}
         theme={{

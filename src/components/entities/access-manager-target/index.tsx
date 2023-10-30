@@ -29,7 +29,7 @@ import DelayedValue from "@/components/delayed-value";
 import Info from "@/components/info";
 
 import { useFavorites } from "@/providers/favorites";
-import Empty from "./empty";
+import Empty from "../empty";
 import { useEntities } from "@/providers/entities";
 
 interface Props extends ComponentProps<typeof Card> {
@@ -215,7 +215,12 @@ const AccessManagerTarget: FC<Props> = ({
             )}
           </Flex>
         ) : (
-          <Empty />
+          <Empty
+            callout={{
+              text: (clientChain) =>
+                `Manager Target contract not found for ${clientChain.name} (${clientChain.id}).`,
+            }}
+          />
         )}
       </Box>
     </Account>

@@ -45,6 +45,7 @@ const MemberOf: FC<Props> = ({ membership }) => {
           address: membership.manager.asAccount.id,
           shortenAddress: 6,
         }}
+        hidePopup
         p="1"
         mr="auto"
       />

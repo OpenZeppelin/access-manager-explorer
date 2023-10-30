@@ -10,7 +10,7 @@ import { AddressEntity } from "@/types";
 import Address from "@/components/address";
 import { ACCESS_MANAGED_QUERY } from "./requests";
 import { useFavorites } from "@/providers/favorites";
-import Empty from "./empty";
+import Empty from "../empty";
 import { useEntities } from "@/providers/entities";
 
 interface Props extends ComponentProps<typeof Card> {
@@ -117,7 +117,12 @@ const AccessManaged: FC<Props> = ({
             ))}
           </Flex>
         ) : (
-          <Empty />
+          <Empty
+            callout={{
+              text: (clientChain) =>
+                `Access Managed contract not found for ${clientChain.name} (${clientChain.id}).`,
+            }}
+          />
         )}
       </Box>
     </Account>

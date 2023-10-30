@@ -25,7 +25,6 @@ import { makeFragmentData } from "@/gql";
 import { ACCESS_MANAGER_ROLE_FRAGMENT } from "../role/requests";
 import Selector from "../function";
 import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "../function/requests";
-import { useRouteNetwork } from "@/providers/route-network";
 import { EntityInstance } from "@/providers/entities/provider";
 import { useEntities } from "@/providers/entities";
 
@@ -37,7 +36,6 @@ const Sidebar: FC<Props> = (props) => {
   const [open, setOpen] = useState(true);
   const { address, isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
-  const { currentChainId } = useRouteNetwork();
   const entities = useEntities();
 
   const [{ data, fetching }] = useQuery({

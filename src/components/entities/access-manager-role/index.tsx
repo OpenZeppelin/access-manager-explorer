@@ -26,7 +26,7 @@ import { makeFragmentData, useFragment as asFragment } from "@/gql";
 import { ACCESS_MANAGER_ROLE_FRAGMENT } from "@/components/role/requests";
 import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "@/components/function/requests";
 import { useFavorites } from "@/providers/favorites";
-import Empty from "./empty";
+import Empty from "../empty";
 import { useEntities } from "@/providers/entities";
 
 interface Props extends ComponentProps<typeof Card> {
@@ -278,7 +278,12 @@ const AccessManagerRole: FC<Props> = ({
             )}
           </Flex>
         ) : (
-          <Empty />
+          <Empty
+            callout={{
+              text: (clientChain) =>
+                `Manager Role not found ${clientChain.name} (${clientChain.id}).`,
+            }}
+          />
         )}
       </Box>
     </Role>
