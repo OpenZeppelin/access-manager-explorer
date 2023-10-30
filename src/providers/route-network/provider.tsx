@@ -1,8 +1,15 @@
 "use client";
-import { createContext, ReactNode, FC, useEffect, useMemo } from "react";
+import {
+  createContext,
+  ReactNode,
+  FC,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
 import { SupportedChainDefinition, SupportedChainId } from "@/types";
 import { useNetwork } from "wagmi";
-import { watchNetwork } from "wagmi/actions";
+import { WatchNetworkCallback, watchNetwork } from "wagmi/actions";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { chains } from "@/config/chains";
 import { Chain } from "viem/chains";
@@ -42,16 +49,19 @@ const RouteNetworkProvider: FC<Props> = ({
     [routeChainId]
   );
 
-  useEffect(() => {
-    watchNetwork(({ chain }) => {
+  const watchNetworkCallback: WatchNetworkCallback = useCallback(
+    ({ chain }) => {
       const [_, network, chainId, ...items] = pathname.split("/");
       replace(
         `${[_, network, chain?.id.toString() ?? chainId, ...items].join(
           "/"
         )}?${searchParams}`
       );
-    });
-  }, [pathname, replace]);
+    },
+    [pathname, replace]
+  );
+
+  useEffect(() => watchNetwork(watchNetworkCallback), [watchNetworkCallback]);
 
   return (
     <routeNetworkContext.Provider
