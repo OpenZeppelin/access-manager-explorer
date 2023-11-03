@@ -2,8 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: Silka;
+  font-weight: 400;
+  src: url("./fonts/silka-regular-webfont.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: Silka;
+  font-weight: 600;
+  src: url("./fonts/silka-medium-webfont.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: Silka;
+  font-weight: 700;
+  src: url("./fonts/silka-bold-webfont.woff2") format("woff2");
+}
+
 .radix-themes {
-  --default-font-family: var(--font-inter);
+  --default-font-family: var(--font-silka) !important;
 }
 
 input:focus {
