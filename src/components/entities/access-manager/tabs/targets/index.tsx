@@ -6,9 +6,10 @@ import { FC } from "react";
 
 interface Props {
   targets: any[];
+  depth: number;
 }
 
-const Targets: FC<Props> = ({ targets }) => {
+const Targets: FC<Props> = ({ targets, depth }) => {
   return (
     <>
       {!targets.length ? (
@@ -29,8 +30,11 @@ const Targets: FC<Props> = ({ targets }) => {
                   shortenAddress: false,
                 }}
                 onDetail={{
-                  type: AddressEntity.AccessManagerTarget,
-                  id,
+                  entity: {
+                    type: AddressEntity.AccessManagerTarget,
+                    id,
+                  },
+                  at: depth,
                 }}
               />
             </Card>

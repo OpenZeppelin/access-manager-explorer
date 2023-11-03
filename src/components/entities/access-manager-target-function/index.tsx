@@ -45,7 +45,7 @@ const AccessManagerTargetFunction: FC<Props> = ({
     },
   });
 
-  const { remove } = useEntities();
+  const { splice } = useEntities();
 
   const selector = useMemo(() => id.split("/").reverse()[0], [id]);
 
@@ -88,7 +88,7 @@ const AccessManagerTargetFunction: FC<Props> = ({
           selector
         ),
       }}
-      remove={() => remove(depth)}
+      remove={() => splice(depth, 1)}
       entityType={Entity.AccessManagerTargetFunction}
       description="A permissioned function defined by an AccessManager"
       method={method}
@@ -120,8 +120,11 @@ const AccessManagerTargetFunction: FC<Props> = ({
                     address: accessManagedTargetFunction.manager.asAccount.id,
                   }}
                   onDetail={{
-                    type: AddressEntity.AccessManager,
-                    id: accessManagedTargetFunction.manager.asAccount.id,
+                    entity: {
+                      type: AddressEntity.AccessManager,
+                      id: accessManagedTargetFunction.manager.asAccount.id,
+                    },
+                    at: depth,
                   }}
                 />
               )}
@@ -136,8 +139,11 @@ const AccessManagerTargetFunction: FC<Props> = ({
                     address: accessManagedTargetFunction.target.asAccount.id,
                   }}
                   onDetail={{
-                    type: AddressEntity.AccessManagerTarget,
-                    id: accessManagedTargetFunction.target.asAccount.id,
+                    entity: {
+                      type: AddressEntity.AccessManagerTarget,
+                      id: accessManagedTargetFunction.target.id,
+                    },
+                    at: depth,
                   }}
                 />
               )}
@@ -156,7 +162,11 @@ const AccessManagerTargetFunction: FC<Props> = ({
                 <Role
                   size="2"
                   accessManagerRole={accessManagedTargetFunction.role}
-                  icons={{ navigate: true }}
+                  icons={{
+                    navigate: {
+                      at: depth,
+                    },
+                  }}
                 />
               )}
             </Flex>

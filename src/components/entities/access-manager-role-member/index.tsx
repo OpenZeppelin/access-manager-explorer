@@ -47,7 +47,7 @@ const AccessManagerMember: FC<Props> = ({
     },
   });
 
-  const { remove } = useEntities();
+  const { splice } = useEntities();
 
   const format = useFormatter();
   const now = useNow();
@@ -89,7 +89,7 @@ const AccessManagerMember: FC<Props> = ({
       entityType={AddressEntity.AccessManagerRoleMember}
       description="A member represents the access level an address has under an AccessManager."
       address={address as AddressType}
-      remove={() => remove(depth)}
+      remove={() => splice(depth, 1)}
       className={className}
       shortenAddress={shortenAddress}
       isLast={isLast}
@@ -117,8 +117,11 @@ const AccessManagerMember: FC<Props> = ({
                 address: accessManagerRoleMember?.manager.asAccount.id,
               }}
               onDetail={{
-                type: AddressEntity.AccessManager,
-                id: accessManagerRoleMember?.manager.asAccount.id,
+                entity: {
+                  type: AddressEntity.AccessManager,
+                  id: accessManagerRoleMember?.manager.asAccount.id,
+                },
+                at: depth,
               }}
             />
           </Flex>
@@ -129,7 +132,7 @@ const AccessManagerMember: FC<Props> = ({
               <Role
                 size="2"
                 accessManagerRole={accessManagerRoleMember?.role}
-                icons={{ navigate: true }}
+                icons={{ navigate: { at: depth } }}
               />
             )}
           </Flex>

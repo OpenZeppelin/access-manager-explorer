@@ -49,7 +49,7 @@ const AccessManagerRole: FC<Props> = ({
     },
   });
 
-  const { remove } = useEntities();
+  const { splice } = useEntities();
   const roleId = useMemo(() => id.split("/").reverse()[0], [id]);
 
   const accessManagerRole = data?.accessManagerRole;
@@ -86,7 +86,7 @@ const AccessManagerRole: FC<Props> = ({
         },
         isFavorite: favorites.isFavorite(Entity.AccessManagerRole, roleId),
       }}
-      remove={() => remove(depth)}
+      remove={() => splice(depth, 1)}
       entityType={Entity.AccessManagerRole}
       description="A role is allowed to call functions by an AccessManager"
       accessManagerRole={role}
@@ -117,8 +117,11 @@ const AccessManagerRole: FC<Props> = ({
                   shortenAddress: 10,
                 }}
                 onDetail={{
-                  type: AddressEntity.AccessManager,
-                  id: accessManagerRole?.manager.asAccount.id,
+                  entity: {
+                    type: AddressEntity.AccessManager,
+                    id: accessManagerRole?.manager.asAccount.id,
+                  },
+                  at: depth,
                 }}
               />
             </Flex>
@@ -155,7 +158,11 @@ const AccessManagerRole: FC<Props> = ({
                 <RoleBadge
                   size="2"
                   accessManagerRole={accessManagerRole.admin}
-                  icons={{ navigate: true }}
+                  icons={{
+                    navigate: {
+                      at: depth,
+                    },
+                  }}
                 />
               )}
             </Flex>
@@ -174,7 +181,11 @@ const AccessManagerRole: FC<Props> = ({
                 <RoleBadge
                   size="2"
                   accessManagerRole={accessManagerRole.guardian}
-                  icons={{ navigate: true }}
+                  icons={{
+                    navigate: {
+                      at: depth,
+                    },
+                  }}
                 />
               )}
             </Flex>
@@ -189,7 +200,11 @@ const AccessManagerRole: FC<Props> = ({
                     <RoleBadge
                       key={asFragment(ACCESS_MANAGER_ROLE_FRAGMENT, role).id}
                       size="2"
-                      icons={{ navigate: true }}
+                      icons={{
+                        navigate: {
+                          at: depth,
+                        },
+                      }}
                       accessManagerRole={role}
                     />
                   ))}
@@ -206,7 +221,11 @@ const AccessManagerRole: FC<Props> = ({
                     <RoleBadge
                       key={asFragment(ACCESS_MANAGER_ROLE_FRAGMENT, role).id}
                       size="2"
-                      icons={{ navigate: true }}
+                      icons={{
+                        navigate: {
+                          at: depth,
+                        },
+                      }}
                       accessManagerRole={role}
                     />
                   ))}
@@ -227,8 +246,11 @@ const AccessManagerRole: FC<Props> = ({
                           address: asAccount.id,
                         }}
                         onDetail={{
-                          type: AddressEntity.AccessManagerRoleMember,
-                          id,
+                          entity: {
+                            type: AddressEntity.AccessManagerRoleMember,
+                            id,
+                          },
+                          at: depth,
                         }}
                       />
                     </Card>
@@ -260,8 +282,11 @@ const AccessManagerRole: FC<Props> = ({
                       method={method}
                       icons={{
                         onDetail: {
-                          type: Entity.AccessManagerTargetFunction,
-                          id,
+                          entity: {
+                            type: Entity.AccessManagerTargetFunction,
+                            id,
+                          },
+                          at: depth,
                         },
                       }}
                     />

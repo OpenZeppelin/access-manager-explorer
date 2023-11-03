@@ -54,7 +54,7 @@ const AccessManagerTarget: FC<Props> = ({
     },
   });
 
-  const { remove } = useEntities();
+  const { splice } = useEntities();
 
   const address = useMemo(() => id.split("/").reverse()[0], [id]);
 
@@ -90,7 +90,7 @@ const AccessManagerTarget: FC<Props> = ({
           address
         ),
       }}
-      remove={() => remove(depth)}
+      remove={() => splice(depth, 1)}
       entityType={AddressEntity.AccessManagerTarget}
       description="An address targetted by an AccessManager"
       address={address as AddressType}
@@ -123,8 +123,11 @@ const AccessManagerTarget: FC<Props> = ({
                     address: accessManagerTarget.manager.asAccount.id,
                   }}
                   onDetail={{
-                    type: AddressEntity.AccessManager,
-                    id: accessManagerTarget.manager.asAccount.id,
+                    entity: {
+                      type: AddressEntity.AccessManager,
+                      id: accessManagerTarget.manager.asAccount.id,
+                    },
+                    at: depth,
                   }}
                 />
               )}
@@ -176,10 +179,13 @@ const AccessManagerTarget: FC<Props> = ({
                 mt="4"
                 color="gray"
                 onClick={() =>
-                  entities.push({
-                    type: AddressEntity.AccessManaged,
-                    id: accessManagerTarget?.asAccount.asAccessManaged?.id,
-                  })
+                  entities.push(
+                    {
+                      type: AddressEntity.AccessManaged,
+                      id: accessManagerTarget?.asAccount.asAccessManaged?.id,
+                    },
+                    depth
+                  )
                 }
               >
                 See as AccessManaged <ArrowRightIcon />
@@ -198,8 +204,11 @@ const AccessManagerTarget: FC<Props> = ({
                     method={method}
                     icons={{
                       onDetail: {
-                        type: Entity.AccessManagerTargetFunction,
-                        id: method.id,
+                        entity: {
+                          type: Entity.AccessManagerTargetFunction,
+                          id: method.id,
+                        },
+                        at: depth,
                       },
                     }}
                   />

@@ -2,7 +2,6 @@ import { Badge, Code, IconButton, Separator, Text } from "@radix-ui/themes";
 import { ComponentProps, FC } from "react";
 import Info from "../info";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
-import { usePathname } from "next/navigation";
 import {
   FragmentType,
   useFragment as asFragment,
@@ -19,7 +18,7 @@ interface IconProps extends ComponentProps<typeof Info> {}
 
 interface IconProps {
   unlabelled?: boolean | IconProps;
-  navigate?: boolean | IconProps;
+  navigate?: IconProps & { at: number };
 }
 
 interface Props extends Omit<ComponentProps<typeof Badge>, "role"> {
@@ -32,8 +31,9 @@ const Role: FC<Props> = ({ accessManagerRole, icons, ...props }) => {
   const isLabel = typeof role.label !== "undefined";
   if (isLabel && !role.label && role.asRole.id == "0") role.label = "ADMIN";
 
-  const pathname = usePathname();
   const entities = useEntities();
+
+  const navigateAt = icons?.navigate?.at;
 
   return (
     <Badge color={role.label ? "blue" : "gray"} {...props}>
@@ -60,20 +60,23 @@ const Role: FC<Props> = ({ accessManagerRole, icons, ...props }) => {
           )}
         </>
       )}
-      {icons?.navigate && (
+      {navigateAt !== undefined ? (
         <IconButton
           variant="ghost"
           color="gray"
           ml="auto"
           size="1"
-          {...(icons.navigate == true ? undefined : { ...icons.navigate })}
+          {...icons?.navigate}
           onClick={() =>
-            entities.push({ type: Entity.AccessManagerRole, id: role.id })
+            entities.push(
+              { type: Entity.AccessManagerRole, id: role.id },
+              navigateAt
+            )
           }
         >
           <ArrowRightIcon />
         </IconButton>
-      )}
+      ) : undefined}
     </Badge>
   );
 };

@@ -79,9 +79,8 @@ const Search: FC<Props> = (props) => {
     setOpen(isInputAddress && isData);
   }, [isData, data, isInputAddress, address]);
 
-  const clearAndSet = (entity: EntityInstance) => {
-    entities.clear();
-    entities.push(entity);
+  const clearAndReset = (entity: EntityInstance) => {
+    entities.clearAndPush(entity);
     setAddress("");
   };
 
@@ -117,7 +116,7 @@ const Search: FC<Props> = (props) => {
           {isManager && (
             <DropdownMenu.Item
               onClick={() =>
-                clearAndSet({
+                clearAndReset({
                   type: AddressEntity.AccessManager,
                   id: data?.account?.asAccessManager?.id,
                 })
@@ -140,7 +139,7 @@ const Search: FC<Props> = (props) => {
             <DropdownMenu.Item
               id={data?.account?.asAccessManaged?.id}
               onClick={() =>
-                clearAndSet({
+                clearAndReset({
                   type: AddressEntity.AccessManaged,
                   id: data?.account?.asAccessManaged?.id,
                 })
@@ -174,7 +173,7 @@ const Search: FC<Props> = (props) => {
                     <DropdownMenu.Item
                       key={membership.id}
                       onClick={() =>
-                        clearAndSet({
+                        clearAndReset({
                           type: AddressEntity.AccessManagerRoleMember,
                           id: membership.id,
                         })
@@ -219,7 +218,7 @@ const Search: FC<Props> = (props) => {
                   <DropdownMenu.Item
                     key={targettedBy.id}
                     onClick={() =>
-                      clearAndSet({
+                      clearAndReset({
                         type: AddressEntity.AccessManagerTarget,
                         id: targettedBy.id,
                       })

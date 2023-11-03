@@ -1,8 +1,5 @@
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { Code, Flex, IconButton } from "@radix-ui/themes";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { join } from "path";
 import { ComponentProps, FC } from "react";
 import { ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT } from "./requests";
 import { FragmentType, useFragment as asFragment } from "@/gql";
@@ -14,7 +11,10 @@ import { useEntities } from "@/providers/entities";
 type IconButtonProps = ComponentProps<typeof IconButton>;
 
 interface IconProps {
-  onDetail?: Omit<IconButtonProps, "type"> & EntityInstance;
+  onDetail?: {
+    entity: Omit<IconButtonProps, "type"> & EntityInstance;
+    at: number;
+  };
 }
 
 interface Props extends ComponentProps<typeof Code> {
@@ -30,18 +30,15 @@ const ellipsis = {
 
 const Selector: FC<Props> = ({ method: fn, icons, ...props }) => {
   const method = asFragment(ACCESS_MANAGER_TARGET_FUNCTION_FRAGMENT, fn);
-  const pathname = usePathname();
   const { functionWithFallback } = useSignatures({
     function: [method.asSelector.id] as Hex[],
   });
   const entities = useEntities();
 
   const onDetailClick = () => {
-    if (icons?.onDetail?.type && icons?.onDetail?.id) {
-      entities.push({
-        type: icons.onDetail.type,
-        id: icons.onDetail.id,
-      });
+    if (icons?.onDetail) {
+      const { entity, at } = icons.onDetail;
+      entities.push(entity, at);
     }
   };
 

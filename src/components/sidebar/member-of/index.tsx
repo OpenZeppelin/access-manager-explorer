@@ -32,8 +32,7 @@ const MemberOf: FC<Props> = ({ membership }) => {
       color="gray"
       className="w-full"
       onClick={() => {
-        entities.clear();
-        entities.push({
+        entities.clearAndPush({
           type: AddressEntity.AccessManagerRoleMember,
           id: membership.id,
         });

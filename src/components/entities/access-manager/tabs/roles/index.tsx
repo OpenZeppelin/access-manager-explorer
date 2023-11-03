@@ -7,9 +7,10 @@ import { FC } from "react";
 
 interface Props {
   roles: FragmentType<typeof ACCESS_MANAGER_ROLE_FRAGMENT>[];
+  depth: number;
 }
 
-const Roles: FC<Props> = ({ roles: fragments }) => {
+const Roles: FC<Props> = ({ roles: fragments, depth }) => {
   const roles = fragments.map((role) =>
     asFragment(ACCESS_MANAGER_ROLE_FRAGMENT, role)
   );
@@ -30,7 +31,12 @@ const Roles: FC<Props> = ({ roles: fragments }) => {
               key={role.id}
               className="w-full"
               size="2"
-              icons={{ unlabelled: true, navigate: true }}
+              icons={{
+                unlabelled: true,
+                navigate: {
+                  at: depth,
+                },
+              }}
               accessManagerRole={fragments[i]}
             />
           ))}

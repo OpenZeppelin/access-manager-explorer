@@ -35,7 +35,7 @@ const AccessManaged: FC<Props> = ({
     },
   });
 
-  const { remove } = useEntities();
+  const { splice } = useEntities();
 
   const accessManaged = data?.accessManaged;
 
@@ -59,7 +59,7 @@ const AccessManaged: FC<Props> = ({
         },
         isFavorite: favorites.isFavorite(AddressEntity.AccessManaged, address),
       }}
-      remove={() => remove(depth)}
+      remove={() => splice(depth, 1)}
       entityType={AddressEntity.AccessManaged}
       description="An contract that inherits from AccessManaged and obeys to an authority."
       address={address}
@@ -91,8 +91,11 @@ const AccessManaged: FC<Props> = ({
                   address: accessManaged?.authority.id,
                 }}
                 onDetail={{
-                  type: AddressEntity.AccessManager,
-                  id: accessManaged?.authority.asAccessManager?.id,
+                  entity: {
+                    type: AddressEntity.AccessManager,
+                    id: accessManaged?.authority.asAccessManager?.id,
+                  },
+                  at: depth,
                 }}
               />
             </Flex>
@@ -109,8 +112,11 @@ const AccessManaged: FC<Props> = ({
                     address: target.manager.asAccount.id,
                   }}
                   onDetail={{
-                    type: AddressEntity.AccessManager,
-                    id: target.manager.asAccount.id,
+                    entity: {
+                      type: AddressEntity.AccessManager,
+                      id: target.manager.asAccount.id,
+                    },
+                    at: depth,
                   }}
                 />
               </Card>

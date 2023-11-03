@@ -12,7 +12,10 @@ type IconButtonProps = ComponentProps<typeof IconButton>;
 
 interface Props extends ComponentProps<typeof Flex> {
   addreth: ComponentProps<typeof Addreth>;
-  onDetail?: Omit<IconButtonProps, "type"> & EntityInstance;
+  onDetail?: {
+    entity: Omit<IconButtonProps, "type"> & EntityInstance;
+    at: number;
+  };
   hidePopup?: boolean;
 }
 
@@ -26,11 +29,9 @@ const Address: FC<Props> = ({ onDetail, addreth, hidePopup, ...props }) => {
   const [isSSR, setIsSSR] = useState(true);
 
   const onDetailClick = () => {
-    if (onDetail?.type && onDetail?.id) {
-      entities.push({
-        type: onDetail.type,
-        id: onDetail.id,
-      });
+    if (onDetail) {
+      const { entity, at } = onDetail;
+      entities.push(entity, at);
     }
   };
 

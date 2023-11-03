@@ -77,11 +77,6 @@ const Sidebar: FC<Props> = (props) => {
   //   [getFavorites]
   // );
 
-  const clearAndSet = (entity: EntityInstance) => {
-    entities.clear();
-    entities.push(entity);
-  };
-
   return (
     <Card
       className={cn("no-radius flex border-r w-80", props.className)}
@@ -153,19 +148,6 @@ const Sidebar: FC<Props> = (props) => {
               <Text size="2" color="gray">
                 No membership found 🤷🏻‍♂️
               </Text>
-              <Separator my="3" size="4" />
-              <Button
-                variant="surface"
-                size="1"
-                onClick={() =>
-                  clearAndSet({
-                    type: AddressEntity.AccessManager,
-                    id: DEMO_MANAGER,
-                  })
-                }
-              >
-                Try the demo manager <ArrowRightIcon className="ml-2" />
-              </Button>
             </Flex>
           ) : (
             <Heading size="1" ml="4" mb="1">
@@ -190,7 +172,7 @@ const Sidebar: FC<Props> = (props) => {
               color="gray"
               className="w-full"
               onClick={() =>
-                clearAndSet({
+                entities.clearAndPush({
                   type: AddressEntity.AccessManager,
                   id,
                 })
@@ -223,7 +205,7 @@ const Sidebar: FC<Props> = (props) => {
               color="gray"
               className="w-full"
               onClick={() =>
-                clearAndSet({
+                entities.clearAndPush({
                   type: AddressEntity.AccessManaged,
                   id,
                 })
@@ -258,7 +240,7 @@ const Sidebar: FC<Props> = (props) => {
                 color="gray"
                 className="w-full"
                 onClick={() =>
-                  clearAndSet({
+                  entities.clearAndPush({
                     type: Entity.AccessManagerRole,
                     id,
                   })
@@ -307,7 +289,7 @@ const Sidebar: FC<Props> = (props) => {
                 color="gray"
                 className="w-full"
                 onClick={() =>
-                  clearAndSet({
+                  entities.clearAndPush({
                     type: AddressEntity.AccessManagerRoleMember,
                     id,
                   })
@@ -366,7 +348,7 @@ const Sidebar: FC<Props> = (props) => {
                 color="gray"
                 className="w-full"
                 onClick={() =>
-                  clearAndSet({
+                  entities.clearAndPush({
                     type: AddressEntity.AccessManagerTarget,
                     id,
                   })
@@ -402,7 +384,7 @@ const Sidebar: FC<Props> = (props) => {
                 color="gray"
                 className="w-full"
                 onClick={() =>
-                  clearAndSet({
+                  entities.clearAndPush({
                     type: Entity.AccessManagerTargetFunction,
                     id,
                   })
@@ -437,6 +419,20 @@ const Sidebar: FC<Props> = (props) => {
           }}
         />
       )}
+      <Button
+        mt="4"
+        variant="surface"
+        size="1"
+        className="w-full"
+        onClick={() =>
+          entities.clearAndPush({
+            type: AddressEntity.AccessManager,
+            id: DEMO_MANAGER,
+          })
+        }
+      >
+        Try the demo manager <ArrowRightIcon className="ml-2" />
+      </Button>
     </Card>
   );
 };

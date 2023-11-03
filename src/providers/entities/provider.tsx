@@ -14,16 +14,17 @@ export interface EntityInstance {
 
 interface Context {
   entities: EntityInstance[];
-  push: (entry: EntityInstance) => void;
-  remove: (at: number) => void;
-  clear: () => void;
+  push: (entry: EntityInstance, at: number) => void;
+  splice(start: number, deleteCount: number, ...items: string[]): void;
+  splice(start: number, deleteCount?: number): void;
+  clearAndPush: (entry: EntityInstance) => void;
 }
 
 const defaultContext: Context = {
   entities: [],
   push: () => {},
-  remove: () => {},
-  clear: () => {},
+  splice: () => {},
+  clearAndPush: () => {},
 };
 
 const entitiesContext = createContext<Context>(defaultContext);
@@ -97,42 +98,39 @@ const EntitiesProvider: FC<Props> = ({ children }) => {
   const pathname = usePathname();
   const { push: pushRoute } = useRouter();
 
-  const push = (entity: EntityInstance) => {
-    const params = new URLSearchParams(searchParams);
-    params.append(SEARCH_PARAMS_KEY, toUrlSafeId(entity));
-    pushRoute(`${pathname}?${params.toString()}`);
-  };
-
-  const remove = (at: number) => {
-    const params = new URLSearchParams(searchParams);
-    const entityUrlSafeIds = searchParams.getAll(SEARCH_PARAMS_KEY);
-    params.delete(SEARCH_PARAMS_KEY);
-    entityUrlSafeIds.splice(at, 1);
-    for (const id of entityUrlSafeIds) {
-      params.append(SEARCH_PARAMS_KEY, id);
-    }
-    pushRoute(`${pathname}?${params.toString()}`);
-  };
-
-  const clear = () => {
-    const params = new URLSearchParams(searchParams);
-    params.delete(SEARCH_PARAMS_KEY);
-    pushRoute(`${pathname}?${params.toString()}`);
-  };
-
   const entities = useMemo(() => {
     const params = new URLSearchParams(searchParams);
     const entityUrlSafeIds = params.getAll(SEARCH_PARAMS_KEY);
     return entityUrlSafeIds.map((id) => fromUrlSafeId(id as URLSafeId));
   }, [searchParams]);
 
+  const push = (entity: EntityInstance, at?: number) => {
+    if (at) splice(at + 1, entities.length - at + 1, toUrlSafeId(entity));
+    else splice(entities.length, 0 + 1, toUrlSafeId(entity));
+  };
+
+  const splice = (start: number, deleteCount?: number, ...items: string[]) => {
+    const params = new URLSearchParams(searchParams);
+    const entityUrlSafeIds = searchParams.getAll(SEARCH_PARAMS_KEY);
+    params.delete(SEARCH_PARAMS_KEY);
+    if (deleteCount) entityUrlSafeIds.splice(start, deleteCount, ...items);
+    else entityUrlSafeIds.splice(start);
+    for (const id of entityUrlSafeIds) {
+      params.append(SEARCH_PARAMS_KEY, id);
+    }
+    pushRoute(`${pathname}?${params.toString()}`);
+  };
+
+  const clearAndPush = (entity: EntityInstance) =>
+    splice(0, entities.length + 1, toUrlSafeId(entity));
+
   return (
     <entitiesContext.Provider
       value={{
         entities,
         push,
-        remove,
-        clear,
+        splice,
+        clearAndPush,
       }}
     >
       {children}

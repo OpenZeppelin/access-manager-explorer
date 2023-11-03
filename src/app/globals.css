@@ -21,6 +21,7 @@ input:focus {
 .no-radius,
 .no-radius::after {
   border-radius: 0 !important;
+  border: 0 !important;
 }
 
 .card-inner-overflow-y-scroll > .rt-CardInner {

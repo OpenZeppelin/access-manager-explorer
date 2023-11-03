@@ -1,5 +1,5 @@
 "use client";
-import { Box, Card, Callout, Tabs, Button } from "@radix-ui/themes";
+import { Box, Card, Callout, Tabs } from "@radix-ui/themes";
 import { ComponentProps, FC } from "react";
 import { Address as AddressType } from "viem";
 import { useQuery } from "urql";
@@ -39,7 +39,7 @@ const AccessManager: FC<Props> = ({
     },
   });
 
-  const { remove } = useEntities();
+  const { splice } = useEntities();
 
   const accessManager = data?.accessManager;
 
@@ -63,7 +63,7 @@ const AccessManager: FC<Props> = ({
         },
         isFavorite: favorites.isFavorite(AddressEntity.AccessManager, address),
       }}
-      remove={() => remove(depth)}
+      remove={() => splice(depth, 1)}
       entityType={AddressEntity.AccessManager}
       description="An AccessManager is a contract that keeps the permissions of a system"
       address={address}
@@ -96,13 +96,19 @@ const AccessManager: FC<Props> = ({
               </Tabs.List>
               <Box pt="4" pb="2">
                 <Tabs.Content value="targets">
-                  <Targets targets={accessManager?.targets ?? []} />
+                  <Targets
+                    targets={accessManager?.targets ?? []}
+                    depth={depth}
+                  />
                 </Tabs.Content>
                 <Tabs.Content value="roles">
-                  <Roles roles={accessManager?.roles ?? []} />
+                  <Roles roles={accessManager?.roles ?? []} depth={depth} />
                 </Tabs.Content>
                 <Tabs.Content value="members">
-                  <Members members={accessManager?.members ?? []} />
+                  <Members
+                    members={accessManager?.members ?? []}
+                    depth={depth}
+                  />
                 </Tabs.Content>
                 {/* <Tabs.Content value="operations">
                   <Operations operations={accessManager?.operations} />

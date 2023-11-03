@@ -37,18 +37,20 @@ const Navbar: FC<{}> = () => {
                 </Text>
               </Text>
             </Link>
-            <Flex>
+            <Flex grow="1">
               <Search
                 ml="4"
                 size="2"
                 variant="soft"
                 color="gray"
                 radius="full"
+                className="flex-grow"
+                style={{
+                  maxWidth: 400,
+                }}
                 input={{
                   placeholder: "Search address...",
-                  style: {
-                    width: 400,
-                  },
+                  className: "flex-grow",
                 }}
               />
             </Flex>
