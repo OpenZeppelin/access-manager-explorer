@@ -8,6 +8,9 @@ import Address from "@/components/address";
 
 type ButtonProps = ComponentProps<typeof Button>;
 type BoxProps = ComponentProps<typeof Box>;
+type AddressProps = ComponentProps<typeof Address>;
+type AddrethProps = Pick<Partial<AddressProps["addreth"]>, "address"> &
+  Omit<AddressProps["addreth"], "address">;
 
 type StateProps = {
   /**
@@ -26,6 +29,9 @@ type StateProps = {
     chain?: Partial<ButtonProps>;
     // Account button
     account?: Partial<ButtonProps>;
+    address?: Omit<AddressProps, "addreth"> & {
+      addreth: AddrethProps;
+    };
   };
 };
 
@@ -98,10 +104,13 @@ const Inner: FC<Props> = ({
             </Button>
             <Button onClick={openAccountModal} {...states?.connected?.account}>
               <Address
+                {...states?.connected?.address}
                 addreth={{
                   actions: "none",
                   address: account.address as AddressType,
+                  ...states?.connected?.address?.addreth,
                 }}
+                hidePopup
               />
               <Text size="1" className="whitespace-nowrap">
                 {account.displayBalance ? ` (${account.displayBalance})` : ""}

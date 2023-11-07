@@ -1,28 +1,66 @@
+"use client";
+import useAccount from "@/hooks/use-account";
 import useDeploy from "@/hooks/use-deploy";
 import { Button, Dialog, Flex, Text, TextField } from "@radix-ui/themes";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
-import { ComponentProps, FC, useMemo, useState } from "react";
+import { ComponentProps, FC, useEffect, useMemo, useState } from "react";
 import { Address, isAddress } from "viem";
-import { useAccount } from "wagmi";
 
-interface Props extends ComponentProps<typeof Dialog.Root> {
-  open: boolean;
+interface ButtonProps extends ComponentProps<typeof Button> {
+  onToggleDialog: () => void;
 }
 
-const DeployManager: FC<Props> = ({ open, ...props }) => {
+const DeployManagerButton: FC<ButtonProps> = ({
+  onToggleDialog,
+  hidden,
+  ...props
+}) => {
+  return (
+    <Button
+      style={{
+        display: hidden ? "none" : undefined,
+      }}
+      {...props}
+      onClick={onToggleDialog}
+    />
+  );
+};
+
+interface DialogProps extends ComponentProps<typeof Dialog.Root> {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+const DeployManagerDialog: FC<DialogProps> = ({
+  open,
+  onOpenChange,
+  ...props
+}) => {
   const { address } = useAccount();
   const deploy = useDeploy(address);
   const addRecentTransaction = useAddRecentTransaction();
-  const [initialAdmin, setInitialAdmin] = useState(address);
+  const [initialAdmin, setInitialAdmin] = useState<Address>();
+  const [deploying, setDeploying] = useState(false);
+
+  useEffect(() => {
+    if (!initialAdmin && address) setInitialAdmin(address);
+  }, [address, initialAdmin]);
 
   const deployManager = async () => {
-    const hash = await deploy.manager(initialAdmin);
+    setDeploying(true);
+    try {
+      const hash = await deploy.manager(initialAdmin);
 
-    if (hash) {
-      addRecentTransaction({
-        hash,
-        description: "Deploy Manager",
-      });
+      if (hash) {
+        addRecentTransaction({
+          hash,
+          description: "Deploy Manager",
+        });
+      }
+    } catch {
+    } finally {
+      setDeploying(false);
+      onOpenChange(false);
     }
   };
 
@@ -32,7 +70,7 @@ const DeployManager: FC<Props> = ({ open, ...props }) => {
   );
 
   return (
-    <Dialog.Root open={open} {...props}>
+    <Dialog.Root open={open} onOpenChange={onOpenChange} {...props}>
       <Dialog.Content style={{ maxWidth: 450 }}>
         <Dialog.Title>Deploy an AccessManager</Dialog.Title>
 
@@ -57,15 +95,41 @@ const DeployManager: FC<Props> = ({ open, ...props }) => {
               Cancel
             </Button>
           </Dialog.Close>
-          <Dialog.Close>
-            <Button disabled={!isValidAddress} onClick={deployManager}>
-              Deploy
-            </Button>
-          </Dialog.Close>
+          <Button disabled={!isValidAddress} onClick={deployManager}>
+            {deploying ? "Deploying..." : "Deploy"}
+          </Button>
         </Flex>
       </Dialog.Content>
     </Dialog.Root>
   );
 };
+
+interface DeployManager
+  extends FC<
+    Pick<Partial<ButtonProps>, "onToggleDialog"> &
+      Omit<ButtonProps, "onToggleDialog">
+  > {
+  Button: FC<ButtonProps>;
+  Modal: FC<DialogProps>;
+}
+
+const DeployManager: DeployManager = ({ ...props }) => {
+  const [open, setOpen] = useState(false);
+  const { address } = useAccount();
+
+  return (
+    <>
+      <DeployManagerButton
+        hidden={!address}
+        onToggleDialog={() => setOpen(!open)}
+        {...props}
+      />
+      <DeployManagerDialog onOpenChange={setOpen} open={open} />
+    </>
+  );
+};
+
+DeployManager.Button = DeployManagerButton;
+DeployManager.Modal = DeployManagerDialog;
 
 export default DeployManager;

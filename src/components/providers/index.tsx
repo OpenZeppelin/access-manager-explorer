@@ -7,8 +7,6 @@ import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { chains } from "@/config/wallet";
 import { chains as suportedChains } from "@/config/chains";
 import { getUrqlClient } from "@/config/urql";
-import { redirect } from "next/navigation";
-import ROUTES from "@/config/routes";
 import { useRouteNetwork } from "@/providers/route-network";
 
 interface Props {
@@ -17,7 +15,12 @@ interface Props {
 
 const Theme: FC<Props> = ({ children }) => {
   return (
-    <ThemeProvider attribute="class">
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
       <Themes accentColor="blue">{children}</Themes>
     </ThemeProvider>
   );

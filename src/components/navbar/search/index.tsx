@@ -25,9 +25,10 @@ const { Root, Slot, Input } = TextField;
 
 interface Props extends ComponentProps<typeof Root> {
   input?: ComponentProps<typeof Input>;
+  onNavigate?: (entity: EntityInstance) => void;
 }
 
-const Search: FC<Props> = (props) => {
+const Search: FC<Props> = ({ input, onNavigate = () => {}, ...props }) => {
   const [address, setAddress] = useState("");
   const [debouncedAddress] = useDebounce(address, 300);
   const [open, setOpen] = useState(false);
@@ -82,6 +83,7 @@ const Search: FC<Props> = (props) => {
   const clearAndReset = (entity: EntityInstance) => {
     entities.clearAndPush(entity);
     setAddress("");
+    onNavigate(entity);
   };
 
   return (
@@ -98,7 +100,7 @@ const Search: FC<Props> = (props) => {
           <MagnifyingGlassIcon height="16" width="16" />
         </Slot>
         <Input
-          {...props.input}
+          {...input}
           onChange={(event) => setAddress(event.target.value)}
           value={address}
         />

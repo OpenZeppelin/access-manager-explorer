@@ -54,7 +54,7 @@ const Entity: FC<Props> = ({
       ref.current?.scrollIntoView({ behavior: "smooth" });
       setScrolled(true);
     }
-  }, [isLast]);
+  }, [isLast, scrolled]);
 
   return (
     <Card
@@ -68,7 +68,7 @@ const Entity: FC<Props> = ({
         <IconButton
           onClick={favorites.toggle}
           ml="4"
-          color="gray"
+          color="yellow"
           size="3"
           variant="ghost"
         >

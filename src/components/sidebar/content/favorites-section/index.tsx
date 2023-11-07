@@ -27,7 +27,7 @@ const FavoritesSection = <T extends Kind>({
       <Flex align="center" mb="1" mt="4">
         <Collapsible.Trigger>
           <Flex width="100%">
-            <Heading size="2" mr="2">
+            <Heading size="2" mr="2" weight="light">
               {name}
             </Heading>
             {!open ? (

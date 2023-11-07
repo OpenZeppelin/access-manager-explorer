@@ -65,10 +65,8 @@ type Props = { children: ReactNode };
 const RootLayout: FC<Props> = ({ children }) => {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body 
-      className={cn(silka.variable)} 
-      suppressHydrationWarning>
-        <main>
+      <body className={cn(silka.variable)} suppressHydrationWarning>
+        <main className="h-[100vh]">
           <WagmiConfig config={config}>
             <Theme>{children}</Theme>
           </WagmiConfig>

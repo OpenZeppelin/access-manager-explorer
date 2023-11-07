@@ -1,14 +1,12 @@
 import Link from "next/link";
-
-import { links } from "@/config/site";
 import Logo from "./logo";
-import { Box, Card, Flex, IconButton, Separator, Text } from "@radix-ui/themes";
-import { TwitterLogoIcon, GitHubLogoIcon } from "@radix-ui/react-icons";
-import ConnectButton from "../connect-button";
+import { Box, Card, Flex, Separator, Text } from "@radix-ui/themes";
 import Search from "./search";
-import ThemeIcon from "./theme-icon";
-import Menu from "./menu";
 import { FC } from "react";
+import ResponsiveMenu from "./responsive-menu";
+import ConnectButton from "../connect-button";
+import DeployManager from "../deploy/manager";
+import Social from "./social";
 
 const Navbar: FC<{}> = () => {
   return (
@@ -16,12 +14,12 @@ const Navbar: FC<{}> = () => {
       <Card asChild size="2" className="no-radius">
         <header>
           <Flex
-            align="center"
-            justify={{
-              sm: "between",
+            px={{
+              initial: "2",
+              sm: "4",
             }}
-            px="4"
             mx="0"
+            align="center"
           >
             <Link href="/" className="flex items-center">
               <Logo className="h-auto w-6" />
@@ -29,32 +27,40 @@ const Navbar: FC<{}> = () => {
                 ml="1"
                 as="span"
                 weight="bold"
-                className="sm:inline-block whitespace-nowrap"
+                className="whitespace-nowrap"
               >
                 OpenZeppelin{" "}
-                <Text as="span" weight="light">
+                <Text
+                  as="span"
+                  className="md:hidden xl:inline-block"
+                  weight="light"
+                >
                   | AccessManager
                 </Text>
               </Text>
             </Link>
-            <Flex grow="1">
+            <Box className="hidden md:flex flex-grow">
               <Search
-                ml="4"
+                mx={{
+                  sm: "4",
+                }}
+                mr="4"
                 size="2"
                 variant="soft"
                 color="gray"
                 radius="full"
-                className="flex-grow"
+                className="md:flex flex-grow"
                 style={{
-                  maxWidth: 400,
+                  maxWidth: 500,
                 }}
                 input={{
                   placeholder: "Search address...",
                   className: "flex-grow",
                 }}
               />
-            </Flex>
-            <Flex ml="auto" align="center" justify="end">
+            </Box>
+            <ResponsiveMenu ml="auto" />
+            <Box ml="auto" className="align-center justify-end hidden lg:flex">
               <Flex asChild align="center" mx="2">
                 <nav>
                   <ConnectButton
@@ -81,36 +87,14 @@ const Navbar: FC<{}> = () => {
                       },
                     }}
                   />
-                  <Menu />
+                  <DeployManager variant="soft" mr="2">
+                    Deploy
+                  </DeployManager>
                   <Separator orientation="vertical" mr="1" size="1" />
-                  <IconButton
-                    mx="2"
-                    size="3"
-                    variant="ghost"
-                    color="gray"
-                    asChild
-                  >
-                    <Link href={links.github} target="_blank" rel="noreferrer">
-                      <GitHubLogoIcon />
-                      <span className="sr-only">Github</span>
-                    </Link>
-                  </IconButton>
-                  <IconButton
-                    mx="2"
-                    size="3"
-                    variant="ghost"
-                    color="gray"
-                    asChild
-                  >
-                    <Link href={links.twitter} target="_blank" rel="noreferrer">
-                      <TwitterLogoIcon />
-                      <span className="sr-only">Twitter</span>
-                    </Link>
-                  </IconButton>
-                  <ThemeIcon mx="2" size="3" variant="ghost" color="gray" />
+                  <Social />
                 </nav>
               </Flex>
-            </Flex>
+            </Box>
           </Flex>
         </header>
       </Card>

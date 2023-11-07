@@ -1,9 +1,8 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAccount as defaultUseAccount } from "wagmi";
 
 const useAccount = (config?: Parameters<typeof defaultUseAccount>[0]) => {
-  const ref = useRef();
   const {
     address,
     connector,
