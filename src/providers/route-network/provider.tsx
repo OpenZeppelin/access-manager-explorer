@@ -58,7 +58,7 @@ const RouteNetworkProvider: FC<Props> = ({
         )}?${searchParams}`
       );
     },
-    [pathname, replace]
+    [pathname, replace, searchParams]
   );
 
   useEffect(() => watchNetwork(watchNetworkCallback), [watchNetworkCallback]);

@@ -70,8 +70,8 @@ const DelayedValue: FC<Props> = ({ value: delayedValue, ...props }) => {
     return now.getTime() >= since * 1000;
   }, [since, now]);
 
-  const units = useMemo(() => duration(value), [oldValue, format]);
-  const oldValueUnits = useMemo(() => duration(oldValue), [oldValue, format]);
+  const units = useMemo(() => duration(value), [value]);
+  const oldValueUnits = useMemo(() => duration(oldValue), [oldValue]);
 
   const oldValueComponent = (
     <Badge size="1" variant="soft" {...props}>
