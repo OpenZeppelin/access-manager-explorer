@@ -5,8 +5,8 @@ const description =
 
 const links = {
   twitter: "https://twitter.com/openzeppelin",
-  github: "https://github.com/openzeppelin/openzeppelin-contracts",
-  docs: "https://docs.openzeppelin.com/contracts/4.x/",
+  github: "https://github.com/OpenZeppelin/access-manager-explorer",
+  docs: "https://docs.openzeppelin.com/contracts/5.x/",
 };
 
 export { title, description, links };
