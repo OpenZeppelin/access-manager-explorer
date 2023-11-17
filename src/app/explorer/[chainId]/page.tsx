@@ -12,19 +12,22 @@ import { useEntities } from "@/providers/entities";
 import { useEffect } from "react";
 import { usePathname, useSearchParams } from 'next/navigation'
 
-interface Props {}
+interface Props { }
 
 const Explorer: FC<Props> = () => {
   const { entities } = useEntities();
 
   const pathname = usePathname()
   const searchParams = useSearchParams()
- 
+  const isProd = process.env.NEXT_PUBLIC_GA_ID?.length != 0;
+
   useEffect(() => {
-    window.gtag('config', process.env.NEXT_PUBLIC_GA_ID as string, {
-      page_path: `${pathname}?${searchParams}`,
-    });
-  }, [pathname, searchParams])
+    if (typeof window.gtag !== 'undefined' && isProd) {
+      window.gtag('config', process.env.NEXT_PUBLIC_GA_ID as string, {
+        page_path: `${pathname}?${searchParams}`,
+      });
+    }
+  }, [pathname, searchParams, isProd])
 
   return entities?.map(({ type, id }, depth) => {
     const commonProps = {

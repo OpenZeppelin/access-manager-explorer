@@ -34,6 +34,7 @@ const silka = LocalFont({
 });
 
 const gtag = `https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`;
+const isProd = process.env.NEXT_PUBLIC_GA_ID?.length != 0;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://contracts.openzeppelin.com"),
@@ -68,12 +69,14 @@ const RootLayout: FC<Props> = ({ children }) => {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-          {/* Google Analytics Measurement ID*/}
-          <script async src={gtag} />
-          {/* Inject the GA tracking code with the Measurement ID */}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
+        {isProd && (
+          <>
+            {/* Google Analytics Measurement ID*/}
+            <script async src={gtag} />
+            {/* Inject the GA tracking code with the Measurement ID */}
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
@@ -81,8 +84,10 @@ const RootLayout: FC<Props> = ({ children }) => {
                   page_path: window.location.pathname
                 });
               `,
-            }}
-          />
+              }}
+            />
+          </>
+        )}
       </head>
       <body className={cn(silka.variable)} suppressHydrationWarning>
         <main className="h-[100vh]">
