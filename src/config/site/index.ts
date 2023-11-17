@@ -1,7 +1,7 @@
 const title = "OpenZeppelin - Access Manager Explorer";
 
 const description =
-  "OpenZeppelin's Access Manager UI to explore and interact with permissions around an AccessManager";
+  "OpenZeppelin's Access Manager UI to explore and interact with permissions around an AccessManager smart contract.";
 
 const links = {
   twitter: "https://twitter.com/openzeppelin",
