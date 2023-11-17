@@ -33,6 +33,8 @@ const silka = LocalFont({
   variable: "--font-silka",
 });
 
+const gtag = `https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`;
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://contracts.openzeppelin.com"),
   title,
@@ -65,6 +67,23 @@ type Props = { children: ReactNode };
 const RootLayout: FC<Props> = ({ children }) => {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+          {/* Google Analytics Measurement ID*/}
+          <script async src={gtag} />
+          {/* Inject the GA tracking code with the Measurement ID */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', {
+                  page_path: window.location.pathname
+                });
+              `,
+            }}
+          />
+      </head>
       <body className={cn(silka.variable)} suppressHydrationWarning>
         <main className="h-[100vh]">
           <WagmiConfig config={config}>

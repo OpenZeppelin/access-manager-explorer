@@ -9,11 +9,22 @@ import { AddressEntity, Entity } from "@/types";
 import { FC } from "react";
 import { Address } from "viem";
 import { useEntities } from "@/providers/entities";
+import { useEffect } from "react";
+import { usePathname, useSearchParams } from 'next/navigation'
 
 interface Props {}
 
 const Explorer: FC<Props> = () => {
   const { entities } = useEntities();
+
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+ 
+  useEffect(() => {
+    window.gtag('config', process.env.NEXT_PUBLIC_GA_ID as string, {
+      page_path: `${pathname}?${searchParams}`,
+    });
+  }, [pathname, searchParams])
 
   return entities?.map(({ type, id }, depth) => {
     const commonProps = {
