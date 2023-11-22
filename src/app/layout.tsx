@@ -9,6 +9,8 @@ import { config } from "@/config/wallet";
 import { FC, ReactNode } from "react";
 import { Theme } from "@/components/providers";
 import LocalFont from "next/font/local";
+import { env, gaId } from "@/config/env";
+import Script from "next/script";
 
 const silka = LocalFont({
   src: [
@@ -32,6 +34,8 @@ const silka = LocalFont({
   fallback: ["Inter", "Helvetica Neue", "Helvetica", "sans-serif", "system-ui"],
   variable: "--font-silka",
 });
+
+const gtag = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://contracts.openzeppelin.com"),
@@ -65,6 +69,23 @@ type Props = { children: ReactNode };
 const RootLayout: FC<Props> = ({ children }) => {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {env.production && (
+          <>
+            <Script async src={gtag} />
+            <Script id="google-analytics">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${gaId}', {
+                  page_path: window.location.pathname
+                });
+              `}
+            </Script>
+          </>
+        )}
+      </head>
       <body className={cn(silka.variable)} suppressHydrationWarning>
         <main className="h-[100vh]">
           <WagmiConfig config={config}>
