@@ -1,4 +1,5 @@
 "use client";
+import { gtag } from "@/config/site";
 import useAccount from "@/hooks/use-account";
 import useDeploy from "@/hooks/use-deploy";
 import { Button, Dialog, Flex, Text, TextField } from "@radix-ui/themes";
@@ -57,12 +58,10 @@ const DeployManagerDialog: FC<DialogProps> = ({
           description: "Deploy Manager",
         });
 
-        if (typeof window.gtag !== 'undefined' && process.env.NEXT_PUBLIC_GA_ID?.length != 0) {
-          window.gtag('event', 'deploy', {
-            'send_to': process.env.NEXT_PUBLIC_GA_ID as string,
-            'hash': hash
-          });
-        }
+        gtag("event", "deploy", {
+          send_to: process.env.NEXT_PUBLIC_GA_ID as string,
+          hash: hash,
+        });
       }
     } catch {
     } finally {
@@ -114,7 +113,7 @@ const DeployManagerDialog: FC<DialogProps> = ({
 interface DeployManager
   extends FC<
     Pick<Partial<ButtonProps>, "onToggleDialog"> &
-    Omit<ButtonProps, "onToggleDialog">
+      Omit<ButtonProps, "onToggleDialog">
   > {
   Button: FC<ButtonProps>;
   Modal: FC<DialogProps>;

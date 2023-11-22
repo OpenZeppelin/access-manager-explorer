@@ -1,3 +1,4 @@
+import { signatureDatabase } from "@/config/env";
 import { join } from "path";
 import { useCallback } from "react";
 import useSWR from "swr";
@@ -33,10 +34,7 @@ const useSignatures = (config: UseSignaturesConfig) => {
   }
 
   const response = useSWR<Response, string>(
-    new URL(
-      join("api", "v1", "signatures"),
-      process.env.NEXT_PUBLIC_SIGNATURE_DATABASE!
-    ) +
+    new URL(join("api", "v1", "signatures"), signatureDatabase) +
       "?" +
       query.toString(),
     (url: string) => fetch(url).then((res) => res.json())

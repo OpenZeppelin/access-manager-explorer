@@ -4,6 +4,7 @@ import { publicProvider } from "wagmi/providers/public";
 import { getDefaultWallets } from "@rainbow-me/rainbowkit";
 import { title } from "../site";
 import { chains as supportedChains } from "../chains";
+import { walletConnectcId } from "../env";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   supportedChains.map((chain) => chain.definition),
@@ -12,7 +13,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 
 const { connectors } = getDefaultWallets({
   appName: title,
-  projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID!,
+  projectId: walletConnectcId!,
   chains,
 });
 

@@ -10,28 +10,26 @@ import { FC } from "react";
 import { Address } from "viem";
 import { useEntities } from "@/providers/entities";
 import { useEffect } from "react";
-import { usePathname, useSearchParams } from 'next/navigation'
+import { usePathname, useSearchParams } from "next/navigation";
+import { gaId } from "@/config/env";
+import { gtag } from "@/config/site";
 
-interface Props { }
+interface Props {}
 
 const Explorer: FC<Props> = () => {
   const { entities } = useEntities();
 
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const isProd = process.env.NEXT_PUBLIC_GA_ID?.length != 0;
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (typeof window.gtag !== 'undefined' && isProd) {
-      window.gtag('config', process.env.NEXT_PUBLIC_GA_ID as string, {
-        page_path: `${pathname}?${searchParams}`,
-      });
-    }
-  }, [pathname, searchParams, isProd])
+    gtag("config", gaId, {
+      page_path: `${pathname}?${searchParams}`,
+    });
+  }, [pathname, searchParams]);
 
   return entities?.map(({ type, id }, depth) => {
     const commonProps = {
-      key: id + depth,
       depth,
       size: "4",
       variant: "classic",
@@ -49,6 +47,7 @@ const Explorer: FC<Props> = () => {
         return (
           <AccessManager
             {...commonProps}
+            key={id + depth}
             address={id as Address}
             shortenAddress={false}
             style={{
@@ -62,7 +61,7 @@ const Explorer: FC<Props> = () => {
         return (
           <AccessManagerMember
             {...commonProps}
-            key={id}
+            key={id + depth}
             id={id}
             shortenAddress={false}
             style={{
@@ -76,7 +75,7 @@ const Explorer: FC<Props> = () => {
         return (
           <AccessManaged
             {...commonProps}
-            key={id}
+            key={id + depth}
             address={id as Address}
             shortenAddress={false}
             style={{
@@ -90,7 +89,7 @@ const Explorer: FC<Props> = () => {
         return (
           <AccessManagerTarget
             {...commonProps}
-            key={id}
+            key={id + depth}
             id={id}
             shortenAddress={false}
             style={{
@@ -104,7 +103,7 @@ const Explorer: FC<Props> = () => {
         return (
           <AccessManagerRole
             {...commonProps}
-            key={id}
+            key={id + depth}
             id={id}
             style={{
               maxWidth: 480,
@@ -117,7 +116,7 @@ const Explorer: FC<Props> = () => {
         return (
           <AccessManagerTargetFunction
             {...commonProps}
-            key={id}
+            key={id + depth}
             id={id}
             style={{
               maxWidth: 480,

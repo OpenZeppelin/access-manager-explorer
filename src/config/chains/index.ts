@@ -1,17 +1,18 @@
 import { goerli, mainnet, sepolia } from "viem/chains";
+import { urqlEndpoint } from "../env";
 
 const chains = [
   {
     definition: goerli,
-    subgraphUrl: process.env.NEXT_PUBLIC_URQL_ENDPOINT_GOERLI!,
+    subgraphUrl: urqlEndpoint.goerli,
   },
   {
     definition: mainnet,
-    subgraphUrl: process.env.NEXT_PUBLIC_URQL_ENDPOINT_MAINNET!,
+    subgraphUrl: urqlEndpoint.mainnet,
   },
   {
     definition: sepolia,
-    subgraphUrl: process.env.NEXT_PUBLIC_URQL_ENDPOINT_SEPOLIA!,
+    subgraphUrl: urqlEndpoint.sepolia,
   },
 ] as const;
 

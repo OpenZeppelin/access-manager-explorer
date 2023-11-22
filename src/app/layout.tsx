@@ -9,6 +9,8 @@ import { config } from "@/config/wallet";
 import { FC, ReactNode } from "react";
 import { Theme } from "@/components/providers";
 import LocalFont from "next/font/local";
+import { env, gaId } from "@/config/env";
+import Script from "next/script";
 
 const silka = LocalFont({
   src: [
@@ -33,8 +35,7 @@ const silka = LocalFont({
   variable: "--font-silka",
 });
 
-const gtag = `https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`;
-const isProd = process.env.NEXT_PUBLIC_GA_ID?.length != 0;
+const gtag = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://contracts.openzeppelin.com"),
@@ -69,23 +70,19 @@ const RootLayout: FC<Props> = ({ children }) => {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {isProd && (
+        {env.production && (
           <>
-            {/* Google Analytics Measurement ID*/}
-            <script async src={gtag} />
-            {/* Inject the GA tracking code with the Measurement ID */}
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
+            <Script async src={gtag} />
+            <Script id="google-analytics">
+              {`
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
-                gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', {
+                gtag('config', '${gaId}', {
                   page_path: window.location.pathname
                 });
-              `,
-              }}
-            />
+              `}
+            </Script>
           </>
         )}
       </head>
