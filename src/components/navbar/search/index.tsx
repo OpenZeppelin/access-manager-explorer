@@ -14,6 +14,8 @@ import { useDebounce } from "use-debounce";
 import { isAddress } from "viem";
 import { useQuery } from "urql";
 import Address from "@/components/address";
+import { postEvent } from "@/config/gtag";
+import { useNetwork } from "wagmi";
 import { cn } from "@/utils";
 import Role from "@/components/role";
 import { makeFragmentData, useFragment as asFragment } from "@/gql";
@@ -28,8 +30,9 @@ interface Props extends ComponentProps<typeof Root> {
   onNavigate?: (entity: EntityInstance) => void;
 }
 
-const Search: FC<Props> = ({ input, onNavigate = () => {}, ...props }) => {
+const Search: FC<Props> = ({ input, onNavigate = () => { }, ...props }) => {
   const [address, setAddress] = useState("");
+  const { chain } = useNetwork();
   const [debouncedAddress] = useDebounce(address, 300);
   const [open, setOpen] = useState(false);
   const entities = useEntities();
@@ -81,6 +84,9 @@ const Search: FC<Props> = ({ input, onNavigate = () => {}, ...props }) => {
   }, [isData, data, isInputAddress, address]);
 
   const clearAndReset = (entity: EntityInstance) => {
+    const inputs = entity.id.split("/", 3);
+    postEvent({ account: inputs[2], manager: inputs[0], hasRole: inputs[1] }, 'search', chain?.name ?? 'none');
+
     entities.clearAndPush(entity);
     setAddress("");
     onNavigate(entity);

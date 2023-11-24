@@ -9,24 +9,11 @@ import { AddressEntity, Entity } from "@/types";
 import { FC } from "react";
 import { Address } from "viem";
 import { useEntities } from "@/providers/entities";
-import { useEffect } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
-import { gaId } from "@/config/env";
-import { gtag } from "@/config/site";
 
-interface Props {}
+interface Props { }
 
 const Explorer: FC<Props> = () => {
   const { entities } = useEntities();
-
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    gtag("config", gaId, {
-      page_path: `${pathname}?${searchParams}`,
-    });
-  }, [pathname, searchParams]);
 
   return entities?.map(({ type, id }, depth) => {
     const commonProps = {

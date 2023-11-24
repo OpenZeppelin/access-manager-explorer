@@ -1,5 +1,6 @@
 "use client";
-import { gtag } from "@/config/site";
+import { postEvent } from "@/config/gtag";
+import { useNetwork } from "wagmi";
 import useAccount from "@/hooks/use-account";
 import useDeploy from "@/hooks/use-deploy";
 import { Button, Dialog, Flex, Text, TextField } from "@radix-ui/themes";
@@ -38,6 +39,7 @@ const DeployManagerDialog: FC<DialogProps> = ({
   ...props
 }) => {
   const { address } = useAccount();
+  const { chain } = useNetwork();
   const deploy = useDeploy(address);
   const addRecentTransaction = useAddRecentTransaction();
   const [initialAdmin, setInitialAdmin] = useState<Address>();
@@ -49,18 +51,16 @@ const DeployManagerDialog: FC<DialogProps> = ({
 
   const deployManager = async () => {
     setDeploying(true);
+
     try {
       const hash = await deploy.manager(initialAdmin);
+
+      postEvent({ deployer: address, hash: hash }, 'deploy', chain?.name ?? 'none');
 
       if (hash) {
         addRecentTransaction({
           hash,
           description: "Deploy Manager",
-        });
-
-        gtag("event", "deploy", {
-          send_to: process.env.NEXT_PUBLIC_GA_ID as string,
-          hash: hash,
         });
       }
     } catch {
@@ -113,7 +113,7 @@ const DeployManagerDialog: FC<DialogProps> = ({
 interface DeployManager
   extends FC<
     Pick<Partial<ButtonProps>, "onToggleDialog"> &
-      Omit<ButtonProps, "onToggleDialog">
+    Omit<ButtonProps, "onToggleDialog">
   > {
   Button: FC<ButtonProps>;
   Modal: FC<DialogProps>;
