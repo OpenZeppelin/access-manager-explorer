@@ -1,3 +1,5 @@
+import { gtag } from "@/config/site";
+
 declare global {
   interface Window {
     gtag?: (...args: unknown[]) => void;
@@ -21,5 +23,5 @@ export interface EventOptions {
 }
 
 export async function postEvent(opts: Required<EventOptions[keyof EventOptions]>, event: Events, network: Network) {
-  window.gtag?.('event', event, { ...opts, network: network });
+  gtag('event', event, { ...opts, network: network });
 }
