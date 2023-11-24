@@ -13,6 +13,8 @@ import {
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import useAccount from "@/hooks/use-account";
 import { useQuery } from "urql";
+import { postEvent } from "@/config/gtag";
+import { useNetwork } from "wagmi";
 import { ACCESS_MANAGER_ROLE_MEMBERS_QUERY } from "./requests";
 import MemberOf from "./member-of";
 import { useFavorites } from "@/providers/favorites";
@@ -33,9 +35,10 @@ interface Props {
 
 const DEMO_MANAGER = "0x4ee69a1703b717cb46cd12c71c6fe225f646ba1e";
 
-const Content: FC<Props> = ({ onNavigate = () => {} }) => {
+const Content: FC<Props> = ({ onNavigate = () => { } }) => {
   const [open, setOpen] = useState(true);
   const { address, isConnected } = useAccount();
+  const { chain } = useNetwork();
   const { openConnectModal } = useConnectModal();
   const entities = useEntities();
 
@@ -94,6 +97,7 @@ const Content: FC<Props> = ({ onNavigate = () => {} }) => {
   );
 
   const clearAndPushNav = (entity: EntityInstance) => {
+    postEvent({}, 'demo', chain?.name ?? 'none');
     entities.clearAndPush(entity);
     onNavigate(entity);
   };

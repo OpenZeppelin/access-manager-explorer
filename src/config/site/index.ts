@@ -10,7 +10,7 @@ const links = {
 };
 
 const gtag = (...args: Parameters<typeof window.gtag>) => {
-  if (window.gtag) return window.gtag(args[0], args);
+  if (window.gtag) return window.gtag(...args);
   return Function;
 };
 
