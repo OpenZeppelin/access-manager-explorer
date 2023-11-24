@@ -1,5 +1,9 @@
 import { links } from "@/config/site";
-import { GitHubLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
+import {
+  GitHubLogoIcon,
+  TwitterLogoIcon,
+  FileTextIcon,
+} from "@radix-ui/react-icons";
 import { Flex, IconButton } from "@radix-ui/themes";
 import Link from "next/link";
 import { ComponentProps, FC } from "react";
@@ -8,6 +12,12 @@ import ThemeIcon from "../theme-icon";
 const Social: FC<ComponentProps<typeof Flex>> = (props) => {
   return (
     <Flex align="center" {...props}>
+      <IconButton mx="2" size="3" variant="ghost" color="gray" asChild>
+        <Link href={links.docs} target="_blank" rel="noreferrer">
+          <FileTextIcon />
+          <span className="sr-only">Docs</span>
+        </Link>
+      </IconButton>
       <IconButton mx="2" size="3" variant="ghost" color="gray" asChild>
         <Link href={links.github} target="_blank" rel="noreferrer">
           <GitHubLogoIcon />

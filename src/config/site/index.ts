@@ -6,7 +6,7 @@ const description =
 const links = {
   twitter: "https://twitter.com/openzeppelin",
   github: "https://github.com/OpenZeppelin/access-manager-explorer",
-  docs: "https://docs.openzeppelin.com/contracts/5.x/",
+  docs: "https://docs.openzeppelin.com/contracts/5.x/access-control#access-management",
 };
 
 const gtag = (...args: Parameters<typeof window.gtag>) => {
