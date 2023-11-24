@@ -9,7 +9,7 @@ import { config } from "@/config/wallet";
 import { FC, ReactNode } from "react";
 import { Theme } from "@/components/providers";
 import LocalFont from "next/font/local";
-import { env, gaId } from "@/config/env";
+import { gaId } from "@/config/env";
 import Script from "next/script";
 
 const silka = LocalFont({
@@ -70,7 +70,7 @@ const RootLayout: FC<Props> = ({ children }) => {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {env.production && (
+        {gaId && (
           <>
             <Script async src={gtag} />
             <Script id="google-analytics">
