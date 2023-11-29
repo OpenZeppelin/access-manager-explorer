@@ -35,7 +35,7 @@ interface Props {
 
 const DEMO_MANAGER = "0x4ee69a1703b717cb46cd12c71c6fe225f646ba1e";
 
-const Content: FC<Props> = ({ onNavigate = () => { } }) => {
+const Content: FC<Props> = ({ onNavigate = () => {} }) => {
   const [open, setOpen] = useState(true);
   const { address, isConnected } = useAccount();
   const { chain } = useNetwork();
@@ -97,7 +97,7 @@ const Content: FC<Props> = ({ onNavigate = () => { } }) => {
   );
 
   const clearAndPushNav = (entity: EntityInstance) => {
-    postEvent({}, 'demo', chain?.name ?? 'none');
+    postEvent({}, "demo", chain?.name ?? "none");
     entities.clearAndPush(entity);
     onNavigate(entity);
   };
@@ -441,20 +441,6 @@ const Content: FC<Props> = ({ onNavigate = () => { } }) => {
           }}
         />
       )}
-      <Button
-        mt="4"
-        variant="surface"
-        size="1"
-        className="w-full"
-        onClick={() =>
-          clearAndPushNav({
-            type: AddressEntity.AccessManager,
-            id: DEMO_MANAGER,
-          })
-        }
-      >
-        Try the demo manager <ArrowRightIcon className="ml-2" />
-      </Button>
     </>
   );
 };
