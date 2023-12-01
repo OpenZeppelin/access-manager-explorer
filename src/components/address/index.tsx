@@ -47,15 +47,20 @@ const Address: FC<Props> = ({ onDetail, addreth, hidePopup, ...props }) => {
       <div ref={ref} style={{ display: "none" }}></div>
 
       <Addreth
-        explorer={(address) => ({
-          name: chain?.blockExplorers?.default.name ?? "Explorer",
-          accountUrl: chain?.blockExplorers
-            ? new URL(
-                join("address", address),
-                chain?.blockExplorers?.default.url
-              ).href
-            : "",
-        })}
+        actions={!chain ? "copy" : "all"}
+        explorer={
+          chain
+            ? (address) => ({
+                name: chain.blockExplorers?.default.name ?? "Explorer",
+                accountUrl: chain.blockExplorers
+                  ? new URL(
+                      join("address", address),
+                      chain.blockExplorers?.default.url
+                    ).href
+                  : "",
+              })
+            : undefined
+        }
         {...addreth}
         theme={{
           base: theme == "dark" ? "simple-dark" : "simple-light",

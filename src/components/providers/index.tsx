@@ -17,8 +17,7 @@ const Theme: FC<Props> = ({ children }) => {
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme="system"
-      enableSystem
+      defaultTheme="light"
       disableTransitionOnChange
     >
       <Themes accentColor="blue">{children}</Themes>
