@@ -49,18 +49,15 @@ export const metadata: Metadata = {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
   },
-  // TODO
-  // openGraph: {
-  //   images: "/banner.png",
-  // },
+  openGraph: {
+    images: "/banner.png",
+  },
   twitter: {
     card: "summary_large_image",
     title,
     description,
     creator: "@openzeppelin",
-    images: [
-      /* "/banner.png" */
-    ],
+    images: ["/banner.png"],
   },
 };
 
