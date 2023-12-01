@@ -38,7 +38,7 @@ const silka = LocalFont({
 const gtag = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://contracts.openzeppelin.com"),
+  metadataBase: new URL("https://access-manager.openzeppelin.com"),
   title,
   description,
   themeColor: [
