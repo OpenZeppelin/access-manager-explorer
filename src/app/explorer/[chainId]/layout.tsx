@@ -8,6 +8,8 @@ import { Flex, ScrollArea } from "@radix-ui/themes";
 import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
 import { EntitiesProvider } from "@/providers/entities";
+import type { Metadata } from 'next'
+import { title, description } from "@/config/site";
 
 type Props = {
   children: ReactNode;
@@ -15,6 +17,15 @@ type Props = {
     chainId: SupportedChainId;
   };
 };
+ 
+export async function generateMetadata(
+  { params }: Props
+): Promise<Metadata> {
+  return {
+    title: title + ' for ' + params.chainId,
+    description: description.slice(0,-1) + ' for ' + params.chainId + '.',
+  }
+}
 
 const ExplorerLayout: FC<Props> = ({ children, params: { chainId } }) => {
   return (
