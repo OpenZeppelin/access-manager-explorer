@@ -84,7 +84,7 @@ const AccessManaged: FC<Props> = ({
         ) : accessManaged ? (
           <Flex direction="column">
             <Flex align="center" width="100%" justify="between">
-              <Heading size="2">Authority</Heading>
+              <Heading as="h2" size="2">Authority</Heading>
               <Address
                 addreth={{
                   shortenAddress: 10,
@@ -101,7 +101,7 @@ const AccessManaged: FC<Props> = ({
             </Flex>
             <Separator size="4" my="3" />
             {(accessManaged?.asAccount.targettedBy?.length ?? 0) > 0 && (
-              <Heading size="2">Targetted by:</Heading>
+              <Heading as="h2" size="2">Targetted by:</Heading>
             )}
             {accessManaged?.asAccount.targettedBy.map((target) => (
               <Card key={target.id} my="2" size="1">

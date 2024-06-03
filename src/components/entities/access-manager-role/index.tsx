@@ -110,7 +110,7 @@ const AccessManagerRole: FC<Props> = ({
         ) : accessManagerRole ? (
           <Flex direction="column">
             <Flex align="center" width="100%" justify="between">
-              <Heading size="2">Manager</Heading>
+              <Heading as="h2" size="2">Manager</Heading>
               <Address
                 addreth={{
                   address: accessManagerRole?.manager.asAccount.id,
@@ -127,7 +127,7 @@ const AccessManagerRole: FC<Props> = ({
             </Flex>
             <Separator size="4" my="3" />
             <Flex align="center" width="100%" justify="between">
-              <Heading size="2">
+              <Heading as="h2" size="2">
                 Grant delay
                 <Info ml="3" mt="1">
                   <Text size="1">
@@ -144,7 +144,7 @@ const AccessManagerRole: FC<Props> = ({
             </Flex>
             <Separator size="4" my="3" />
             <Flex align="center" width="100%" justify="between">
-              <Heading size="2">
+              <Heading as="h2" size="2">
                 Admin
                 <Info ml="3" mt="1">
                   <Text size="1">
@@ -168,7 +168,7 @@ const AccessManagerRole: FC<Props> = ({
             </Flex>
             <Separator size="4" my="3" />
             <Flex align="center" width="100%" justify="between">
-              <Heading size="2">
+              <Heading as="h2" size="2">
                 Guardian
                 <Info ml="3" mt="1">
                   <Text size="1">
@@ -192,7 +192,7 @@ const AccessManagerRole: FC<Props> = ({
             <Separator size="4" my="3" />
             {(accessManagerRole?.adminOf.length ?? 0) > 0 && (
               <Flex direction="column">
-                <Heading size="3" mt="4" mb="2">
+                <Heading as="h2" size="3" mt="4" mb="2">
                   Admin of
                 </Heading>
                 <Grid columns="2" gap="3" width="auto">
@@ -213,7 +213,7 @@ const AccessManagerRole: FC<Props> = ({
             )}
             {(accessManagerRole?.guardianOf.length ?? 0) > 0 && (
               <Flex direction="column">
-                <Heading size="3" mt="4" mb="2">
+                <Heading as="h2" size="3" mt="4" mb="2">
                   Guardian of
                 </Heading>
                 <Grid columns="2" gap="3" width="auto">
@@ -232,7 +232,7 @@ const AccessManagerRole: FC<Props> = ({
                 </Grid>
               </Flex>
             )}
-            <Heading size="3" mt="4" mb="2">
+            <Heading as="h2" size="3" mt="4" mb="2">
               Members
             </Heading>
             {(accessManagerRole?.members.length ?? 0) > 0 ? (
@@ -265,7 +265,7 @@ const AccessManagerRole: FC<Props> = ({
                 <Callout.Text>No members</Callout.Text>
               </Callout.Root>
             )}
-            <Heading size="3" mt="4" mb="2">
+            <Heading as="h2" size="3" mt="4" mb="2">
               Functions
             </Heading>
             {(accessManagerRole?.functions.length ?? 0) > 0 ? (

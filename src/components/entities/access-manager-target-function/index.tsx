@@ -112,7 +112,7 @@ const AccessManagerTargetFunction: FC<Props> = ({
         ) : accessManagedTargetFunction ? (
           <Flex direction="column">
             <Flex align="center" width="100%" justify="between">
-              <Heading size="2">Manager</Heading>
+              <Heading as="h2" size="2">Manager</Heading>
               {accessManagedTargetFunction?.manager.asAccount.id && (
                 <Address
                   addreth={{
@@ -131,7 +131,7 @@ const AccessManagerTargetFunction: FC<Props> = ({
             </Flex>
             <Separator size="4" my="3" />
             <Flex align="center" width="100%" justify="between">
-              <Heading size="2">Target</Heading>
+              <Heading as="h2" size="2">Target</Heading>
               {accessManagedTargetFunction?.target.asAccount.id && (
                 <Address
                   addreth={{
@@ -150,7 +150,7 @@ const AccessManagerTargetFunction: FC<Props> = ({
             </Flex>
             <Separator size="4" my="3" />
             <Flex align="center" width="100%" justify="between">
-              <Heading size="2">
+              <Heading as="h2" size="2">
                 Allowed role
                 <Info ml="3" mt="1">
                   <Text size="1">

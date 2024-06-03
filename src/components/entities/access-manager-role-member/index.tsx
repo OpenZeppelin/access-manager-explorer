@@ -110,7 +110,7 @@ const AccessManagerMember: FC<Props> = ({
       ) : accessManagerRoleMember ? (
         <Flex direction="column">
           <Flex align="center" width="100%" justify="between">
-            <Heading size="2">Manager</Heading>
+            <Heading as="h2" size="2">Manager</Heading>
             <Address
               addreth={{
                 shortenAddress: 10,
@@ -127,7 +127,7 @@ const AccessManagerMember: FC<Props> = ({
           </Flex>
           <Separator size="4" my="3" />
           <Flex align="center" width="100%" justify="between">
-            <Heading size="2">Role</Heading>
+            <Heading as="h2" size="2">Role</Heading>
             {accessManagerRoleMember?.role && (
               <Role
                 size="2"
@@ -138,7 +138,7 @@ const AccessManagerMember: FC<Props> = ({
           </Flex>
           <Separator size="4" my="3" />
           <Flex align="center" width="100%" justify="between">
-            <Heading size="2">
+            <Heading as="h2" size="2">
               Execution delay
               <Info ml="3" mt="1">
                 <Text size="1">
@@ -158,7 +158,7 @@ const AccessManagerMember: FC<Props> = ({
           </Flex>
           <Separator size="4" my="3" />
           <Flex align="center" width="100%" justify="between">
-            <Heading size="2">Member since</Heading>
+            <Heading as="h2" size="2">Member since</Heading>
             <Flex align="center">
               <Text size="2">
                 {format.relativeTime(

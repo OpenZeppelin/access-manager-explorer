@@ -115,7 +115,7 @@ const AccessManagerTarget: FC<Props> = ({
         ) : accessManagerTarget ? (
           <Flex direction="column">
             <Flex align="center" width="100%" justify="between">
-              <Heading size="2">Targetted by</Heading>
+              <Heading as="h2" size="2">Targetted by</Heading>
               {accessManagerTarget?.manager.asAccount.id && (
                 <Address
                   addreth={{
@@ -134,7 +134,7 @@ const AccessManagerTarget: FC<Props> = ({
             </Flex>
             <Separator size="4" my="3" />
             <Flex align="center" width="100%" justify="between">
-              <Heading size="2">
+              <Heading as="h2" size="2">
                 Admin delay
                 <Info ml="3" mt="1">
                   <Text size="1">
@@ -156,7 +156,7 @@ const AccessManagerTarget: FC<Props> = ({
             <Separator size="4" my="3" />
             <Flex align="center" width="100%" justify="between">
               <Flex>
-                <Heading size="2">Status</Heading>
+                <Heading as="h2" size="2">Status</Heading>
                 <Info ml="3" mt="1">
                   <Text size="1">
                     A target can be closed, which means that every{" "}
@@ -191,7 +191,7 @@ const AccessManagerTarget: FC<Props> = ({
                 See as AccessManaged <ArrowRightIcon />
               </Button>
             )}
-            <Heading size="3" mt="4" mb="2">
+            <Heading as="h2" size="3" mt="4" mb="2">
               Managed functions
             </Heading>
             {(accessManagerTarget?.functions.length ?? 0) > 0 ? (
