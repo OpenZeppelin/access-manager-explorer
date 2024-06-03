@@ -35,7 +35,7 @@ const Explorer: FC<Props> = () => {
   if (entities.length === 0) {
     return (
       <Flex width="100%" direction="column" justify="center" align="center">
-        <Heading size="3" className="text-center">
+        <Heading as="h1" size="3" className="text-center">
           Not sure where to start? 👇
         </Heading>
         <Button
